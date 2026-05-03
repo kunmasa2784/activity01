@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第18回ふなばし市民活動フェア 現状分析と活性化案</title>
+    <!-- Tailwind CSSの読み込み -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fontsの読み込み（明朝体とゴシック体） -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 学術誌のような洗練されたタイポグラフィの設定 */
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f3f4f6;
+            color: #334155;
+            line-height: 1.8;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Noto Serif JP', serif;
+        }
+        .journal-container {
+            background-color: #ffffff;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        }
+        .quote-block {
+            position: relative;
+        }
+        .quote-block::before {
+            content: "“";
+            font-family: 'Noto Serif JP', serif;
+            position: absolute;
+            top: -10px;
+            left: -15px;
+            font-size: 3rem;
+            color: #cbd5e1;
+            opacity: 0.5;
+        }
+        /* 箇条書きのマーカーカスタマイズ */
+        .custom-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .custom-list li::before {
+            content: "•";
+            color: #0f766e; /* Teal-700 */
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: -2px;
+            font-size: 1.2rem;
+        }
+        .custom-sublist li::before {
+            content: "-";
+            color: #64748b; /* Slate-500 */
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body class="py-10 px-4 sm:px-6 lg:px-8 text-gray-800">
+
+    <!-- メインコンテンツコンテナ -->
+    <main class="max-w-4xl mx-auto journal-container rounded-xl overflow-hidden border border-gray-100 p-8 sm:p-12 lg:p-16">
+        
+        <!-- タイトル -->
+        <h1 class="text-3xl sm:text-4xl font-bold text-center text-slate-800 mb-10 leading-tight">
+            第18回ふなばし市民活動フェア <br class="hidden sm:block" />
+            <span class="text-teal-700 text-2xl sm:text-3xl mt-2 block">現状分析と活性化案</span>
+        </h1>
+
+        <!-- 要約ブロック（アブストラクト風） -->
+        <div class="bg-gradient-to-r from-teal-50 to-emerald-50 border-l-4 border-teal-500 p-6 sm:p-8 rounded-r-lg mb-12 shadow-sm">
+            <h2 class="text-xl font-bold text-teal-800 mb-4 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                【要約】
+            </h2>
+            <p class="mb-4">
+                第17回フェアは一定の成果を上げたものの、来場者が379名にとどまり、シニア層・常連団体に偏る「身内の集まり」からの脱却が急務です。第18回（2026年11月23日開催）では、目標来場者数を1,000名に設定し、ターゲット層を「40代〜60代」「子育て一段落層」「次世代」へと拡大します。
+            </p>
+            <p class="mb-4">
+                目標達成のため、一般参加者および出展団体からの「生の声」と、新たな5つの改善提案に基づき、以下の3本柱で活性化を図ります。
+            </p>
+            <ul class="space-y-3 mt-4 text-slate-700">
+                <li class="flex items-start">
+                    <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-teal-200 text-teal-800 font-bold text-sm mr-3 mt-1">1</span>
+                    <p><strong>集客と広報の多角化</strong>：ターゲット別広報、SNSの戦略的活用、窓口からのシームレスな誘導。</p>
+                </li>
+                <li class="flex items-start">
+                    <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-teal-200 text-teal-800 font-bold text-sm mr-3 mt-1">2</span>
+                    <p><strong>企画のアップデートと次世代育成</strong>：「見る」から「体験する」展示への転換、活動報告ピッチの導入、多世代交流企画の拡充。</p>
+                </li>
+                <li class="flex items-start">
+                    <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-teal-200 text-teal-800 font-bold text-sm mr-3 mt-1">3</span>
+                    <p><strong>地域機関との連動と回遊性向上</strong>：社協・公民館・学校との連携、ミッション型スタンプラリー等の実施。</p>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 1. 現状の把握と課題 -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-slate-800 border-b-2 border-teal-600 pb-2 mb-6 mt-12 flex items-center">
+                <span class="text-teal-600 text-3xl mr-2 block mt-1">1.</span> 現状の把握と課題（アンケートの生の声より）
+            </h2>
+            <p class="mb-6 text-slate-700">
+                前年度（第17回）の実績（来場者379名、参加65団体）および各種アンケートの自由記述等から、以下の現状と課題が浮き彫りになりました。
+            </p>
+
+            <div class="space-y-8">
+                <!-- 課題ブロック 1 -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center border-b border-slate-100 pb-2">
+                        <span class="w-2 h-6 bg-indigo-500 rounded-full mr-3"></span>
+                        参加者と出展団体の偏りに関する課題
+                    </h3>
+                    
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-indigo-700 mb-2">【一般参加者の傾向】</h4>
+                        <blockquote class="quote-block bg-indigo-50 border-l-4 border-indigo-400 text-slate-700 p-4 rounded-r ml-2 text-sm sm:text-base">
+                            来場者は60代以上のシニア層と女性（約6割）に偏っています。次世代の活動を担う若年層や、男性が気軽に参加できるテーマ設定が不足しています。
+                        </blockquote>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold text-rose-700 mb-2">【出展団体の声】</h4>
+                        <blockquote class="quote-block bg-rose-50 border-l-4 border-rose-400 text-slate-700 p-4 rounded-r ml-2 space-y-2 text-sm sm:text-base">
+                            <p>「期待した成果が得られなかった最大の要因は、一般来場者の少なさと子ども層の不在です。」</p>
+                            <p>「どうしても身内の集まりになりがちで、新規層へのリーチができていません。」</p>
+                        </blockquote>
+                    </div>
+                </div>
+
+                <!-- 課題ブロック 2 -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center border-b border-slate-100 pb-2">
+                        <span class="w-2 h-6 bg-amber-500 rounded-full mr-3"></span>
+                        集客・広報における根本的課題
+                    </h3>
+                    
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-indigo-700 mb-2">【一般参加者の声】</h4>
+                        <blockquote class="quote-block bg-indigo-50 border-l-4 border-indigo-400 text-slate-700 p-4 rounded-r ml-2 text-sm sm:text-base">
+                            「参加のきっかけは『広報ふなばし』を見ました。」<br>
+                            <span class="text-xs text-indigo-600 mt-1 block">（※圧倒的に多く、ウェブやSNS経由での参加者が相対的に少ないデジタル媒体の弱さが露呈しています。）</span>
+                        </blockquote>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold text-rose-700 mb-2">【出展団体の声（実態）】</h4>
+                        <blockquote class="quote-block bg-rose-50 border-l-4 border-rose-400 text-slate-700 p-4 rounded-r ml-2 text-sm sm:text-base">
+                            団体の広報活動が「会員や知人への声がけ（14件）」など内向きに偏り、外部・新規層への発信（SNSやHP等）が非常に弱い（各2件）ことが判明しました。
+                        </blockquote>
+                    </div>
+                </div>
+
+                <!-- 課題ブロック 3 -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center border-b border-slate-100 pb-2">
+                        <span class="w-2 h-6 bg-emerald-500 rounded-full mr-3"></span>
+                        企画・展示・交流の不完全燃焼
+                    </h3>
+                    
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-indigo-700 mb-2">【一般参加者の声】</h4>
+                        <blockquote class="quote-block bg-indigo-50 border-l-4 border-indigo-400 text-slate-700 p-4 rounded-r ml-2 text-sm sm:text-base">
+                            「パネル展示を見た後、活動内容がよく分かりました。」<br>
+                            <span class="text-xs text-indigo-600 mt-1 block">（※展示自体は有効に機能しているものの、「見る」中心であり、関心を「体験」に繋げきれていないのが課題です。）</span>
+                        </blockquote>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold text-rose-700 mb-2">【出展団体の声】</h4>
+                        <blockquote class="quote-block bg-rose-50 border-l-4 border-rose-400 text-slate-700 p-4 rounded-r ml-2 space-y-2 text-sm sm:text-base">
+                            <p>「交流会が始まってもどうしていいかわからなかったです。」</p>
+                            <p>「時間が短く、マイクもなく自己紹介しづらくて不完全燃焼でした。」</p>
+                        </blockquote>
+                    </div>
+                </div>
+
+                <!-- 課題ブロック 4 -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center border-b border-slate-100 pb-2">
+                        <span class="w-2 h-6 bg-cyan-500 rounded-full mr-3"></span>
+                        運営体制・環境面での課題
+                    </h3>
+                    
+                    <div>
+                        <h4 class="font-semibold text-rose-700 mb-2">【出展団体の声】</h4>
+                        <blockquote class="quote-block bg-rose-50 border-l-4 border-rose-400 text-slate-700 p-4 rounded-r ml-2 space-y-2 text-sm sm:text-base">
+                            <p>「パフォーマンス時の音響トラブルや映像の不具合があり、事前のリハーサル不足を感じました。」</p>
+                            <p>「ブースが狭かったです。事前のレイアウト打ち合わせが必要だと思います。」</p>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 第18回に向けた基本戦略と目標 -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-slate-800 border-b-2 border-teal-600 pb-2 mb-6 mt-16 flex items-center">
+                <span class="text-teal-600 text-3xl mr-2 block mt-1">2.</span> 第18回に向けた基本戦略と目標
+            </h2>
+            <p class="mb-6 text-slate-700">
+                出展団体の84%が「次回も出展したい」と回答しており、フェアの存在意義は非常に高いと言えます。この熱意を外部へ届けるための戦略を構築します。
+            </p>
+
+            <ul class="custom-list space-y-4">
+                <li>
+                    <strong class="text-slate-800 text-lg">開催概要</strong>
+                    <ul class="custom-sublist mt-2 space-y-2 text-slate-700 ml-2">
+                        <li>日程：2026年11月23日（祝）</li>
+                        <li>会場：きららホール、市民活動サポートセンター等</li>
+                        <li>目的：フェアを単なる「団体のPRの場」から、各団体の「1年間の活動の集大成・成果発表の場」へと位置づけを強化し、熱気と活気を生み出します。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong class="text-slate-800 text-lg">数値目標とターゲット設定</strong>
+                    <ul class="custom-sublist mt-2 space-y-2 text-slate-700 ml-2">
+                        <li><strong>目標動員数</strong>：1,000人（「できるだけ多く」から明確な数値目標へ移行）。</li>
+                        <li><strong>メインターゲット</strong>：40代〜60代（子育てが落ち着いた層、退職を見据えた層）、および将来を担う子ども・学生・ファミリー層。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong class="text-slate-800 text-lg">運営体制の強化</strong>
+                    <ul class="custom-sublist mt-2 space-y-2 text-slate-700 ml-2">
+                        <li>実行委員の役割を「調整・管理担当（団体向け）」と「集客・企画担当（市民向け）」のパラレル・グループに明確に分割し、並行して推進。</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 3. 来場者増加計画 -->
+        <section class="mb-12 bg-slate-50 p-6 sm:p-8 rounded-xl border border-slate-100">
+            <h2 class="text-2xl font-bold text-slate-800 border-b-2 border-teal-600 pb-2 mb-6 flex items-center">
+                <span class="text-teal-600 text-3xl mr-2 block mt-1">3.</span> 来場者増加計画（広報戦略の多角化と日常からの誘導）
+            </h2>
+            <p class="mb-6 text-slate-700">
+                「広報ふなばし」以外のチャネルを強化するとともに、日頃の窓口業務からのシームレスな誘導を図ります。（提案4より）
+            </p>
+
+            <ul class="custom-list space-y-6">
+                <li>
+                    <strong class="text-slate-800 text-lg">市民活動サポートセンター（ボランティアセンター等）からの誘導</strong>
+                    <ul class="custom-sublist mt-2 space-y-2 text-slate-700 ml-2">
+                        <li>サポートセンターに相談に来た市民に対して、「実際の活動を見て、体験できる場」としてフェアを積極的に案内します。</li>
+                        <li>相談窓口で「フェア特別招待・体験チケット（粗品付き）」などを配布し、フェアへの来場動機を強めます。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong class="text-slate-800 text-lg">SNSの戦略的活用と団体スキルの底上げ</strong>
+                    <ul class="custom-sublist mt-2 space-y-2 text-slate-700 ml-2">
+                        <li>X（旧Twitter）やInstagramを活用し、開催前から出展団体の魅力や当日の見どころをカウントダウン形式で発信します。</li>
+                        <li>フェア数ヶ月前に「SNS向けショート動画活用講座」等を実施し、参加団体の発信力を底上げします。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong class="text-slate-800 text-lg">ターゲット別の広報</strong>
+                    <ul class="custom-sublist mt-2 space-y-2 text-slate-700 ml-2">
+                        <li><strong>子育て世代向け</strong>：市内の保育園・小学校、子育て支援施設でのチラシ配布。</li>
+                        <li><strong>若年層向け</strong>：大学・専門学校の掲示板への掲載。</li>
+                        <li><strong class="text-indigo-600">【一般参加者の声】</strong>を活かし、プロスポーツチーム（千葉スカイセイラーズ、クボタスピアーズ等）の選手が出演する15秒程度のPR動画を作成し、YouTube広告等でスポーツファン層の関心を惹きつけます。</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 4. フェアの活性化・魅力向上アイデア -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-slate-800 border-b-2 border-teal-600 pb-2 mb-6 mt-16 flex items-center">
+                <span class="text-teal-600 text-3xl mr-2 block mt-1">4.</span> フェアの活性化・魅力向上アイデア（企画・展示・連携）
+            </h2>
+            <p class="mb-8 text-slate-700">
+                会場全体を活気づけ、次世代の参加を促すための具体的な企画案です。（提案1、2、3、5より）
+            </p>
+
+            <div class="grid gap-8">
+                <!-- 提案 1 -->
+                <article class="bg-white rounded-lg border border-teal-100 overflow-hidden shadow-sm">
+                    <div class="bg-teal-50 px-6 py-4 border-b border-teal-100">
+                        <h3 class="text-xl font-bold text-teal-900">提案1：展示・企画のアップデート（日頃の活動の「集大成」の場へ）</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="custom-list space-y-4">
+                            <li>
+                                <strong class="text-slate-800">活動の成果を可視化する企画</strong>
+                                <ul class="custom-sublist mt-2 space-y-1 text-slate-700 ml-2">
+                                    <li>各団体がこの1年で最も誇れる活動を発表する「活動報告ピッチ（ショートプレゼン）」ステージを設けます。</li>
+                                    <li>参加者の投票によって決定する「市民活動アワード」や「共感賞」などを新設し、団体側のモチベーション向上と来場者の参加意識を高めます。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong class="text-slate-800">「見る」から「体験する」展示へ</strong>
+                                <ul class="custom-sublist mt-2 space-y-1 text-slate-700 ml-2">
+                                    <li>自由記述で関心が高かった分野（こども食堂、地域清掃など）について、パネル展示だけでなく、その場でミニ体験（フードドライブの受付、ごみ分別ゲームなど）ができるようにします。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- 提案 2 -->
+                <article class="bg-white rounded-lg border border-teal-100 overflow-hidden shadow-sm">
+                    <div class="bg-teal-50 px-6 py-4 border-b border-teal-100">
+                        <h3 class="text-xl font-bold text-teal-900">提案2：多様な地域機関との連動・コラボレーション</h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-700 mb-4 text-sm">市民活動を点ではなく「面」で展開するため、他の公共機関や団体と積極的に連携し、相乗効果を狙います。</p>
+                        <ul class="custom-list space-y-4">
+                            <li>
+                                <strong class="text-slate-800">社会福祉協議会・公民館との連携</strong>
+                                <ul class="custom-sublist mt-2 space-y-1 text-slate-700 ml-2">
+                                    <li>社協と連携し、福祉系ボランティア団体や地域の見守りネットワークとの合同企画（例：多世代交流ワークショップ）を実施します。</li>
+                                    <li>公民館を拠点とする地域サークル（文化・学習活動）にも参加を呼びかけ、趣味の延長から地域貢献へ繋がる導線を作ります。フェア開催前に各公民館で「ミニパネル展」を実施し、本開催への興味を喚起します。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong class="text-slate-800">市民大学校との連動</strong>
+                                <ul class="custom-sublist mt-2 space-y-1 text-slate-700 ml-2">
+                                    <li>市民大学校のカリキュラムの一環として「フェアへの見学・参加」を組み込みます。</li>
+                                    <li>市民大学校の卒業生が新たに立ち上げた団体のデビューの場としたり、在校生が既存団体とマッチングして実践活動を始める「お見合いの場」として機能させます。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- 提案 3 -->
+                <article class="bg-white rounded-lg border border-teal-100 overflow-hidden shadow-sm">
+                    <div class="bg-teal-50 px-6 py-4 border-b border-teal-100">
+                        <h3 class="text-xl font-bold text-teal-900">提案3：ターゲット層の拡大と次世代の育成（子ども・若年層の誘客）</h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-700 mb-4 text-sm">シニア層向けの充実を図りつつ、将来の市民活動を担う層（子ども・学生・ファミリー層）を呼び込む企画が必要です。</p>
+                        <ul class="custom-list space-y-4">
+                            <li>
+                                <strong class="text-slate-800">子どもを含めた多世代交流・体験型企画</strong>
+                                <ul class="custom-sublist mt-2 space-y-1 text-slate-700 ml-2">
+                                    <li>各種団体・機関がコラボして、子どもが楽しみながら社会課題を学べるワークショップ（工作、科学実験、SDGsゲームなど）を実施します。</li>
+                                    <li>地元スポーツチームによるスポーツ体験コーナーを実施し、スポーツを通じて地域貢献に触れる機会を作ります。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong class="text-slate-800">学校教育との連携</strong>
+                                <ul class="custom-sublist mt-2 space-y-1 text-slate-700 ml-2">
+                                    <li>小中学校の「総合的な学習の時間」で学んだ地域課題の発表の場をフェア内に設けます。</li>
+                                    <li>高校生・大学生のボランティアスタッフを積極的に募集し、運営側として巻き込みます。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- 提案 5 -->
+                <article class="bg-white rounded-lg border border-teal-100 overflow-hidden shadow-sm">
+                    <div class="bg-teal-50 px-6 py-4 border-b border-teal-100">
+                        <h3 class="text-xl font-bold text-teal-900">提案5：会場内の回遊性向上と交流の創出</h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-700 mb-4 text-sm">来場者が特定のブースだけでなく、会場全体を楽しみ、交流できる仕掛けを作ります。</p>
+                        <ul class="custom-list space-y-4">
+                            <li>
+                                <strong class="text-slate-800">ミッション型スタンプラリーの実施</strong>
+                                <ul class="custom-sublist mt-2 space-y-1 text-slate-700 ml-2">
+                                    <li>単純なスタンプ集めではなく、「〇〇団体のブースでクイズに答える」「〇〇の体験をする」といったミッション型のスタンプラリーを実施し、景品を用意します。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong class="text-slate-800">交流カフェ・休憩スペースの充実</strong>
+                                <ul class="custom-sublist mt-2 space-y-1 text-slate-700 ml-2">
+                                    <li>来場者同士、または来場者と出展者がリラックスして話せるカフェスペースを設置します（市内福祉施設等による飲食物の販売など）。</li>
+                                    <li>「参加者の声ボード」を設置し、その場で感想や「自分にもできそうなこと」を付箋で貼ってもらい、参加の可視化を図ります。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- 5. 団体間交流の質的向上と運営環境の最適化 -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold text-slate-800 border-b-2 border-teal-600 pb-2 mb-6 mt-16 flex items-center">
+                <span class="text-teal-600 text-3xl mr-2 block mt-1">5.</span> 団体間交流の質的向上と運営環境の最適化
+            </h2>
+            <p class="mb-6 text-slate-700">
+                アンケートで寄せられた不満や課題を解消し、持続可能な運営体制を構築します。
+            </p>
+
+            <ul class="custom-list space-y-6">
+                <li>
+                    <strong class="text-slate-800 text-lg">団体間交流（ネットワーキング）の抜本的改善</strong>
+                    <ul class="custom-sublist mt-2 space-y-2 text-slate-700 ml-2">
+                        <li>「どうしていいかわからない」という声に応え、当日の交流会にはファシリテーター（進行役）を必ず配置します。</li>
+                        <li>マイクを用意して全団体の自己紹介を実施した後、「ボランティア募集の悩み」などテーマ別のテーブトークを導入し、有意義な時間を提供します。</li>
+                        <li>事前の顔合わせ交流会や、フェア終了後の懇親会も企画します。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong class="text-slate-800 text-lg">出展環境の最適化（事前のすり合わせ徹底）</strong>
+                    <ul class="custom-sublist mt-2 space-y-2 text-slate-700 ml-2">
+                        <li>「リハーサル不足」「ブースが狭い」というトラブルを防ぐため、オンライン・対面での事前レイアウト説明会を開き、要望（広さ等）を事前ヒアリングします。</li>
+                        <li>当日開場前や前日に、音響・映像チェックを含むリハーサル枠を確実に確保します。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong class="text-slate-800 text-lg">運営の効率化</strong>
+                    <ul class="custom-sublist mt-2 space-y-2 text-slate-700 ml-2">
+                        <li>来場者・団体アンケートは、QRコードを読み取ってスマートフォンで回答できる形式（Googleフォーム等）を導入し、手軽な回答と集計の効率化を図ります。</li>
+                        <li>募集スケジュールを早期化し（6月要項確定、7〜8月募集）、準備期間に十分な余裕を持たせます。</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+    </main>
+</body>
+</html>
