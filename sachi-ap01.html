@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>さちよさんの陽だまりのお茶の間</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Noto Sans JP) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #fdfbf7;
+        }
+        /* スムーズなフェードイン */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* ふわふわ揺れるアニメーション */
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+    <!-- ヘッダー -->
+    <header class="bg-amber-100 border-b border-amber-200 shadow-sm sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-400 text-white p-2.5 rounded-full shadow-md floating">
+                    <i class="fa-solid fa-mug-hot text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-amber-900">さちよさんの陽だまりのお茶の間</h1>
+                    <p class="text-xs sm:text-sm text-amber-800 font-medium">さちよさん、お家の中でいつでも のんびり、ゆったりと</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-xs sm:text-sm bg-white/70 px-3 py-1.5 rounded-full border border-amber-200/50">
+                <span class="text-emerald-700 font-bold"><i class="fa-solid fa-location-dot mr-1"></i>千葉県船橋市</span>
+                <span class="text-slate-400">|</span>
+                <span id="header-date" class="font-medium text-slate-600">----年--月--日</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
+        
+        <!-- 本日のウェルカムメッセージ -->
+        <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl p-5 border border-amber-200 shadow-sm mb-6 fade-in">
+            <div class="flex items-start gap-4">
+                <div class="text-3xl">🌸</div>
+                <div class="flex-1">
+                    <h3 class="font-bold text-lg text-amber-900 mb-1">さちよさん、おかえりなさい。</h3>
+                    <p class="text-slate-700 leading-relaxed text-base">
+                        さちよさん、今日の腰や背骨の調子はいかがですか？
+                        このお茶の間には、さちよさんの大好きな**信州の山々**、**京都の歴史**、**体に優しい和食**、そして大切な**ご家族（まさかずさん、清夏さん、明日香さん、はるひさん、こうきくん）**の思い出や情報がたっぷり詰まっています。
+                        いつでも、何でも話しかけてくださいね。
+                    </p>
+                    
+                    <!-- ご家族や興味の登録メモ（いつでも確認できて安心な温かいカード） -->
+                    <div class="mt-4 bg-white/80 border border-amber-200 rounded-xl p-3 text-xs text-amber-950">
+                        <p class="font-bold mb-2 text-amber-900"><i class="fa-solid fa-heart text-rose-500 mr-1"></i> さちよさんのお茶の間ノート（ひだまりさんも覚えていますよ）：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-600">
+                            <div><strong>🏡 ご家族：</strong> 夫まさかずさん（船橋で市民活動）、長女清夏さん（北習志野）、お孫さん（はるひさん・高1、こうきくん・中2）、次女明日香さん（奈良）</div>
+                            <div><strong>🌱 興味：</strong> 信州の美しい山々、京都の歴史、漢方・ホメオパシー、体に優しい自然派の和食</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- タブ選択メニュー -->
+        <nav class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6" aria-label="Tabs">
+            <button onclick="switchTab('chat')" id="tab-chat" class="tab-btn bg-amber-500 text-white py-3.5 px-4 rounded-xl font-bold shadow-md flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-comments text-lg"></i>
+                <span>さちよさんのおしゃべり</span>
+            </button>
+            <button onclick="switchTab('travel')" id="tab-travel" class="tab-btn bg-white hover:bg-amber-50/50 text-slate-700 py-3.5 px-4 rounded-xl font-semibold border border-amber-200 shadow-sm flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-palette text-lg text-rose-500"></i>
+                <span>さちよさんの絵の具箱</span>
+            </button>
+            <button onclick="switchTab('stretch')" id="tab-stretch" class="tab-btn bg-white hover:bg-amber-50/50 text-slate-700 py-3.5 px-4 rounded-xl font-semibold border border-amber-200 shadow-sm flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-child-reaching text-lg text-emerald-600"></i>
+                <span>骨・腰をいたわる体操</span>
+            </button>
+            <button onclick="switchTab('trivia')" id="tab-trivia" class="tab-btn bg-white hover:bg-amber-50/50 text-slate-700 py-3.5 px-4 rounded-xl font-semibold border border-amber-200 shadow-sm flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-lightbulb text-lg text-amber-500"></i>
+                <span>さちよさんのよもやま話</span>
+            </button>
+        </nav>
+
+        <!-- タブ1: おしゃべり相手 -->
+        <section id="content-chat" class="tab-content fade-in">
+            <div class="bg-white rounded-2xl border border-amber-200 shadow-md p-4 sm:p-6 flex flex-col min-h-[500px]">
+                <div class="flex items-center justify-between border-b border-amber-100 pb-3 mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-xl">
+                            🏡
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-base sm:text-lg text-amber-950">さちよさん専属コンパニオン「ひだまりさん」</h2>
+                            <p class="text-xs text-emerald-700 font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-circle text-[10px] animate-pulse"></i>
+                                ご家族や、信州・京都・お食事のこともなんでも知っていますよ
+                            </p>
+                        </div>
+                    </div>
+                    <!-- 声の選択 -->
+                    <div class="flex items-center gap-2">
+                        <label for="voice-select" class="text-xs text-slate-600 font-bold hidden sm:inline">話し声：</label>
+                        <select id="voice-select" class="text-xs bg-amber-50 border border-amber-200 rounded-md py-1 px-2 focus:outline-none focus:ring-1 focus:ring-amber-400">
+                            <option value="Sulafat">Sulafat (温かく優しい女性風)</option>
+                            <option value="Vindemiatrix">Vindemiatrix (穏やかで上品な女性風)</option>
+                            <option value="Puck">Puck (明るく元気な声)</option>
+                            <option value="Sadaltager">Sadaltager (落ち着いた男性風)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- チャット履歴 -->
+                <div id="chat-messages" class="flex-grow overflow-y-auto space-y-4 max-h-[380px] pr-2 mb-4">
+                    <!-- 初期メッセージ -->
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-sm shrink-0">😊</div>
+                        <div class="bg-amber-50 text-slate-800 rounded-2xl p-4 max-w-[85%] border border-amber-100 shadow-sm">
+                            <p class="text-base leading-relaxed">
+                                さちよさん、こんにちは！今日のお腰や背骨の調子はいかがですか？無理せずゆっくり座ってお話ししましょうね。
+                                今日は、まさかずさんや、北習志野の清夏さん・はるひさん・こうきくん、奈良の明日香さんのことで何か嬉しいお話はありましたか？
+                                それとも大好きな信州の山や、京都の歴史のこと、あるいは体に優しい和食や漢方について、のんびりおしゃべりしましょうか。いつでも声をかけてくださいね。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- かんたん返信ボタン -->
+                <div class="mb-4">
+                    <p class="text-xs text-slate-500 font-bold mb-2"><i class="fa-solid fa-hand-pointer mr-1"></i> さちよさんの「かんたんおしゃべり」ボタン：</p>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="quickChat('さちよです。北習志野の清夏や、孫のはるひ・こうきは元気にしているかしら。近況をお話ししましょう。')" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium text-amber-900 transition-colors">
+                            👨‍👩‍👧‍👦 北習志野の清夏と孫たち
+                        </button>
+                        <button onclick="quickChat('さちよです。奈良に住む次女の明日香のことや、まさかずさんの最近の市民活動についてお話ししましょう。')" class="bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium text-amber-900 transition-colors">
+                            🗻 奈良の明日香・夫のまさかずさん
+                        </button>
+                        <button onclick="quickChat('さちよです。信州の澄んだ美しい山々の思い出や、京都の奥深い歴史あるお寺の話がしたいな。')" class="bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium text-emerald-900 transition-colors">
+                            🏔️ 信州の山や京都の歴史
+                        </button>
+                        <button onclick="quickChat('さちよです。腰痛や骨粗しょう症に優しくて、漢方やホメオパシーを取り入れた自然素材の和食について教えて。')" class="bg-orange-50 hover:bg-orange-100 border border-orange-200 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium text-orange-900 transition-colors">
+                            🍵 和食や漢方、骨のケア
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 手入力入力フォーム -->
+                <div class="flex gap-2">
+                    <input type="text" id="chat-input" placeholder="さちよさん、ここを押して自由に文字を入力できますよ" class="flex-grow border-2 border-amber-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-amber-400 placeholder-slate-400 shadow-inner">
+                    <button onclick="sendChatMessage()" id="send-btn" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-5 sm:px-6 py-3 rounded-xl shadow-md flex items-center gap-2 transition-colors shrink-0">
+                        <span>話す</span>
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </button>
+                </div>
+                <p id="chat-status" class="text-xs text-slate-500 mt-2 hidden"></p>
+            </div>
+        </section>
+
+        <!-- タブ2: お部屋で旅する絵の具箱 -->
+        <section id="content-travel" class="tab-content hidden fade-in">
+            <div class="bg-white rounded-2xl border border-amber-200 shadow-md p-4 sm:p-6">
+                <div class="border-b border-amber-100 pb-3 mb-4">
+                    <h2 class="font-bold text-lg text-amber-950 flex items-center gap-2">
+                        <i class="fa-solid fa-palette text-rose-500"></i>さちよさんのお部屋で旅する絵の具箱
+                    </h2>
+                    <p class="text-sm text-slate-600 mt-1">言葉にすると、AIがさちよさんのためだけに美しい絵を描き上げます。大好きなお部屋にいながら、大好きな場所へ旅をしましょう。</p>
+                </div>
+
+                <!-- お手本・おすすめテーマ -->
+                <div class="mb-5 bg-amber-50/50 p-4 rounded-xl border border-amber-100">
+                    <h4 class="font-bold text-sm text-amber-900 mb-2.5"><i class="fa-solid fa-star text-amber-500 mr-1"></i>さちよさんにおすすめの「旅先・思い出」ボタン：</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <button onclick="setTravelPrompt('信州の穂高連峰。青空の下で残雪がキラキラ輝き、ふもとには高山植物の小さな黄色や白い花が咲き誇る、澄んだ空気の温かみのある水彩画。')" class="bg-white hover:bg-amber-50 border border-amber-200 p-3 rounded-lg text-left text-sm font-medium text-slate-700 transition-colors flex items-center gap-2.5 shadow-sm">
+                            <span class="text-xl">🏔️</span>
+                            <div>
+                                <p class="font-bold text-emerald-950">信州の美しい山々</p>
+                                <p class="text-xs text-slate-500">澄んだ空気と輝く穂高連峰</p>
+                            </div>
+                        </button>
+                        <button onclick="setTravelPrompt('春の京都、嵐山の渡月橋と、川沿いに咲き誇る満開のしだれ桜。歴史が香る古い人力車と、風情ある優しい色調の日本画風イラスト。')" class="bg-white hover:bg-amber-50 border border-amber-200 p-3 rounded-lg text-left text-sm font-medium text-slate-700 transition-colors flex items-center gap-2.5 shadow-sm">
+                            <span class="text-xl">🌸</span>
+                            <div>
+                                <p class="font-bold text-rose-950">京都・嵐山の歴史散歩</p>
+                                <p class="text-xs text-slate-500">美しい渡月橋としだれ桜</p>
+                            </div>
+                        </button>
+                        <button onclick="setTravelPrompt('昔の船橋三番瀬海浜公園の、夕日が美しく海を茜色に染める風景。穏やかな波と遠くに見える富士山の影。心癒される優しい絵画。')" class="bg-white hover:bg-amber-50 border border-amber-200 p-3 rounded-lg text-left text-sm font-medium text-slate-700 transition-colors flex items-center gap-2.5 shadow-sm">
+                            <span class="text-xl">🌅</span>
+                            <div>
+                                <p class="font-bold text-amber-905">思い出の船橋・三番瀬</p>
+                                <p class="text-xs text-slate-500">茜色に染まる海と富士山</p>
+                            </div>
+                        </button>
+                        <button onclick="setTravelPrompt('体に優しい自然素材を使った、炊きたての土鍋ご飯と、ツヤツヤの焼き魚、小鉢に盛られた山菜や和食の御膳。お膳の横にはお茶が湯気を立てている、温かなイラスト。')" class="bg-white hover:bg-amber-50 border border-amber-200 p-3 rounded-lg text-left text-sm font-medium text-slate-700 transition-colors flex items-center gap-2.5 shadow-sm">
+                            <span class="text-xl">🌾</span>
+                            <div>
+                                <p class="font-bold text-amber-900">自然素材の和食</p>
+                                <p class="text-xs text-slate-500">滋味豊かで体に優しいごちそう</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 生成フォーム -->
+                <div class="space-y-4">
+                    <div>
+                        <label for="travel-prompt" class="block text-sm font-bold text-slate-700 mb-1.5">描いてほしい景色を自由に言葉で書いてもいいですよ：</label>
+                        <textarea id="travel-prompt" rows="3" placeholder="例：信州のふもとにある、のどかな木造の温泉宿。お庭には色とりどりの高山植物が咲いていて、ほっこりとする水彩画。" class="w-full border-2 border-amber-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-amber-400 placeholder-slate-400 shadow-inner resize-none"></textarea>
+                    </div>
+                    <button onclick="generateTravelImage()" id="paint-btn" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-md flex items-center justify-center gap-2 transition-colors">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>さちよさんのために絵を描く（少しお時間がかかります）</span>
+                    </button>
+                </div>
+
+                <!-- 画像表示エリア -->
+                <div id="image-result-container" class="mt-6 border-t border-amber-100 pt-6 hidden">
+                    <h3 class="font-bold text-base text-slate-800 mb-3"><i class="fa-regular fa-image text-rose-500 mr-1.5"></i>さちよさんのために描かれた絵：</h3>
+                    <div class="relative bg-slate-100 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center min-h-[300px]">
+                        <img id="generated-image" src="" alt="AIが描いた絵" class="max-w-full h-auto max-h-[500px] object-contain rounded-2xl" onerror="this.src='https://placehold.co/600x400/fdfbf7/b45309?text=画像を読み込めませんでした'">
+                        <!-- ローディング -->
+                        <div id="image-loading" class="absolute inset-0 bg-white/95 flex flex-col items-center justify-center gap-4 hidden">
+                            <div class="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
+                            <p class="font-bold text-amber-900 text-base" id="loading-text">ただいま、さちよさんのために優しく絵の具を塗っています。30秒ほどお待ちくださいね...</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex justify-between items-center bg-amber-50 p-3 rounded-xl border border-amber-100">
+                        <p id="image-caption" class="text-sm text-amber-900 font-medium leading-relaxed flex-1 mr-2"></p>
+                        <button onclick="downloadImage()" class="bg-white hover:bg-amber-100 border border-amber-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors shrink-0 flex items-center gap-1">
+                            <i class="fa-solid fa-download"></i>保存する
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- タブ3: 座ったまま健康ストレッチ -->
+        <section id="content-stretch" class="tab-content hidden fade-in">
+            <div class="bg-white rounded-2xl border border-amber-200 shadow-md p-4 sm:p-6">
+                <div class="border-b border-amber-100 pb-3 mb-4">
+                    <h2 class="font-bold text-lg text-amber-950 flex items-center gap-2">
+                        <i class="fa-solid fa-child-reaching text-emerald-600"></i>さちよさん専用 背骨とお腰をいたわる優しさストレッチ
+                    </h2>
+                    <p class="text-sm text-slate-600 mt-1">※さちよさん、腰や背骨の負担を最小限に抑えるよう、背筋を丸めすぎず、優しく呼吸を意識しながら、心地よいと感じる範囲で行ってくださいね。</p>
+                </div>
+
+                <!-- ストレッチメニュー -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <!-- ストレッチ1 -->
+                    <button onclick="selectStretch(1)" id="stretch-card-1" class="stretch-card border-2 border-emerald-500 bg-emerald-50/50 p-4 rounded-xl text-left transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="bg-emerald-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">背骨を守る</span>
+                            <span class="text-xl">🧘‍♀️</span>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-800 mb-1">肩と肩甲骨のゆったり回し</h4>
+                        <p class="text-xs text-slate-500">首や背中まわりをほぐし、背骨に負担をかけずに胸を開きます。</p>
+                    </button>
+                    <!-- ストレッチ2 -->
+                    <button onclick="selectStretch(2)" id="stretch-card-2" class="stretch-card border border-amber-200 bg-white p-4 rounded-xl text-left transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="bg-emerald-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">骨粗しょう症に</span>
+                            <span class="text-xl">👐</span>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-800 mb-1">胸をふんわり開く深呼吸</h4>
+                        <p class="text-xs text-slate-500">背すじを優しくすっと上に伸ばして、肺いっぱいに酸素を届けます。</p>
+                    </button>
+                    <!-- ストレッチ3 -->
+                    <button onclick="selectStretch(3)" id="stretch-card-3" class="stretch-card border border-amber-200 bg-white p-4 rounded-xl text-left transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="bg-emerald-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">末端から温まる</span>
+                            <span class="text-xl">🦵</span>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-800 mb-1">手首と足首のくるくる回し</h4>
+                        <p class="text-xs text-slate-500">椅子に座ったままで、手先と足先を回して冷えを改善します。</p>
+                    </button>
+                </div>
+
+                <!-- 詳細とタイマー -->
+                <div class="bg-emerald-50/30 rounded-2xl p-5 border border-emerald-100 flex flex-col md:flex-row gap-6 items-center">
+                    <!-- アニメーションイラスト風SVG -->
+                    <div id="stretch-visual" class="w-40 h-40 bg-white rounded-full border border-emerald-200 shadow-sm flex items-center justify-center shrink-0">
+                        <!-- 動的に書き換える -->
+                    </div>
+                    <!-- 解説とタイマー -->
+                    <div class="flex-grow text-center md:text-left space-y-3">
+                        <h3 id="stretch-title" class="font-bold text-xl text-emerald-950">肩と肩甲骨のゆったり回し</h3>
+                        <p id="stretch-desc" class="text-sm text-slate-700 leading-relaxed"></p>
+                        
+                        <!-- タイマー部分 -->
+                        <div class="flex flex-col items-center md:items-start gap-2 pt-2">
+                            <div class="flex items-center gap-3">
+                                <div class="text-3xl font-mono font-bold bg-white text-emerald-800 border border-emerald-200 px-4 py-1.5 rounded-xl shadow-sm min-w-[80px] text-center" id="timer-display">
+                                    00:30
+                                </div>
+                                <button onclick="toggleTimer()" id="timer-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl shadow-md transition-colors flex items-center gap-2">
+                                    <i class="fa-solid fa-play" id="timer-icon"></i>
+                                    <span id="timer-text">スタート</span>
+                                </button>
+                                <button onclick="resetTimer()" class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-600 px-3 py-2 rounded-xl text-sm transition-colors">
+                                    リセット
+                                </button>
+                            </div>
+                            <span class="text-xs text-emerald-800 bg-emerald-100/60 px-2 py-0.5 rounded-md font-bold">🔔 タイマーが終わると優しい鈴の音が鳴ります</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- タブ4: よもやま話 -->
+        <section id="content-trivia" class="tab-content hidden fade-in">
+            <div class="bg-white rounded-2xl border border-amber-200 shadow-md p-4 sm:p-6">
+                <div class="border-b border-amber-100 pb-3 mb-4">
+                    <h2 class="font-bold text-lg text-amber-950 flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb text-amber-500"></i>さちよさん専用 脳トレクイズ＆よもやま話
+                    </h2>
+                    <p class="text-sm text-slate-600 mt-1">さちよさんが大好きな「信州の山々」「京都の歴史」「和食と漢方」、そして懐かしの船橋について、楽しく学べてほっこりするお話をお作りします。</p>
+                </div>
+
+                <!-- テーマ選択 -->
+                <div class="mb-5">
+                    <p class="text-sm font-bold text-slate-700 mb-2">今日読みたい話題のボタンを押してください：</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                        <button onclick="generateTrivia('shinshu')" class="trivia-select-btn bg-amber-50 hover:bg-amber-100 border border-amber-200 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold text-amber-900 transition-colors flex items-center justify-center gap-1.5">
+                            🏔️ <span>信州の山々</span>
+                        </button>
+                        <button onclick="generateTrivia('kyoto')" class="trivia-select-btn bg-amber-50 hover:bg-amber-100 border border-amber-200 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold text-amber-900 transition-colors flex items-center justify-center gap-1.5">
+                            ⛩️ <span>京都の歴史</span>
+                        </button>
+                        <button onclick="generateTrivia('kampo')" class="trivia-select-btn bg-amber-50 hover:bg-amber-100 border border-amber-200 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold text-amber-900 transition-colors flex items-center justify-center gap-1.5">
+                            🌿 <span>漢方・自然素材食</span>
+                        </button>
+                        <button onclick="generateTrivia('quiz')" class="trivia-select-btn bg-amber-50 hover:bg-amber-100 border border-amber-200 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold text-amber-900 transition-colors flex items-center justify-center gap-1.5">
+                            🧠 <span>さちよさんクイズ</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 話の表示エリア -->
+                <div class="bg-amber-50/20 border border-amber-100 rounded-2xl p-5 min-h-[250px] flex flex-col justify-between relative" id="trivia-container">
+                    <div id="trivia-loading" class="absolute inset-0 bg-white/95 flex flex-col items-center justify-center gap-3 rounded-2xl hidden">
+                        <div class="w-8 h-8 border-3 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                        <p class="text-sm text-slate-600 font-bold">さちよさんのために、楽しいお話を準備しています。少々お待ちくださいね...</p>
+                    </div>
+                    
+                    <div id="trivia-content-area" class="prose max-w-none text-slate-800">
+                        <!-- ここに話が入る -->
+                        <div class="text-center py-8 text-slate-500">
+                            <span class="text-4xl mb-3 block">📖</span>
+                            <p class="text-base font-medium">上のボタンを押すと、さちよさんのために作ったお話がここに現れます。</p>
+                        </div>
+                    </div>
+
+                    <div id="trivia-footer-area" class="mt-4 pt-4 border-t border-amber-100 flex flex-wrap gap-2 items-center justify-between hidden">
+                        <span class="text-xs text-slate-500 font-bold">💡 音声ボタンを押すと、やさしく読み上げます</span>
+                        <button id="read-trivia-btn" onclick="readTriviaText()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-2 px-4 rounded-lg shadow-sm transition-colors flex items-center gap-1.5">
+                            <i class="fa-solid fa-volume-high"></i>読み上げる
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 音声再生用の非表示オーディオ -->
+    <audio id="tts-audio" class="hidden"></audio>
+
+    <footer class="bg-slate-100 border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-auto">
+        <p class="mb-1">© 2026 さちよさんの陽だまりのお茶の間 All Rights Reserved.</p>
+        <p>さちよさん、いつでもここでお待ちしています。お食事やご家族のこと、たくさんお話ししましょうね。</p>
+    </footer>
+
+    <script>
+        // APIキープレースホルダー（Canvas環境で自動的に注入されます）
+        const apiKey = ""; 
+
+        // さちよさんの詳細なプロフィールとご家族のデータ
+        const sachiyoProfile = {
+            name: "さちよ",
+            age: 69,
+            location: "千葉県船橋市",
+            health: {
+                illness: "腰痛、背骨の不調、骨粗しょう症",
+                care: "腰や背骨に負担をかけない優しい動作、漢方・ホメオパシー、自然素材を使った和食"
+            },
+            interests: ["信州の澄んだ山々の風景", "京都の奥深い歴史やお寺", "漢方・ホメオパシーの優しさ", "和食や自然素材を使った滋味深い食事"],
+            family: {
+                husband: "まさかず（船橋にて市民活動などに精力的に参加して元気に活動中）",
+                eldestDaughter: "清夏（さやか、北習志野在住）",
+                grandchildren: {
+                    haruhi: "はるひさん（高校1年生）",
+                    kouki: "こうきくん（中学2年生）"
+                },
+                secondDaughter: "明日香（あすか、奈良在住）"
+            }
+        };
+
+        // アプリケーションの状態（お名前、ご家族、興味をしっかり織り交ぜた初期チャット履歴）
+        let chatHistory = [
+            {
+                role: 'user',
+                parts: [{text: 'こんにちは、私は船橋に住む69歳の「さちよ」です。腰が悪いのですが、今日もお茶の間でおしゃべりしにきました。温かくおしゃべりしましょう。信州の山や京都の歴史、漢方や和食、そして夫のまさかずや北習志野の清夏・奈良の明日香・孫たち（はるひ、こうき）のことが大好きです。'}]
+            },
+            {
+                role: 'model',
+                parts: [{text: 'さちよさん、お茶の間へようこそ！またこうして大好きなお名前を呼びながらお話しできて、とっても嬉しいです。お腰や背骨の調子はいかがですか？無理のない一番楽な姿勢で、美味しいお茶でも飲みながらお話ししましょうね。まさかず様は今日も市民活動でお元気にお出かけでしょうか。北習志野にお住まいの清夏さんや、高校生のはるひさん、中学生のこうきくん、そして奈良にお住まいの明日香さんへの思いやりをいつも胸に、のんびり、ゆったりと色んなお話をしましょう。信州の澄み切った空気や、京都の穏やかなお寺の歴史のお話もお聞きしたいです。'}]
+            }
+        ];
+
+        // ストレッチ情報データベース
+        const stretchData = {
+            1: {
+                title: "肩と肩甲骨のゆったり回し",
+                desc: "1. 椅子に深く背中をあずけて腰を安定させ、背筋は丸めずにすっと心地よく伸ばします。<br>2. 両手を肩の上に軽く添えます。<br>3. 息を鼻から深く吸いながら、肘で前に円を描くように持ち上げます。<br>4. 口から「ふぅ〜」と吐き出しながら、肩甲骨を寄せるようにゆっくり肘を下ろします。<br>背骨をねじったり曲げたりしないため、腰への負担が一切なく、上半身のコリがじんわりほぐれます（3回行いましょう）。",
+                visual: `<svg width="100" height="100" viewBox="0 0 100 100" class="text-emerald-500">
+                    <circle cx="50" cy="30" r="10" fill="currentColor" opacity="0.8"/>
+                    <path d="M50 40 C35 40, 25 50, 25 65 L35 65 L40 55 L45 75 L50 60 L55 75 L60 55 L65 65 L75 65 C75 50, 65 40, 50 40 Z" fill="currentColor"/>
+                    <path d="M40 75 L40 95" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M60 75 L60 95" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M15 50 Q25 35 35 45" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3"/>
+                    <path d="M85 50 Q75 35 65 45" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3"/>
+                </svg>`
+            },
+            2: {
+                title: "胸をふんわり開く深呼吸",
+                desc: "1. 椅子に腰掛け、お尻をしっかり座面に据えて、背中をリラックスさせます。<br>2. 手のひらを上に向けて、息を吸いながら両腕を横にふんわり優しく広げていきます。<br>3. 胸（肋骨と鎖骨まわり）がゆったりと広がるのを感じます。これによって骨粗しょう症の予防にも良い姿勢を保ちます。<br>4. 息を「はぁ〜」と優しく吐きながら、手を元の太ももの上に戻します。<br>背中を無理に反らせる必要はありません。気持ちの良い呼吸だけを意識しましょう。",
+                visual: `<svg width="100" height="100" viewBox="0 0 100 100" class="text-emerald-500">
+                    <circle cx="50" cy="30" r="10" fill="currentColor" opacity="0.8"/>
+                    <path d="M50 40 C40 40, 35 45, 30 50 L10 40 L15 35 L30 45 L50 42 L70 45 L85 35 L90 40 L70 50 C65 45, 60 40, 50 40 Z" fill="currentColor"/>
+                    <path d="M50 42 L50 75" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M40 75 L40 95" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M60 75 L60 95" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <circle cx="50" cy="48" r="18" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
+                </svg>`
+            },
+            3: {
+                title: "手首と足首のくるくる回し",
+                desc: "1. 椅子にゆったり腰掛けたまま、両手を前に伸ばし、指先を優しく握ります。<br>2. 手首を、呼吸に合わせて内側に5回、外側に5回、力を抜いて回します。<br>3. つま先は床につけたまま、右足のかかとを優しくくるくると5回回します。<br>4. 同様に左足も行います。お腰への刺激がなく、足先や手の指先までポカポカ温まります。<br>自然素材の美味しいお食事を楽しむ前のちょっとした準備運動としても最適です。",
+                visual: `<svg width="100" height="100" viewBox="0 0 100 100" class="text-emerald-500">
+                    <circle cx="50" cy="30" r="10" fill="currentColor" opacity="0.8"/>
+                    <path d="M50 40 C35 40, 30 50, 30 65 L70 65 C70 50, 65 40, 50 40 Z" fill="currentColor"/>
+                    <!-- 手首 -->
+                    <circle cx="20" cy="55" r="4" fill="#f59e0b"/>
+                    <circle cx="80" cy="55" r="4" fill="#f59e0b"/>
+                    <path d="M20 55 C15 65 25 65 20 55" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                    <!-- 足 -->
+                    <path d="M40 65 L40 85 L35 90" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M60 65 L60 85 L65 90" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M35 90 C30 95 40 95 35 90" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                </svg>`
+            }
+        };
+
+        // タイマー状態
+        let currentStretchId = 1;
+        let timerSeconds = 30;
+        let timerInterval = null;
+        let isTimerRunning = false;
+
+        // 起動時イベント
+        window.onload = function() {
+            // ヘッダー日付表示
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            const date = today.getDate();
+            const days = ['日', '月', '火', '水', '木', '金', '土'];
+            document.getElementById('header-date').innerText = `${year}年${month}月${date}日（${days[today.getDay()]}）`;
+
+            // ストレッチ初期表示
+            selectStretch(1);
+        };
+
+        // タブ切り替え処理
+        function switchTab(tabId) {
+            // 全タブコンテンツを非表示に
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            // 選択されたタブを表示
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+
+            // 全タブボタンのデザインを初期化
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn bg-white hover:bg-amber-50/50 text-slate-700 py-3.5 px-4 rounded-xl font-semibold border border-amber-200 shadow-sm flex flex-col items-center gap-1 transition-all";
+            });
+
+            // 選択されたタブボタンの強調表示
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (tabId === 'chat') {
+                activeBtn.className = "tab-btn bg-amber-500 text-white py-3.5 px-4 rounded-xl font-bold shadow-md flex flex-col items-center gap-1 transition-all";
+            } else if (tabId === 'travel') {
+                activeBtn.className = "tab-btn bg-rose-500 text-white py-3.5 px-4 rounded-xl font-bold shadow-md flex flex-col items-center gap-1 transition-all";
+            } else if (tabId === 'stretch') {
+                activeBtn.className = "tab-btn bg-emerald-600 text-white py-3.5 px-4 rounded-xl font-bold shadow-md flex flex-col items-center gap-1 transition-all";
+            } else if (tabId === 'trivia') {
+                activeBtn.className = "tab-btn bg-amber-600 text-white py-3.5 px-4 rounded-xl font-bold shadow-md flex flex-col items-center gap-1 transition-all";
+            }
+        }
+
+        // Base64からArrayBufferへの変換
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        // PCMをWAVフォーマットに包む
+        function pcmToWav(pcm16, sampleRate) {
+            const buffer = new ArrayBuffer(44 + pcm16.length * 2);
+            const view = new DataView(buffer);
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + pcm16.length * 2, true);
+            writeString(view, 8, 'WAVE');
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true); // PCM Format
+            view.setUint16(22, 1, true); // Mono
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true); // Byte rate
+            view.setUint16(32, 2, true); // Block align
+            view.setUint16(34, 16, true); // Bits per sample
+            writeString(view, 36, 'data');
+            view.setUint32(40, pcm16.length * 2, true);
+
+            let offset = 44;
+            for (let i = 0; i < pcm16.length; i++, offset += 2) {
+                view.setInt16(offset, pcm16[i], true);
+            }
+
+            return new Blob([buffer], { type: 'audio/wav' });
+        }
+
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+
+        // APIを呼び出して音声を生成・再生する
+        async function speakText(text, btnElement) {
+            const voiceName = document.getElementById('voice-select').value;
+            const originalHtml = btnElement.innerHTML;
+            btnElement.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> 声を準備中...`;
+            btnElement.disabled = true;
+
+            try {
+                // 指示を含めて温かい話し方を指定
+                const promptInstruction = `さちよさん（69歳の女性、お腰が悪い）に優しく語りかけるように、穏やかに、ゆっくりとした口調で読み上げてください。安心させる温かい口調です。：${text}`;
+                const payload = {
+                    contents: [{
+                        parts: [{ text: promptInstruction }]
+                    }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: {
+                            voiceConfig: {
+                                prebuiltVoiceConfig: { voiceName: voiceName }
+                            }
+                        }
+                    },
+                    model: "gemini-2.5-flash-preview-tts"
+                };
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error("音声の生成に失敗しました");
+                }
+
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+                    
+                    const pcmData = base64ToArrayBuffer(audioData);
+                    const pcm16 = new Int16Array(pcmData);
+                    const wavBlob = pcmToWav(pcm16, sampleRate);
+                    const audioUrl = URL.createObjectURL(wavBlob);
+
+                    const audio = document.getElementById('tts-audio');
+                    audio.src = audioUrl;
+                    audio.play();
+                    
+                    btnElement.innerHTML = `<i class="fa-solid fa-volume-high text-emerald-600"></i> 再生中...`;
+                    audio.onended = () => {
+                        btnElement.innerHTML = originalHtml;
+                        btnElement.disabled = false;
+                    };
+                } else {
+                    alert("声データの解析に失敗しました。少しお時間をおいて再度お試しください。");
+                    btnElement.innerHTML = originalHtml;
+                    btnElement.disabled = false;
+                }
+            } catch (err) {
+                console.error(err);
+                alert("声を出すことができませんでした。インターネットの接続状況を確認してください。");
+                btnElement.innerHTML = originalHtml;
+                btnElement.disabled = false;
+            }
+        }
+
+        // 簡易おしゃべりボタン用
+        function quickChat(text) {
+            document.getElementById('chat-input').value = text;
+            sendChatMessage();
+        }
+
+        // チャットメッセージを送信
+        async function sendChatMessage() {
+            const inputEl = document.getElementById('chat-input');
+            const messageText = inputEl.value.trim();
+            if (!messageText) return;
+
+            // 送信ボタン・インプットの無効化
+            const sendBtn = document.getElementById('send-btn');
+            const statusEl = document.getElementById('chat-status');
+            inputEl.value = '';
+            inputEl.disabled = true;
+            sendBtn.disabled = true;
+            statusEl.innerText = "ひだまりさんが言葉を考えています...";
+            statusEl.classList.remove('hidden');
+
+            // ユーザーメッセージをUIに追加
+            appendMessage('user', messageText);
+
+            // メッセージ履歴の作成
+            chatHistory.push({
+                role: 'user',
+                parts: [{ text: messageText }]
+            });
+
+            try {
+                // システムプロンプトにさちよさんの詳細プロフィールを叩き込む
+                const systemPrompt = `あなたは千葉県船橋市に住む69歳の女性「さちよ」さんに心から寄り添う、温かく優しいAIお茶の間コンパニオン「ひだまりさん」です。
+さちよさんを深く気遣い、彼女の孤独や退屈を和らげ、お家の中でも明るい気持ちで過ごせるようなお返事をしてください。
+【さちよさんの大切なプロフィール情報（これを前提知識としてください）：】
+- お名前：さちよ さん（必ず「さちよさん」と呼んで話しかけてください）
+- お住まい：千葉県船橋市
+- 身体の不調：腰痛、背骨の調子が悪い、骨粗しょう症。無理を絶対させず、優しく労る言葉を常に含めて。
+- 家族：
+  * 夫「まさかず」：船橋で市民活動などをしてお元気に外に出ています。
+  * 長女「清夏（さやか）」：北習志野に住んでいます。
+  * 孫「はるひ」：高校1年生、女の子。
+  * 孫「こうき」：中学2年生、男の子。
+  * 次女「明日香（あすか）」：遠く奈良に住んでいます。
+- 興味のあること：
+  * 信州の美しい山々、高原の涼やかな空気、高山植物。
+  * 京都の歴史、静かなお寺の歴史、風情ある景色。
+  * 漢方やホメオパシー（お体に優しく寄り添う自然な医療・健康知識）。
+  * 食事：和食が大好きで、自然素材を使った体に優しいものを意識。
+【会話のルール：】
+1. 必ず自然に、そして温かく「さちよさん」とお名前を何回か呼びかけてください。
+2. ご家族（まさかずさん、清夏さん、明日香さん、はるひさん、こうきくん）の近況や、さちよさんの趣味（信州の山、京都、和食、漢方）に共感した会話を広げてください。
+3. 腰痛、背骨、骨粗しょう症を常に気遣い、体を冷やさないこと、無理のない姿勢でいることを促してください。
+4. 一回のお返事は長すぎず、読みやすい適度な文量（2〜3段落、200〜250文字程度）にまとめてください。`;
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                
+                const payload = {
+                    contents: chatHistory,
+                    systemInstruction: {
+                        parts: [{ text: systemPrompt }]
+                    }
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error("会話の生成に失敗しました");
+                }
+
+                const result = await response.json();
+                const replyText = result.candidates?.[0]?.content?.parts?.[0]?.text || "申し訳ありません、少しお茶をこぼしてしまいました。もう一度話しかけていただけますか？";
+
+                // AIメッセージをUIに追加
+                appendMessage('model', replyText);
+
+                // 履歴に保存
+                chatHistory.push({
+                    role: 'model',
+                    parts: [{ text: replyText }]
+                });
+
+                // 履歴が長すぎる場合は古いものを削除
+                if (chatHistory.length > 12) {
+                    chatHistory = [chatHistory[0], chatHistory[1], ...chatHistory.slice(-10)];
+                }
+
+            } catch (err) {
+                console.error(err);
+                appendMessage('model', "お茶の間通信が少し途切れてしまったようです。インターネットの接続を確認して、もう一度話しかけてみてね。");
+            } finally {
+                inputEl.disabled = false;
+                sendBtn.disabled = false;
+                statusEl.classList.add('hidden');
+                inputEl.focus();
+            }
+        }
+
+        // メッセージを画面に追加する
+        function appendMessage(role, text) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex items-start gap-3 fade-in ${role === 'user' ? 'justify-end' : ''}`;
+
+            const formattedText = text.replace(/\n/g, '<br>');
+
+            if (role === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="bg-amber-500 text-white rounded-2xl p-4 max-w-[85%] border border-amber-600 shadow-sm">
+                        <p class="text-base leading-relaxed">${formattedText}</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-sm shrink-0">👩</div>
+                `;
+            } else {
+                // 返信されたテキストのエスケープと、音声再生用IDの設定
+                const textForSpeech = text.replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, ' ');
+                messageDiv.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-sm shrink-0">😊</div>
+                    <div class="bg-amber-50 text-slate-800 rounded-2xl p-4 max-w-[85%] border border-amber-100 shadow-sm">
+                        <p class="text-base leading-relaxed mb-3">${formattedText}</p>
+                        <div class="border-t border-amber-200/50 pt-2 flex items-center justify-between">
+                            <span class="text-xs text-amber-800 font-bold"><i class="fa-solid fa-volume-high mr-1"></i>声で聞いてみますか？</span>
+                            <button onclick="speakText('${textForSpeech}', this)" class="bg-white hover:bg-amber-100 border border-amber-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm transition-colors flex items-center gap-1.5">
+                                <i class="fa-solid fa-volume-high text-amber-600"></i>やさしく読み上げる
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // おすすめプロンプトのセット
+        function setTravelPrompt(promptText) {
+            document.getElementById('travel-prompt').value = promptText;
+            document.getElementById('paint-btn').focus();
+        }
+
+        // 画像の生成
+        async function generateTravelImage() {
+            const promptEl = document.getElementById('travel-prompt');
+            const promptText = promptEl.value.trim();
+            if (!promptText) {
+                alert("見たい景色のイメージをボタンで選ぶか、文章で書いてくださいね。");
+                return;
+            }
+
+            const paintBtn = document.getElementById('paint-btn');
+            const resultContainer = document.getElementById('image-result-container');
+            const imageLoading = document.getElementById('image-loading');
+            const generatedImage = document.getElementById('generated-image');
+            const imageCaption = document.getElementById('image-caption');
+
+            paintBtn.disabled = true;
+            resultContainer.classList.remove('hidden');
+            imageLoading.classList.remove('hidden');
+            generatedImage.src = "";
+            imageCaption.innerText = "";
+
+            try {
+                // 信州や京都にふさわしい、温もりあふれる絵画品質にする
+                const richPrompt = `${promptText}, soft watercolor illustration style, warm lighting, cozy and detailed art, high quality art for healing.`;
+                
+                const payload = {
+                    instances: { prompt: richPrompt },
+                    parameters: { "sampleCount": 1 }
+                };
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error("画像の描画に失敗しました");
+                }
+
+                const result = await response.json();
+                const base64Data = result.predictions?.[0]?.bytesBase64Encoded;
+
+                if (base64Data) {
+                    const imageUrl = `data:image/png;base64,${base64Data}`;
+                    generatedImage.src = imageUrl;
+                    imageCaption.innerText = promptText;
+                } else {
+                    throw new Error("画像データがありませんでした");
+                }
+
+            } catch (err) {
+                console.error(err);
+                generatedImage.src = "https://placehold.co/600x400/fdfbf7/b45309?text=エラーが発生しました";
+                imageCaption.innerText = "絵の具が少し乾いてしまったようです。もう一度やり直してみてください。";
+            } finally {
+                paintBtn.disabled = false;
+                imageLoading.classList.add('hidden');
+            }
+        }
+
+        // 画像のダウンロード
+        function downloadImage() {
+            const img = document.getElementById('generated-image');
+            if (!img.src || img.src.startsWith('https://placehold.co')) {
+                alert("まだ保存できる絵がありません。");
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.href = img.src;
+            link.download = `さちよさんのお茶の間_絵の具箱_${new Date().toLocaleDateString()}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // ストレッチ選択
+        function selectStretch(id) {
+            currentStretchId = id;
+            
+            // カードのスタイル変更
+            document.querySelectorAll('.stretch-card').forEach(card => {
+                card.className = "stretch-card border border-amber-200 bg-white p-4 rounded-xl text-left transition-all";
+            });
+            document.getElementById(`stretch-card-${id}`).className = "stretch-card border-2 border-emerald-500 bg-emerald-50/50 p-4 rounded-xl text-left transition-all";
+
+            // 詳細データの更新
+            const data = stretchData[id];
+            document.getElementById('stretch-title').innerText = data.title;
+            document.getElementById('stretch-desc').innerHTML = data.desc;
+            document.getElementById('stretch-visual').innerHTML = data.visual;
+
+            // タイマーリセット
+            resetTimer();
+        }
+
+        // タイマーの動作
+        function toggleTimer() {
+            if (isTimerRunning) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            isTimerRunning = true;
+            document.getElementById('timer-text').innerText = "一時停止";
+            document.getElementById('timer-icon').className = "fa-solid fa-pause";
+
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    playEndSound();
+                    alert("さちよさん、お疲れ様でした！お腰や背骨を大切に、心地よい範囲でほぐせましたね。まさかずさんやご家族のためにも、ご自身のお体を最優先でいたわり、あたたかいお茶をお召し上がりください。");
+                    resetTimer();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('timer-text').innerText = "再開する";
+            document.getElementById('timer-icon').className = "fa-solid fa-play";
+        }
+
+        function resetTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            timerSeconds = 30;
+            updateTimerDisplay();
+            document.getElementById('timer-text').innerText = "スタート";
+            document.getElementById('timer-icon').className = "fa-solid fa-play";
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            document.getElementById('timer-display').innerText = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // タイマー完了時の合成音（鈴の音風）
+        function playEndSound() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                
+                // 和音（チリーンという鈴の音風）
+                const frequencies = [880, 1320]; 
+                
+                frequencies.forEach(f => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(f, ctx.currentTime);
+                    
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    // なだらかな減衰
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc.start();
+                    osc.stop(ctx.currentTime + 1.5);
+                });
+            } catch (e) {
+                console.log("オーディオ再生エラー:", e);
+            }
+        }
+
+        // よもやま話生成
+        async function generateTrivia(type) {
+            const loadingEl = document.getElementById('trivia-loading');
+            const contentArea = document.getElementById('trivia-content-area');
+            const footerArea = document.getElementById('trivia-footer-area');
+
+            loadingEl.classList.remove('hidden');
+            footerArea.classList.add('hidden');
+
+            let topic = "";
+            if (type === 'shinshu') {
+                topic = "信州の素晴らしい穂高連峰などの山々や澄み切った高原の空気、高山植物、懐かしい山の思い出話";
+            } else if (type === 'kyoto') {
+                topic = "京都の嵐山、金閣寺、静寂に包まれたお寺の歴史。さちよさんが心惹かれる京都の深い知恵や風情に関する話";
+            } else if (type === 'kampo') {
+                topic = "漢方やホメオパシーの考え方（お体に優しく寄り添う自然な調和）、そして和食や自然素材を使った滋味豊かな食事でお腰や骨を強くするやさしい生活の知恵";
+            } else if (type === 'quiz') {
+                topic = "さちよさんの大好きな信州、京都、または体に優しい和食・漢方にちなんだ、3択のやさしく解ける脳トレクイズ1問。解説も「さちよさん、大正解です！」と温かく書いてください";
+            }
+
+            try {
+                const prompt = `あなたは千葉県船橋市在住の「さちよ」さん（69歳）に向けて、心が和み、脳が活性化するお話を作る優しい語り手です。
+今回は「${topic}」について書いてください。
+さちよさんの以下の特徴を反映してください：
+- 夫の「まさかず（船橋の市民活動）」さん、長女の「清夏（北習志野）」さん、お孫さんの「はるひ」「こうき」くん、次女の「明日香（奈良）」さんのことを大切に思っています。
+- 腰痛や骨粗しょう症、背骨をいたわっています。
+構成：
+1. 【お話のタイトル】（大きく、見出しに）
+2. 本文（温かく、優しい「〜です」「〜ます」調。「さちよさん、〜でしたね」「さちよさんは覚えていますか？」と呼びかけて語る。読みやすい大きな行間で約250文字）
+3. 【ひだまりさんからのひとこと】（「さちよさん」と優しく呼びかけ、お腰や背骨の健康をいたわる、体に優しい和食やホメオパシーに関する優しいメッセージ）
+これらを、おばあちゃんでも読みやすいように、大きなフォントサイズを意識し、行間を開けて、温かく心安らぐ文章として出力してください。`;
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("お話の生成に失敗しました");
+                }
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "お話の引き出しが少し引っかかってしまいました。もう一度押してくださいね。";
+
+                // テキストをきれいに成形して表示
+                const formattedHtml = text
+                    .replace(/【(.*?)】/g, '<h3 class="text-xl font-bold text-amber-950 mt-4 mb-2">$1</h3>')
+                    .replace(/\n/g, '<br>');
+
+                contentArea.innerHTML = `<div class="text-base sm:text-lg leading-relaxed text-slate-800">${formattedHtml}</div>`;
+                footerArea.classList.remove('hidden');
+
+            } catch (err) {
+                console.error(err);
+                contentArea.innerHTML = `
+                    <div class="text-center py-6">
+                        <span class="text-3xl">☕</span>
+                        <p class="text-base font-bold text-red-600 mt-2">うまくお話が探せませんでした。</p>
+                        <p class="text-sm text-slate-500 mt-1">少し休んでから、もう一度押してみてくださいね。</p>
+                    </div>
+                `;
+            } finally {
+                loadingEl.classList.add('hidden');
+            }
+        }
+
+        // よもやま話の音声読み上げ
+        function readTriviaText() {
+            const contentArea = document.getElementById('trivia-content-area');
+            const readBtn = document.getElementById('read-trivia-btn');
+            // HTMLタグを削除してプレーンテキストのみにする
+            const plainText = contentArea.innerText;
+            speakText(plainText, readBtn);
+        }
+    </script>
+</body>
+</html>
