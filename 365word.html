@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>至言365 - 人生とビジネスを導く</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts (Inter & Noto Serif JP for elegant style) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Serif JP', serif;
+    }
+    .serif-font {
+      font-family: 'Noto Serif JP', serif;
+    }
+    /* カスタムスクロールバー */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-[#fafaf9] text-[#1c1917] min-h-screen flex flex-col antialiased selection:bg-amber-100 selection:text-amber-900">
+
+  <div id="app" class="flex-grow flex flex-col">
+    <!-- ヘッダー -->
+    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-stone-200">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="app.changeTab('home')">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-amber-500/20">
+            <span class="serif-font text-xl font-bold">至</span>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold tracking-tight text-stone-800">至言365</h1>
+            <p class="text-xs text-stone-500 font-medium">人生とビジネスを導く言葉</p>
+          </div>
+        </div>
+
+        <!-- PCナビゲーション -->
+        <nav class="hidden md:flex space-x-1">
+          <button onclick="app.changeTab('home')" id="nav-home" class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-amber-600 bg-amber-50">
+            <i class="fa-solid fa-house mr-1.5"></i>ホーム
+          </button>
+          <button onclick="app.changeTab('search')" id="nav-search" class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-stone-600 hover:text-stone-900 hover:bg-stone-50">
+            <i class="fa-solid fa-magnifying-glass mr-1.5"></i>言葉を探す
+          </button>
+          <button onclick="app.changeTab('favorites')" id="nav-favorites" class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-stone-600 hover:text-stone-900 hover:bg-stone-50 flex items-center">
+            <i class="fa-solid fa-heart mr-1.5 text-rose-500"></i>お気に入り
+            <span id="fav-badge" class="ml-1.5 px-1.5 py-0.5 text-3xs bg-rose-500 text-white rounded-full font-bold hidden">0</span>
+          </button>
+          <button onclick="app.changeTab('advisor')" id="nav-advisor" class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-stone-600 hover:text-stone-900 hover:bg-stone-50">
+            <i class="fa-solid fa-brain mr-1.5 text-amber-500"></i>AI相談室
+          </button>
+        </nav>
+
+        <!-- 右端：設定おみくじ -->
+        <div class="flex items-center space-x-2">
+          <button onclick="app.showSettingsModal()" class="w-9 h-9 bg-stone-100 hover:bg-stone-200 text-stone-600 rounded-lg flex items-center justify-center transition-all" title="APIキー設定">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+          <button onclick="app.drawFortune()" class="px-3.5 py-1.5 bg-stone-900 hover:bg-stone-800 text-white rounded-lg text-xs font-semibold tracking-wider transition-all shadow-sm flex items-center space-x-1">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+            <span>おみくじ</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- モバイル向けボトムナビゲーション -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 z-40 px-4 py-2 flex justify-around shadow-lg">
+      <button onclick="app.changeTab('home')" id="m-nav-home" class="flex flex-col items-center space-y-1 text-amber-600">
+        <i class="fa-solid fa-house text-lg"></i>
+        <span class="text-2xs font-bold">ホーム</span>
+      </button>
+      <button onclick="app.changeTab('search')" id="m-nav-search" class="flex flex-col items-center space-y-1 text-stone-400">
+        <i class="fa-solid fa-magnifying-glass text-lg"></i>
+        <span class="text-2xs font-bold">探す</span>
+      </button>
+      <button onclick="app.changeTab('favorites')" id="m-nav-favorites" class="flex flex-col items-center space-y-1 text-stone-400 relative">
+        <i class="fa-solid fa-heart text-lg"></i>
+        <span class="text-2xs font-bold">お気に入り</span>
+        <span id="m-fav-badge" class="absolute -top-1 right-2 w-4 h-4 bg-rose-500 text-white text-3xs rounded-full flex items-center justify-center font-bold hidden">0</span>
+      </button>
+      <button onclick="app.changeTab('advisor')" id="m-nav-advisor" class="flex flex-col items-center space-y-1 text-stone-400">
+        <i class="fa-solid fa-brain text-lg"></i>
+        <span class="text-2xs font-bold">AI相談</span>
+      </button>
+    </nav>
+
+    <!-- メインコンテンツエリア -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
+      
+      <!-- ホームタブ -->
+      <section id="tab-home" class="space-y-8">
+        <!-- ヒーロー & 今日の言葉 -->
+        <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-950 text-stone-100 rounded-3xl p-6 sm:p-10 shadow-xl border border-stone-800 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full filter blur-3xl -mr-20 -mt-20"></div>
+          <div class="absolute bottom-0 left-0 w-64 h-64 bg-stone-500/5 rounded-full filter blur-2xl -ml-20 -mb-20"></div>
+          
+          <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div class="space-y-4 max-w-2xl">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                <i class="fa-solid fa-calendar-day mr-1.5"></i>本日の言葉
+              </span>
+              <h2 id="today-phrase" class="serif-font text-2xl sm:text-3xl md:text-4xl font-bold leading-tight tracking-wide text-white">
+                -- Loading --
+              </h2>
+              <p id="today-commentary" class="text-stone-300 text-sm sm:text-base leading-relaxed font-light">
+                解説を読み込んでいます。
+              </p>
+              <div class="flex items-center space-x-3 text-xs text-stone-400">
+                <span id="today-category" class="bg-stone-800 px-2.5 py-1 rounded-md text-stone-300 font-medium border border-stone-700">困難・挑戦・逆境</span>
+                <span id="today-id" class="font-mono">ID: #000</span>
+                <span id="today-source" class="italic">出典: --</span>
+              </div>
+            </div>
+
+            <!-- アクションボタン -->
+            <div class="flex flex-row md:flex-col gap-3 justify-start md:justify-center">
+              <button onclick="app.speakToday()" class="flex-1 md:flex-none px-4 py-3 bg-white/10 hover:bg-white/20 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 border border-white/10">
+                <i class="fa-solid fa-volume-high text-amber-400" id="today-tts-icon"></i>
+                <span id="today-tts-text">朗読する</span>
+              </button>
+              <button onclick="app.consultTodayWithAI()" class="flex-1 md:flex-none px-4 py-3 bg-amber-500 hover:bg-amber-400 active:scale-95 text-stone-950 rounded-xl text-xs font-black transition-all flex items-center justify-center space-x-2 shadow-lg shadow-amber-500/20">
+                <i class="fa-solid fa-brain"></i>
+                <span>AIに相談する</span>
+              </button>
+              <button onclick="app.toggleTodayFavorite()" id="today-fav-btn" class="px-4 py-3 bg-white/5 hover:bg-white/10 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center border border-white/5">
+                <i class="fa-regular fa-heart text-lg" id="today-fav-icon"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 365の至言集のイントロ -->
+        <div class="bg-amber-50/50 border border-amber-200/60 rounded-2xl p-6 flex flex-col md:flex-row gap-6 items-center">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-800 flex-shrink-0">
+            <i class="fa-solid fa-scroll text-xl"></i>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-bold text-stone-800">人生とビジネスを導く365の至言集</h3>
+            <p class="text-stone-600 text-xs sm:text-sm leading-relaxed">
+              古今東西の知恵やビジネスリーダーたちの言葉から、困難を乗り越え、自己を磨き、ビジネスやリーダーシップで卓越した成果を上げるための365の至言。今日一日の指針として、気になるキーワードを検索して、またはAIと共に対話しながら心に刻みましょう。
+            </p>
+          </div>
+        </div>
+
+        <!-- カテゴリセクション -->
+        <div>
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="font-bold text-lg text-stone-800 flex items-center">
+              <span class="w-1 h-5 bg-amber-500 rounded-full mr-2.5"></span>
+              カテゴリーから探す
+            </h3>
+            <span class="text-xs text-stone-500 font-medium">全8つのテーマ</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="category-grid">
+            <!-- JSで動的に追加 -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 検索・一覧タブ -->
+      <section id="tab-search" class="space-y-6 hidden">
+        <!-- 検索バー・フィルタ -->
+        <div class="bg-white p-4 sm:p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+          <div class="flex flex-col md:flex-row gap-3">
+            <div class="relative flex-grow">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400"></i>
+              <input type="text" id="search-input" oninput="app.filterMaxims()" placeholder="フレーズ、解説、出典番号などを入力して検索..." class="w-full pl-10 pr-4 py-2.5 bg-stone-50 hover:bg-stone-100/50 focus:bg-white rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-sm">
+            </div>
+            <div class="flex gap-2">
+              <select id="category-select" onchange="app.filterMaxims()" class="px-3 py-2.5 bg-stone-50 rounded-xl border border-stone-200 text-sm font-medium focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all">
+                <option value="all">すべてのカテゴリ</option>
+                <!-- JSで動的に追加 -->
+              </select>
+              <button onclick="app.clearFilters()" class="px-4 py-2.5 text-stone-600 hover:text-stone-900 bg-stone-100 hover:bg-stone-200 rounded-xl text-sm font-medium transition-all">
+                クリア
+              </button>
+            </div>
+          </div>
+
+          <!-- カテゴリバッジ横並び -->
+          <div class="flex flex-wrap gap-1.5 pt-2" id="category-badges">
+            <!-- JSで動的生成 -->
+          </div>
+        </div>
+
+        <!-- 検索結果情報 -->
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-stone-500 font-medium" id="results-count">全365件の言葉を表示中</p>
+          <div class="flex items-center space-x-1.5">
+            <span class="text-xs text-stone-400 font-medium">表示順:</span>
+            <select id="sort-select" onchange="app.sortMaxims()" class="bg-transparent text-xs font-semibold text-stone-600 border-none outline-none cursor-pointer">
+              <option value="asc">ID順 (1 - 365)</option>
+              <option value="desc">ID逆順</option>
+              <option value="random">ランダム</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 言葉のカードリスト -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="maxim-card-list">
+          <!-- JSで動的にカードを生成 -->
+        </div>
+
+        <!-- 無限スクロール・さらに読み込むボタン -->
+        <div id="load-more-container" class="flex justify-center pt-4 hidden">
+          <button onclick="app.loadMore()" class="px-6 py-2.5 bg-white border border-stone-200 hover:border-stone-300 hover:bg-stone-50 rounded-xl text-stone-700 text-sm font-medium transition-all shadow-sm">
+            もっと見る
+          </button>
+        </div>
+      </section>
+
+      <!-- お気に入りタブ -->
+      <section id="tab-favorites" class="space-y-6 hidden">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="serif-font text-xl font-bold text-stone-800">お気に入りした言葉</h2>
+            <p class="text-xs text-stone-500 mt-1">いつでも見返すことができる、あなたの琴線に触れた至言たち</p>
+          </div>
+          <button id="clear-all-favs" onclick="app.clearAllFavorites()" class="text-xs text-rose-600 hover:text-rose-700 font-semibold transition-all px-3 py-1.5 bg-rose-50 rounded-lg border border-rose-100 hidden">
+            すべて削除
+          </button>
+        </div>
+
+        <!-- お気に入りカードリスト -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="fav-card-list">
+          <!-- JSで動的に追加 -->
+        </div>
+
+        <!-- 空状態 -->
+        <div id="fav-empty-state" class="flex flex-col items-center justify-center py-20 bg-stone-50 border border-dashed border-stone-200 rounded-3xl space-y-4">
+          <div class="w-16 h-16 rounded-full bg-stone-100 flex items-center justify-center text-stone-400">
+            <i class="fa-regular fa-heart text-2xl"></i>
+          </div>
+          <div class="text-center space-y-1">
+            <h4 class="font-bold text-stone-800">お気に入りはまだありません</h4>
+            <p class="text-stone-500 text-xs sm:text-sm">気になる言葉のハートマークを押して保存しましょう。</p>
+          </div>
+          <button onclick="app.changeTab('search')" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 active:scale-95 text-stone-950 rounded-xl text-xs font-bold transition-all shadow-md shadow-amber-500/10">
+            言葉を探しにいく
+          </button>
+        </div>
+      </section>
+
+      <!-- AI相談室タブ -->
+      <section id="tab-advisor" class="space-y-6 hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- 左側：選択されている至言 -->
+          <div class="lg:col-span-1 space-y-4">
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm sticky top-20 space-y-4">
+              <h3 class="font-bold text-stone-800 text-sm flex items-center space-x-1.5">
+                <i class="fa-solid fa-quote-left text-amber-500"></i>
+                <span>相談のベースにする言葉</span>
+              </h3>
+              
+              <div id="advisor-selected-maxim" class="p-4 bg-stone-50 rounded-xl border border-stone-100 space-y-3 relative overflow-hidden">
+                <div class="absolute -top-3 -right-3 text-7xl text-stone-200/40 serif-font select-none">“</div>
+                <div id="adv-maxim-id" class="text-2xs font-bold font-mono text-amber-600 bg-amber-50 inline-block px-1.5 py-0.5 rounded">ID: --</div>
+                <h4 id="adv-phrase" class="serif-font font-bold text-stone-900 leading-snug">言葉が選択されていません</h4>
+                <p id="adv-comm" class="text-stone-500 text-xs leading-relaxed">右のチャット、または一覧から言葉を選択して「AIに相談する」をクリックしてください。</p>
+              </div>
+
+              <!-- 音声設定 -->
+              <div class="space-y-2">
+                <label class="text-xs font-bold text-stone-600 block">AIの声種（朗読用）</label>
+                <select id="ai-voice-select" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium outline-none">
+                  <option value="Aoede">Aoede (そよ風のように爽やか)</option>
+                  <option value="Zephyr">Zephyr (明るく前向き)</option>
+                  <option value="Leda">Leda (若々しくハツラツ)</option>
+                  <option value="Algieba">Algieba (滑らかで上品)</option>
+                  <option value="Kore">Kore (凛とした強さ)</option>
+                </select>
+              </div>
+
+              <div class="pt-2 border-t border-stone-100 flex items-center justify-between text-xxs text-stone-400">
+                <span>Powerd by Gemini 3.1 Flash</span>
+                <span id="advisor-status" class="flex items-center text-stone-400 font-semibold"><span class="w-1.5 h-1.5 bg-stone-400 rounded-full mr-1"></span>OFFLINE</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右側：チャット型相談UI -->
+          <div class="lg:col-span-2 flex flex-col h-[550px] bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+            <!-- チャットヘッダー -->
+            <div class="px-5 py-4 border-b border-stone-100 bg-stone-50 flex items-center justify-between">
+              <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-stone-950 font-bold text-sm">
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-stone-800 text-sm">至言コンシェルジュ</h4>
+                  <p class="text-2xs text-stone-500">あなたの選んだ言葉から具体的な解決策を紐解きます</p>
+                </div>
+              </div>
+              <button onclick="app.clearChat()" class="text-stone-400 hover:text-stone-600 text-xs transition-all flex items-center space-x-1">
+                <i class="fa-regular fa-trash-can"></i>
+                <span>履歴クリア</span>
+              </button>
+            </div>
+
+            <!-- チャット履歴エリア -->
+            <div id="chat-history" class="flex-grow p-5 overflow-y-auto space-y-4 text-sm">
+              <!-- AIウェルカムメッセージ -->
+              <div class="flex gap-3">
+                <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-800 flex-shrink-0 text-xs">
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="bg-stone-100 text-stone-800 rounded-2xl rounded-tl-none p-3.5 max-w-[85%] space-y-2">
+                  <p class="font-medium text-xs text-stone-500">至言コンシェルジュ</p>
+                  <p class="leading-relaxed text-xs sm:text-sm">
+                    こんにちは。365の至言を用いて、あなたの仕事や人生の悩みを解決するヒントをお届けします。<br><br>
+                    まずはホームや検索から気になる至言を選んで「AIに相談する」をクリックするか、そのまま悩みをこちらに入力してください！
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 送信フォーム -->
+            <div class="p-4 border-t border-stone-100 bg-stone-50">
+              <form id="chat-form" onsubmit="app.sendMessage(event)" class="flex gap-2">
+                <input type="text" id="chat-input" placeholder="例: 新規事業で行き詰まっている、人間関係に悩んでいる..." class="flex-grow px-4 py-2.5 bg-white rounded-xl border border-stone-200 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all">
+                <button type="submit" id="chat-send-btn" class="px-5 py-2.5 bg-stone-900 hover:bg-stone-800 active:scale-95 text-white rounded-xl text-sm font-bold transition-all shadow-md flex items-center space-x-1">
+                  <span>相談する</span>
+                  <i class="fa-solid fa-paper-plane text-xs"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-stone-900 text-stone-400 py-10 mt-auto border-t border-stone-800">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+        <div class="flex items-center justify-center space-x-2">
+          <div class="w-6 h-6 rounded bg-amber-500 flex items-center justify-center text-stone-950 font-bold text-xs serif-font">
+            至
+          </div>
+          <span class="font-bold text-white text-sm tracking-wider">至言365</span>
+        </div>
+        <p class="text-xs max-w-md mx-auto leading-relaxed">
+          「言葉は現実を作る」。毎日の習慣として至言を一つ心に宿し、人生とビジネスに新しい可能性を開花させましょう。
+        </p>
+        <div class="pt-4 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-3xs sm:text-2xs">
+          <span>&copy; 2026 至言365 App. All Rights Reserved.</span>
+          <div class="flex items-center space-x-3">
+            <span class="hover:text-white cursor-pointer" onclick="app.showSettingsModal()">⚙️ APIキーを設定する</span>
+            <span>|</span>
+            <span class="hover:text-white cursor-pointer" onclick="app.showAboutModal()">このアプリについて</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- おみくじ結果表示モーダル -->
+  <div id="fortune-modal" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 border border-stone-200 shadow-2xl relative overflow-hidden transform scale-95 transition-transform duration-300">
+      <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-red-500 via-amber-500 to-yellow-500"></div>
+      
+      <div class="text-center space-y-6 pt-2">
+        <span class="text-5xl">🔮</span>
+        <div class="space-y-1">
+          <span class="text-xs font-bold text-amber-600 uppercase tracking-widest block">Fortune & Wisdom</span>
+          <h3 class="serif-font text-2xl font-black text-stone-900" id="fortune-tier">大吉</h3>
+        </div>
+
+        <div class="bg-stone-50 p-5 rounded-2xl border border-stone-100 text-left space-y-3 relative overflow-hidden">
+          <div class="absolute top-2 right-2 text-3xs font-mono text-stone-400" id="fortune-id">ID: #000</div>
+          <p class="serif-font font-bold text-stone-800 leading-relaxed text-base" id="fortune-phrase">
+            -- Phrase --
+          </p>
+          <p class="text-stone-500 text-xs leading-relaxed" id="fortune-commentary">
+            -- Commentary --
+          </p>
+        </div>
+
+        <div class="flex gap-2">
+          <button onclick="app.closeFortuneModal()" class="flex-1 px-4 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-semibold transition-all">
+            閉じる
+          </button>
+          <button onclick="app.consultFortuneWithAI()" class="flex-1 px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-stone-950 rounded-xl text-xs font-bold transition-all shadow-lg shadow-amber-500/10">
+            この言葉でAI相談
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 設定(APIキー)モーダル -->
+  <div id="settings-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 border border-stone-200 shadow-xl space-y-4 transform scale-95 transition-transform duration-300 text-left">
+      <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+        <h4 class="font-bold text-stone-800 flex items-center space-x-2">
+          <i class="fa-solid fa-gear text-stone-500 animate-spin-slow"></i>
+          <span>至言365 設定</span>
+        </h4>
+        <button onclick="app.closeSettingsModal()" class="text-stone-400 hover:text-stone-600">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="space-y-4 text-xs leading-relaxed">
+        <div class="space-y-1.5">
+          <label class="block font-bold text-stone-700">Gemini API キー (オプション)</label>
+          <input type="password" id="api-key-input" placeholder="AI-..." class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all">
+          <p class="text-stone-400 text-3xs mt-1">
+            ※ APIキーはあなたのブラウザ内（Local Storage）にのみ安全に保存され、サーバーへ送信されることはありません。GitHub公開時も安全です。
+          </p>
+        </div>
+        <div class="bg-amber-50 p-3 rounded-lg border border-amber-100 text-amber-800 space-y-1 text-3xs">
+          <p class="font-bold"><i class="fa-solid fa-circle-info mr-1"></i>キーがないとどうなりますか？</p>
+          <p>APIキーを入力しなくても、言葉の閲覧、検索、おみくじ、お気に入りはすべて完全に動作します。朗読機能はブラウザ標準の音声で再生されます。AIに相談する機能のみ、無料のAPIキーが必要です。</p>
+          <a href="https://aistudio.google.com/" target="_blank" class="text-amber-600 underline font-semibold block mt-1">Google AI Studioでキーを無料取得する →</a>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="app.closeSettingsModal()" class="flex-1 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-bold transition-all">
+          キャンセル
+        </button>
+        <button onclick="app.saveSettings()" class="flex-1 py-2 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-bold transition-all">
+          設定を保存
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- アバウトモーダル -->
+  <div id="about-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 border border-stone-200 shadow-xl space-y-4 transform scale-95 transition-transform duration-300 text-left">
+      <h4 class="font-bold text-stone-800 flex items-center space-x-2">
+        <i class="fa-solid fa-circle-info text-amber-500"></i>
+        <span>至言365について</span>
+      </h4>
+      <div class="text-xs text-stone-600 space-y-3 leading-relaxed">
+        <p>
+          本アプリ『至言365』は、人生とビジネスを導く厳選された365の至言をお届けするインスピレーションプラットフォームです。
+        </p>
+        <p>
+          <strong>困難・挑戦・逆境、自己成長、経営、リーダーシップ、人間関係、時間術</strong>など多様なカテゴリーを通じて、一歩前に進むための方針を提供します。
+        </p>
+        <p>
+          また、APIキーを設定すればGoogle Gemini APIと連携可能になり、選んだ言葉をベースにしたAIお悩み相談や、情緒豊かなAI朗読が機能します。
+        </p>
+      </div>
+      <button onclick="app.closeAboutModal()" class="w-full py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-bold transition-all">
+        閉じる
+      </button>
+    </div>
+  </div>
+
+  <!-- JavaScript Core App -->
+  <script>
+    // 365の至言集のフルデータセット
+    const maxims = [
+      // 1. 困難・挑戦・逆境（1-45）
+      { id: 1, cat: 1, phrase: "迷ったら難しいほうを取れ", comm: "無難な道より変革のある道が未来を拓きます", src: "[1-3]" },
+      { id: 2, cat: 1, phrase: "不安の反対は行動である", comm: "動くことで脳内の不安は解消されます", src: "[1, 3, 4]" },
+      { id: 3, cat: 1, phrase: "恐れは逃げると倍、立ち向かえば半分", comm: "向き合うことで課題は縮小します", src: "[1, 4, 5]" },
+      { id: 4, cat: 1, phrase: "とりあえず一歩踏み出す", comm: "小さな一歩が次へのエネルギーを生みます", src: "[1, 3, 6]" },
+      { id: 5, cat: 1, phrase: "魔法の言葉「もう少しだ」", comm: "好転の直前が最も苦しい時期です", src: "[1, 7-10]" },
+      { id: 6, cat: 1, phrase: "「どうしたらできるか」を考える", comm: "不可能な理由ではなく方法に集中します", src: "[1, 11]" },
+      { id: 7, cat: 1, phrase: "グリッド（やり抜く力）", comm: "地道な努力の継続こそが最大の差別化です", src: "[1, 6-8]" },
+      { id: 8, cat: 1, phrase: "雨の中でダンスする", comm: "困難な状況そのものを楽しむ姿勢を持ちます", src: "[1, 12, 13]" },
+      { id: 9, cat: 1, phrase: "ピンチは作業着を着たチャンス", comm: "危機は泥臭い努力を要する姿で現れます", src: "[1, 11, 14, 15]" },
+      { id: 10, cat: 1, phrase: "最後のひと頑張りが成否を決める", comm: "土壇場での粘りが結果を左右します", src: "[1, 15]" },
+      { id: 11, cat: 1, phrase: "マイナスの言葉を口にしない", comm: "否定的な言葉は脳を縛り、不可能を現実にします", src: "[1, 16, 17]" },
+      { id: 12, cat: 1, phrase: "他の道があるのが世の常", comm: "一つの扉が閉まっても別の道が必ずあります", src: "[1, 18]" },
+      { id: 13, cat: 1, phrase: "苦労は船を安定させる重荷（バラスト）", comm: "適度な苦労が人生を安定させます", src: "[1, 14, 19]" },
+      { id: 14, cat: 1, phrase: "夢を目標に変えた瞬間、戦いが始まる", comm: "具体化した時から現実が動き出します", src: "[1, 20]" },
+      { id: 15, cat: 1, phrase: "危機は決断するもの", comm: "右往左往せず、冷静な判断を下すべき時です", src: "[1, 21]" },
+      { id: 16, cat: 1, phrase: "あきらめてベンチに座った隣に成功はいる", comm: "成功は目前で諦める人が多いものです", src: "[7, 22]" },
+      { id: 17, cat: 1, phrase: "「もはやこれまで」は解決策がある合図", comm: "窮地こそ新しい扉が開く時です", src: "[10, 23]" },
+      { id: 18, cat: 1, phrase: "躓いている姿より這い上がる姿に価値がある", comm: "再起する力こそが本質です", src: "[23]" },
+      { id: 19, cat: 1, phrase: "失敗を「成長」と読み替える", comm: "学びがある限り、それは失敗ではありません", src: "[7, 24]" },
+      { id: 20, cat: 1, phrase: "不運な時は虚心に変化を目指す", comm: "こだわりを捨てることが幸運への近道です", src: "[13]" },
+      { id: 21, cat: 1, phrase: "大きな悲しみには勇気、小さな悲しみには忍耐", comm: "感情の大きさに合わせた対処を", src: "[25]" },
+      { id: 22, cat: 1, phrase: "「何とかなる」と口に出す", comm: "前向きな言葉が解決の糸口を探させます", src: "[26]" },
+      { id: 23, cat: 1, phrase: "悲観は終わりを早め、楽観は始まりの力", comm: "始めるには楽観が必要です", src: "[27]" },
+      { id: 24, cat: 1, phrase: "もう終わりと思うか、さあ始まりと思うか", comm: "解釈は自分次第です", src: "[27]" },
+      { id: 25, cat: 1, phrase: "失ったものを数えず、残されたものを生かす", comm: "現状の武器で戦います", src: "[27]" },
+      { id: 26, cat: 1, phrase: "困難は限界を超えるための思考実験", comm: "遊戯の精神で挑みます", src: "[12]" },
+      { id: 27, cat: 1, phrase: "道が閉ざされることは絶対にない", comm: "思考する人間がいる限り突破口はあります", src: "[18, 28]" },
+      { id: 28, cat: 1, phrase: "暗闇の中でも視座を高く保つ", comm: "泥沼ではなく北極星を見つめます", src: "[29, 30]" },
+      { id: 29, cat: 1, phrase: "逆境こそが情熱を生む", comm: "安定は情熱を殺し、緊張が火を灯します", src: "[31]" },
+      { id: 30, cat: 1, phrase: "一を聞いて実行してみる", comm: "十を知るより、一つ動く方が吉です", src: "[32]" },
+      { id: 31, cat: 1, phrase: "勝負は負けた時から始まる", comm: "弱点を知った時が成長の起点です", src: "[5]" },
+      { id: 32, cat: 1, phrase: "転んだ人を笑わない、彼は歩こうとした", comm: "挑戦した証拠です", src: "[5]" },
+      { id: 33, cat: 1, phrase: "「待つ」ことができるのは高等な精神", comm: "焦らず時が熟すのを待ちます", src: "[33, 34]" },
+      { id: 34, cat: 1, phrase: "不当な扱いに「にこっ」と笑う", comm: "余裕が勝利を引き寄せます", src: "[35]" },
+      { id: 35, cat: 1, phrase: "災いはどこか一方の扉を開けている", comm: "救いは必ず残されています", src: "[10]" },
+      { id: 36, cat: 1, phrase: "矛盾に寛容であるべし", comm: "進化には矛盾が含まれるものです", src: "[10, 23]" },
+      { id: 37, cat: 1, phrase: "正当に怖がることが難しい", comm: "怖がりすぎも、なさすぎもよくありません", src: "[10]" },
+      { id: 38, cat: 1, phrase: "苦しみは打ち砕くか強くするか、自分が決める", comm: "意味付けは自分で行います", src: "[36]" },
+      { id: 39, cat: 1, phrase: "苦難は未来の幸福を準備している", comm: "順風の時こそ疑念を持ちなさい", src: "[36]" },
+      { id: 40, cat: 1, phrase: "束縛があるからこそ飛べる", comm: "制限が跳躍のバネになります", src: "[37]" },
+      { id: 41, cat: 1, phrase: "不慮の事故への対応力が「たくましさ」", comm: "処理能力を磨くことが生存戦略です", src: "[38]" },
+      { id: 42, cat: 1, phrase: "「一兆大勝負」の気概を持つ", comm: "ここぞという時は冒険に出ます", src: "[39]" },
+      { id: 43, cat: 1, phrase: "できないと言い訳する間はやりたくないだけ", comm: "本力を直視すべきです", src: "[40]" },
+      { id: 44, cat: 1, phrase: "不完全な自分を認める勇気が「打たれ強さ」", comm: "完璧主義を捨てます", src: "[41]" },
+      { id: 45, cat: 1, phrase: "自分こそ、自分の最大の敵", comm: "放った矢は自分に戻ってきます", src: "[42]" },
+
+      // 2. 自己成長・学び（46-90）
+      { id: 46, cat: 2, phrase: "学ぶ目的は行動にある", comm: "知識は使わなければ意味がありません", src: "[43, 44]" },
+      { id: 47, cat: 2, phrase: "昨日に学び、今日を生き、明日に希望を持つ", comm: "時間軸を正しく持ちます", src: "[45, 46]" },
+      { id: 48, cat: 2, phrase: "問いかけることをやめない", comm: "思考を停止させないことが重要です", src: "[45]" },
+      { id: 49, cat: 2, phrase: "自分を過大評価した瞬間に思考が硬直する", comm: "謙虚さが成長を支えます", src: "[8, 47]" },
+      { id: 50, cat: 2, phrase: "才能とは情熱を20年傾けられること", comm: "継続こそが非凡さです", src: "[7, 32]" },
+      { id: 51, cat: 2, phrase: "失敗は「考えたがやらなかった」と「やったが考えなかった」の2種", comm: "思考と行動の両立を", src: "[48]" },
+      { id: 52, cat: 2, phrase: "他人の悪口を言わない（くちなしで）", comm: "自分の徳を下げるだけです", src: "[8]" },
+      { id: 53, cat: 2, phrase: "意志力は後天的に鍛えられる", comm: "住環境や習慣で強化可能です", src: "[49]" },
+      { id: 54, cat: 2, phrase: "新しい出会いが人生を豊かにする", comm: "未知の喜びや痛みに目を向けます", src: "[49]" },
+      { id: 55, cat: 2, phrase: "自分を認めなければ始まらない", comm: "自己肯定が全ての基盤です", src: "[49]" },
+      { id: 56, cat: 2, phrase: "何かを始める時がその人の「春」", comm: "年齢は関係ありません", src: "[49]" },
+      { id: 57, cat: 2, phrase: "巨人の肩に乗って世界を見る", comm: "先人の知恵を土台にします", src: "[43]" },
+      { id: 58, cat: 2, phrase: "忘れる能力が辛さを和らげる", comm: "忘却は救いでもあります", src: "[43]" },
+      { id: 59, cat: 2, phrase: "「得」は迷い、「損」は悟り", comm: "目先の利益に惑わされない", src: "[43]" },
+      { id: 60, cat: 2, phrase: "運は「はこぶ」もの。動けばついてくる", comm: "自ら掴みに行くものです", src: "[43, 50]" },
+      { id: 61, cat: 2, phrase: "大切なのは力ではなくコントロール", comm: "制御できてこその力です", src: "[43]" },
+      { id: 62, cat: 2, phrase: "生きることに慣れてはいけない", comm: "慣れた瞬間に世界はつまらなくなります", src: "[38]" },
+      { id: 63, cat: 2, phrase: "脳は新しいものに警戒心を持つ", comm: "その壁を意識して突破します", src: "[38]" },
+      { id: 64, cat: 2, phrase: "10年繰り返せばモノになる", comm: "才能を超えた継続の力です", src: "[38]" },
+      { id: 65, cat: 2, phrase: "知性とは「面倒なこと」を放棄しないこと", comm: "考える労を惜しみません", src: "[51]" },
+      { id: 66, cat: 2, phrase: "時は流れない、積み重なる", comm: "過去の蓄積が今の自分です", src: "[36, 51, 52]" },
+      { id: 67, cat: 2, phrase: "「私なんかダメ」という考え方がダメ", comm: "思考がパワーを逃がします", src: "[50]" },
+      { id: 68, cat: 2, phrase: "天才とは努力する凡才", comm: "地道な積み重ねの結果です", src: "[23]" },
+      { id: 69, cat: 2, phrase: "言い訳が得意な人は他に得意なことがない", comm: "成し遂げる人は言い訳しません", src: "[9]" },
+      { id: 70, cat: 2, phrase: "体験だけでは足りない、考察が必要", comm: "よく噛まないと身につきません", src: "[10]" },
+      { id: 71, cat: 2, phrase: "学ぶことは自分のバカさ加減と付き合うこと", comm: "無知を認めて壁を超えます", src: "[26]" },
+      { id: 72, cat: 2, phrase: "少年老い易く、学成り難し", comm: "時間の価値を噛み締めます", src: "[26]" },
+      { id: 73, cat: 2, phrase: "自分の歩みを記録し、位置を知る", comm: "記録こそが歩みを支えます", src: "[26]" },
+      { id: 74, cat: 2, phrase: "変わるために学び、学ぶことで変わる", comm: "成長の循環です", src: "[53]" },
+      { id: 75, cat: 2, phrase: "歴史は年号より仮説と推論で学ぶ", comm: "現実で活用できる知恵になります", src: "[53]" },
+      { id: 76, cat: 2, phrase: "ろくでもないものを効率的に学んでも害", comm: "学ぶ内容を厳選します", src: "[54]" },
+      { id: 77, cat: 2, phrase: "力量に見合う仕事を求めず、やり遂げる力をつける", comm: "自らを高めます", src: "[54]" },
+      { id: 78, cat: 2, phrase: "知らないことは知らない、できないことはできないと言う", comm: "正直が一番楽です", src: "[54]" },
+      { id: 79, cat: 2, phrase: "志に立ち返って気力を回復する", comm: "挫折した時こそ原点へ", src: "[54]" },
+      { id: 80, cat: 2, phrase: "真剣にやれば興味が湧き、好きになる", comm: "最初から好きである必要はありません", src: "[25]" },
+      { id: 81, cat: 2, phrase: "つまづいて学び、また歩き出す", comm: "人生の基本ステップです", src: "[25]" },
+      { id: 82, cat: 2, phrase: "幸せを感じる「心」を手に入れる", comm: "境遇ではなく感性の問題です", src: "[55]" },
+      { id: 83, cat: 2, phrase: "エフィカシー（自己評価）を高く保つ", comm: "脳がその評価に追いつこうとします", src: "[56]" },
+      { id: 84, cat: 2, phrase: "過去が未来を作るのではなく、未来が過去を作る", comm: "今の行動が過去の意味を決めます", src: "[14, 36, 56]" },
+      { id: 85, cat: 2, phrase: "人間成長という山の頂を目指すのがリーダー", comm: "自ら登り続ける姿です", src: "[57]" },
+      { id: 86, cat: 2, phrase: "準備ができていなければ機会は去る", comm: "チャンスを逃さないための日常", src: "[57]" },
+      { id: 87, cat: 2, phrase: "「道」をよく間違える人が道を覚える", comm: "失敗が地図を作ります", src: "[58]" },
+      { id: 88, cat: 2, phrase: "成功したのはたった1%", comm: "残りの99%の失敗が支えています", src: "[58]" },
+      { id: 89, cat: 2, phrase: "学ぶことの障害は答えを教えること", comm: "自分で見つける機会を奪います", src: "[59]" },
+      { id: 90, cat: 2, phrase: "自分を笑える者は他人に笑われない", comm: "最強の防御です", src: "[35, 60, 61]" },
+
+      // 3. 仕事・経営・マネジメント（91-150）
+      { id: 91, cat: 3, phrase: "仕事は自ら創るべき", comm: "受け身ではなく先手で働きかけます", src: "[8, 23, 62, 63]" },
+      { id: 92, cat: 3, phrase: "企業の目的は顧客の創造である", comm: "利益は存続の条件にすぎません", src: "[57, 58, 62]" },
+      { id: 93, cat: 3, phrase: "陳腐化したものを計画的に捨てる", comm: "新しいもののために資源を解放します", src: "[12, 15, 27, 51, 57, 62, 64]" },
+      { id: 94, cat: 3, phrase: "人にどれだけしてあげられるか", comm: "ビジネスの本質は貢献です", src: "[62, 65, 66]" },
+      { id: 95, cat: 3, phrase: "戦略とは「何をしないか」を決めること", comm: "リソースの集中が肝です", src: "[35, 47, 62, 67, 68]" },
+      { id: 96, cat: 3, phrase: "コスト削減の根底は夢の実現", comm: "再設計により競争力を高めます", src: "[62, 67, 69]" },
+      { id: 97, cat: 3, phrase: "意思決定は仮説から始める", comm: "事実を待たず意見からスタートします", src: "[11, 62, 70]" },
+      { id: 98, cat: 3, phrase: "組織の天井はリーダーの能力", comm: "部下より先に自分を磨きます", src: "[23, 62]" },
+      { id: 99, cat: 3, phrase: "「失敗する権利」も付与する", comm: "任せるとは失敗も許容することです", src: "[9, 62]" },
+      { id: 100, cat: 3, phrase: "一つの経験から知恵を掴み出す", comm: "プロは凝縮した言葉で語ります", src: "[62, 71]" },
+      { id: 101, cat: 3, phrase: "「状況の奴隷」にならない", comm: "強い願望が創意工夫を生みます", src: "[62, 72]" },
+      { id: 102, cat: 3, phrase: "仕事を面白くする力がコンピテンシーの中心", comm: "楽しむ工夫をする力です", src: "[62, 73]" },
+      { id: 103, cat: 3, phrase: "完璧主義を捨てよ、それは創造力の欠如", comm: "適度な「不完全」を許容", src: "[47, 62, 66, 74, 75]" },
+      { id: 104, cat: 3, phrase: "成功は恐ろしいが失敗は宝の山", comm: "慢心を防ぎ改善のヒントを得ます", src: "[24, 62, 76]" },
+      { id: 105, cat: 3, phrase: "報酬以上の仕事をしない人は報酬が下がる", comm: "自身の価値を下げています", src: "[15, 62]" },
+      { id: 106, cat: 3, phrase: "「打つべき手はすべて打った」と腹をくくる", comm: "不退転の覚悟が必要です", src: "[62, 77]" },
+      { id: 107, cat: 3, phrase: "ジョブ、キャリア、ミッション", comm: "仕事の意義を多層的に捉えます", src: "[50, 62]" },
+      { id: 108, cat: 3, phrase: "「なすべきこと」を優先する", comm: "主観より組織・社会の要請に応えます", src: "[51, 62]" },
+      { id: 109, cat: 3, phrase: "大きな仕事に取り組め、小さな仕事は己を小さくする", comm: "視座を高く", src: "[78]" },
+      { id: 110, cat: 3, phrase: "取り組んだら放すな、殺されても放すな", comm: "目的完遂まで粘ります", src: "[78]" },
+      { id: 111, cat: 3, phrase: "周囲を引きずり回せ", comm: "主導権を持って動くことで差がつきます", src: "[78]" },
+      { id: 112, cat: 3, phrase: "頭は常に全回転、八方に気を配れ", comm: "隙のないサービスの本質", src: "[78]" },
+      { id: 113, cat: 3, phrase: "摩擦を恐れるな、摩擦は進歩の母", comm: "衝突を避けては卑屈になります", src: "[78, 79]" },
+      { id: 114, cat: 3, phrase: "仕事には細心、視野は広大、理想は高遠", comm: "三つの視点を持ちます", src: "[78]" },
+      { id: 115, cat: 3, phrase: "常に値上げを考えよ、ただし新しい価値をつけて", comm: "安売りからの脱却", src: "[51]" },
+      { id: 116, cat: 3, phrase: "仕組みに血を流せ、仏を作って魂を入れろ", comm: "運用こそが命です", src: "[51]" },
+      { id: 117, cat: 3, phrase: "「利益は出たが金がない」のが経営の不思議", comm: "CFの重要性", src: "[33, 80]" },
+      { id: 118, cat: 3, phrase: "自ら割れば生命、人に割られれば卵焼き", comm: "自律的な変革を", src: "[33, 81]" },
+      { id: 119, cat: 3, phrase: "一台目を避けた直後が最も危ない", comm: "トラブル処理後の油断に注意", src: "[20, 33]" },
+      { id: 120, cat: 3, phrase: "アリバイ作りのリーダーは失格", comm: "責任回避は組織を潰します", src: "[33, 82]" },
+      { id: 121, cat: 3, phrase: "「負けました」と頭を下げる投了", comm: "次へ行くための潔さ", src: "[33, 83]" },
+      { id: 122, cat: 3, phrase: "金のない悲劇と金のある悲劇", comm: "お金との距離感を考えます", src: "[5, 33, 43]" },
+      { id: 123, cat: 3, phrase: "「なぜ」を考えれば改革のヒントが出る", comm: "目的と手段の再点検", src: "[71]" },
+      { id: 124, cat: 3, phrase: "仕事のできない人は「言えない」か「言われたことしかしない」", comm: "自律性が鍵", src: "[23, 50]" },
+      { id: 125, cat: 3, phrase: "高慢は破滅の一歩手前", comm: "勝負に負けている証拠です", src: "[23]" },
+      { id: 126, cat: 3, phrase: "仕事は創ってなんぼ", comm: "能動的に価値を生みます", src: "[23]" },
+      { id: 127, cat: 3, phrase: "自分の仕事に誇りを持っているか", comm: "品質は誇りから生まれます", src: "[9]" },
+      { id: 128, cat: 3, phrase: "百歩先なら狂人、半歩先なら成功者", comm: "早すぎてもいけません", src: "[66, 84]" },
+      { id: 129, cat: 3, phrase: "仕事が上達するコツは、とことん惚れ込むこと", comm: "愛着が技能を高めます", src: "[48]" },
+      { id: 130, cat: 3, phrase: "チャレンジの結果は「成功」か「大成功」", comm: "前向きな挑戦姿勢", src: "[48]" },
+      { id: 131, cat: 3, phrase: "リスクとは自分が何をやっているか分からない時に起きる", comm: "無知が最大のリスク", src: "[8]" },
+      { id: 132, cat: 3, phrase: "攻撃は一点に集中せよ", comm: "リソースの分散を避けます", src: "[2, 8]" },
+      { id: 133, cat: 3, phrase: "自ら引火せよ", comm: "情熱の火種を自分から広げます", src: "[8]" },
+      { id: 134, cat: 3, phrase: "アイディアを具現化することが最も重要", comm: "思いつきだけでは無価値", src: "[30, 85]" },
+      { id: 135, cat: 3, phrase: "一人の力は知れている、エンジンの数を増やせ", comm: "組織力の活用", src: "[30]" },
+      { id: 136, cat: 3, phrase: "古いものに新しい命を吹き込む", comm: "新たな視点での再生", src: "[30]" },
+      { id: 137, cat: 3, phrase: "企業の強みは実行力で決まる", comm: "計画倒れにさせない", src: "[41, 75, 86]" },
+      { id: 138, cat: 3, phrase: "経営は真剣による斬り合い", comm: "甘えは許されないトップの覚悟", src: "[87]" },
+      { id: 139, cat: 3, phrase: "経営はリレー競争", comm: "全速力で次へバトンを繋ぎます", src: "[87]" },
+      { id: 140, cat: 3, phrase: "ライバルがしない無駄に成長のきっかけがある", comm: "差別化の源泉", src: "[88]" },
+      { id: 141, cat: 3, phrase: "交渉とは互いに譲り合うこと", comm: "胸襟を開くことが第一", src: "[88]" },
+      { id: 142, cat: 3, phrase: "従業員を幸福にする義務がある", comm: "専門性を掘り下げ成長させる", src: "[89]" },
+      { id: 143, cat: 3, phrase: "伸びシロがないところにまだ伸びシロがある", comm: "不満の解消に勝機", src: "[89]" },
+      { id: 144, cat: 3, phrase: "利益が先にあってニーズがあるのではない", comm: "順番を間違えない", src: "[90]" },
+      { id: 145, cat: 3, phrase: "基礎力が重要、過去のストックだけでは勝てない", comm: "日々進化が必要", src: "[44]" },
+      { id: 146, cat: 3, phrase: "理念なき行動は凶器、行動なき理念は無価値", comm: "両輪が必要", src: "[44]" },
+      { id: 147, cat: 3, phrase: "誠実さ、知性、行動力の三条件", comm: "誠実さがなければ知性も凶器", src: "[44]" },
+      { id: 148, cat: 3, phrase: "重大事故の影に300の「ヒヤリ・ハット」", comm: "ハインリッヒの法則", src: "[91]" },
+      { id: 149, cat: 3, phrase: "不満を持った顧客の96%は何も言わない", comm: "1件の背後に多数の不満", src: "[92]" },
+      { id: 150, cat: 3, phrase: "経営判断に迷うのは目標が明確でないから", comm: "北極星を定める", src: "[93]" },
+
+      // 4. リーダーシップ・組織（151-200）
+      { id: 151, cat: 4, phrase: "リーダーとは「希望を配る人」", comm: "困難な時こそビジョンを", src: "[50, 66, 84, 94, 95]" },
+      { id: 152, cat: 4, phrase: "プレッシャーの中でも優雅さを保つ", comm: "感情の乱れを見せない", src: "[86, 94, 96, 97]" },
+      { id: 153, cat: 4, phrase: "リーダーの使命は「先が見える」ようにすること", comm: "不安を払拭する", src: "[94, 98]" },
+      { id: 154, cat: 4, phrase: "照明力（部下を輝かせる力）", comm: "自分が目立つのではなく光を当てる", src: "[57, 94]" },
+      { id: 155, cat: 4, phrase: "組織の健全化とは高度な基準の要求", comm: "事なかれ主義を排す", src: "[5, 57, 94]" },
+      { id: 156, cat: 4, phrase: "真摯さを絶対視する", comm: "誠実さがマネジャーの最低条件", src: "[5, 57, 94]" },
+      { id: 157, cat: 4, phrase: "心理的安全性を醸成する", comm: "本来の自分をさらけ出せる場", src: "[94, 99, 100]" },
+      { id: 158, cat: 4, phrase: "「人」ではなく「問題」に集中せよ", comm: "人格否定ではなくプロセス改善", src: "[71, 94, 99]" },
+      { id: 159, cat: 4, phrase: "組織のパワーは外的環境をコントロールする力", comm: "内向きの政治を排す", src: "[39, 94]" },
+      { id: 160, cat: 4, phrase: "人を残して死ぬ者は「上」", comm: "人材育成こそ最大の功績", src: "[94, 101]" },
+      { id: 161, cat: 4, phrase: "反対者には反対者の論理がある", comm: "聞く耳を持つことが解決への道", src: "[45]" },
+      { id: 162, cat: 4, phrase: "何をするかではなく、何をしないかを決める", comm: "リーダーの最重要決定", src: "[47, 68]" },
+      { id: 163, cat: 4, phrase: "率率な意志の相違は進歩の兆候", comm: "議論を歓迎します", src: "[65]" },
+      { id: 164, cat: 4, phrase: "モチベーションは指示・命令で生めない", comm: "内側から湧くもの", src: "[8, 64, 87, 102]" },
+      { id: 165, cat: 4, phrase: "強い想いが世界を変える", comm: "たった一人から始まります", src: "[38]" },
+      { id: 166, cat: 4, phrase: "「打たれ強さ」は不完全な自分と他人を認めること", comm: "寛容さが強さ", src: "[41]" },
+      { id: 167, cat: 4, phrase: "CEOは人生最後の通信簿", comm: "その評価が全てを決める", src: "[41]" },
+      { id: 168, cat: 4, phrase: "権限委譲は「自由演技」で結果を出させること", comm: "信頼して任せる", src: "[89]" },
+      { id: 169, cat: 4, phrase: "異質を受け入れることが強さ", comm: "古典に学ぶ多様性の力", src: "[89]" },
+      { id: 170, cat: 4, phrase: "組織デザインは何も解決しない、ヒトが全て", comm: "魂を入れなければ形だけ", src: "[39]" },
+      { id: 171, cat: 4, phrase: "コア・グループ（陰の影響力者）を意識せよ", comm: "実質的な決定層", src: "[103]" },
+      { id: 172, cat: 4, phrase: "ミドルの育成は先輩を超えること", comm: "守破離の先へ", src: "[75]" },
+      { id: 173, cat: 4, phrase: "全体利益を考え、役割を果たすのがマネジャー", comm: "部分最適を排す", src: "[75]" },
+      { id: 174, cat: 4, phrase: "部下を平等に扱うな、個々に向き合え", comm: "特性に合わせた接し方", src: "[73]" },
+      { id: 175, cat: 4, phrase: "教育はやり方・考え方を教えるもの", comm: "答えを教えない", src: "[104]" },
+      { id: 176, cat: 4, phrase: "組織的な影響を慎重に考える", comm: "個別対応が基本です", src: "[105]" },
+      { id: 177, cat: 4, phrase: "「現場を歩き回る」真意は感情インフラの観察", comm: "雑談から本質を掴む", src: "[106, 107]" },
+      { id: 178, cat: 4, phrase: "不都合な報告を笑顔で労う", comm: "情報の遮断を防ぐコツ", src: "[67]" },
+      { id: 179, cat: 4, phrase: "戦略ストーリーは動画のように見えるべき", comm: "つながりと流れ", src: "[108]" },
+      { id: 180, cat: 4, phrase: "再生プロセスは「静」「動」「実行」", comm: "フェーズを駆け抜ける", src: "[106]" },
+      { id: 181, cat: 4, phrase: "90日以内に短期成果（クイック・ウィン）を出す", comm: "懐疑派を黙らせる", src: "[77, 109]" },
+      { id: 182, cat: 4, phrase: "死の谷（ Valley of Death）で腹をくくる", comm: "中盤の停滞こそリーダーの粘りどころ", src: "[110]" },
+      { id: 183, cat: 4, phrase: "ミドルを計画策定から巻き込む", comm: "当事者意識を醸成する", src: "[99, 111]" },
+      { id: 184, cat: 4, phrase: "失敗時に「なぜ」を問い、「誰」を追及しない", comm: "隠蔽を防ぐ仕組み", src: "[99]" },
+      { id: 185, cat: 4, phrase: "改革物語は「始まり」「旅路」「結末」", comm: "ストーリーで人を動かす", src: "[112]" },
+      { id: 186, cat: 4, phrase: "不都合な事実をありのままに開示する", comm: "危機感の共通認識化", src: "[109]" },
+      { id: 187, cat: 4, phrase: "組織の年齢は「精神年齢」を指す", comm: "硬直化すれば老いた証拠", src: "[63]" },
+      { id: 188, cat: 4, phrase: "自己反省は孤独な行為である", comm: "決断も反省も一人で行う", src: "[63]" },
+      { id: 189, cat: 4, phrase: "組織の政治性は戦略性を殺す", comm: "保身が変革を阻む", src: "[69]" },
+      { id: 190, cat: 4, phrase: "業績悪化と危機感は逆相関", comm: "危機が見えないこと自体が最大の危機", src: "[69, 76]" },
+      { id: 191, cat: 4, phrase: "権限がない人ほどキレやすい", comm: "言葉を持っていないことの裏返し", src: "[113, 114]" },
+      { id: 192, cat: 4, phrase: "部長ポスト削減は本人の責任ではない", comm: "処遇に配慮を", src: "[105]" },
+      { id: 193, cat: 4, phrase: "組織変更は会社の専権事項、従うべきもの", comm: "規律の重要性", src: "[105]" },
+      { id: 194, cat: 4, phrase: "期待のシナリオ（出来上がりの姿）を明確化", comm: "判断基準を示す", src: "[115]" },
+      { id: 195, cat: 4, phrase: "成り行きのシナリオ（現実）を直視", comm: "深層の問題を共有", src: "[115]" },
+      { id: 196, cat: 4, phrase: "原因分析は根底原因への嗅覚", comm: "単純化したロジックで描く", src: "[111, 115]" },
+      { id: 197, cat: 4, phrase: "褒めるシステムで成果を認知", comm: "達成感を醸成", src: "[115]" },
+      { id: 198, cat: 4, phrase: "小さな奇跡が伝説となり人々を変える", comm: "ドラマチックな成功を", src: "[115]" },
+      { id: 199, cat: 4, phrase: "戦略とは選択、環境とゴールを見据えて組み合わせる", comm: "パズルのようなもの", src: "[105]" },
+      { id: 200, cat: 4, phrase: "未来を予測するのではなく自らつくるのが「経営」", comm: "意志の力", src: "[116]" },
+
+      // 5. 人間関係・コミュニケーション（201-250）
+      { id: 201, cat: 5, phrase: "相手の表情は自分の表情を映す鏡", comm: "自分の態度から変えます", src: "[8, 13, 60]" },
+      { id: 202, cat: 5, phrase: "正論ではなく「利益」を話せ", comm: "メリットの提示が説得の鍵", src: "[8, 47, 60, 102, 117]" },
+      { id: 203, cat: 5, phrase: "「叱る」と「褒める」は同意語", comm: "根底に情熱と愛情を", src: "[60, 65]" },
+      { id: 204, cat: 5, phrase: "「私はあなたに関心があります」を伝える", comm: "重要感を満たします", src: "[31, 60]" },
+      { id: 205, cat: 5, phrase: "議論は知識、口論は無知の交換", comm: "高め合う対話を", src: "[13, 60, 118]" },
+      { id: 206, cat: 5, phrase: "「重要感」を満たしてあげよう", comm: "認められたい欲求に応える", src: "[30, 60]" },
+      { id: 207, cat: 5, phrase: "聞き上手はパラシュートのようなもの", comm: "開かなければ使えません", src: "[13, 60, 96]" },
+      { id: 208, cat: 5, phrase: "自分が馬鹿であると信じ、相手の長所を見る", comm: "謙虚さが信頼を作る", src: "[50, 60, 119]" },
+      { id: 209, cat: 5, phrase: "批判を避けるための「台本」を用意する", comm: "冷静なフィードバック", src: "[60]" },
+      { id: 210, cat: 5, phrase: "自分を笑える者は他人に笑われない", comm: "精神の余裕", src: "[35, 60, 61]" },
+      { id: 211, cat: 5, phrase: "相手が間違っていても非難はしない", comm: "相手は正しいと思っている", src: "[118]" },
+      { id: 212, cat: 5, phrase: "率直な批評は歓迎されないが、信頼の証", comm: "伝え方を工夫", src: "[16, 118]" },
+      { id: 213, cat: 5, phrase: "他人のサポートを受け入れた時に成長する", comm: "一人の限界を知る", src: "[16]" },
+      { id: 214, cat: 5, phrase: "感情にまかせた時に事を始めてはいけない", comm: "嵐の海への出港と同じ", src: "[13]" },
+      { id: 215, cat: 5, phrase: "人間は助け合わないと生きられない、それが最大の強み", comm: "弱さゆえの連帯", src: "[13]" },
+      { id: 216, cat: 5, phrase: "他人の短所が目につきすぎる人はリーダー不適格", comm: "長所を発揮させるのが仕事", src: "[102]" },
+      { id: 217, cat: 5, phrase: "朝目覚めたら感謝しよう", comm: "感謝が幸福感を高めます", src: "[120]" },
+      { id: 218, cat: 5, phrase: "身近な人の笑顔や小さな行動の力を侮るな", comm: "人生を好転させる", src: "[120]" },
+      { id: 219, cat: 5, phrase: "憤怒を抱く人は自制できていない", comm: "平静な抵抗が勝利する", src: "[18]" },
+      { id: 220, cat: 5, phrase: "偽りの知識を身にまとうな", comm: "無知を恥じず学ぶ姿勢", src: "[18]" },
+      { id: 221, cat: 5, phrase: "復讐は一瞬の幸福、許しは永遠の幸福", comm: "広い心を持つ", src: "[121]" },
+      { id: 222, cat: 5, phrase: "「相手が悪い」ではなく「自分にも責任」と考える", comm: "自分中心からの解放", src: "[122]" },
+      { id: 223, cat: 5, phrase: "心の傷は誰もが抱えている", comm: "共感の基盤となります", src: "[122]" },
+      { id: 224, cat: 5, phrase: "他人の冷蔵庫を羨ましがらない", comm: "自分の素材でご馳走を作る", src: "[123]" },
+      { id: 225, cat: 5, phrase: "結婚生活は長い会話である", comm: "対話の継続こそが幸せ", src: "[123, 124]" },
+      { id: 226, cat: 5, phrase: "幸せになりたいなら一生健康であれ", comm: "全ての基盤です", src: "[125]" },
+      { id: 227, cat: 5, phrase: "批判をやめるには台本が必要", comm: "余計な一言を言わない", src: "[126]" },
+      { id: 228, cat: 5, phrase: "軽蔑は敬意の欠如、好きでなくてもメリットを考える", comm: "大人の対応", src: "[126, 127]" },
+      { id: 229, cat: 5, phrase: "審議拒否（沈黙）は最悪、議論に参加せよ", comm: "意思表示をする", src: "[127, 128]" },
+      { id: 230, cat: 5, phrase: "広告は誰かと誰かをつなぐコミュニケーション", comm: "心を通わせる手段", src: "[128]" },
+      { id: 231, cat: 5, phrase: "友人の失敗を伝えると失う、自分の失敗を伝えると信頼される", comm: "自己開示", src: "[61]" },
+      { id: 232, cat: 5, phrase: "相手の興味のない話を延々としない", comm: "モテない理由A", src: "[119]" },
+      { id: 233, cat: 5, phrase: "相手の話を全く聞かない", comm: "モテない理由B", src: "[119]" },
+      { id: 234, cat: 5, phrase: "ネガティブな発想から始めない", comm: "モテない理由C", src: "[119]" },
+      { id: 235, cat: 5, phrase: "「さしすせそ」を使いこなす（さすが・知らなかった・すごい・センスいい・そうなんだ）", comm: "共感の技術", src: "[129]" },
+      { id: 236, cat: 5, phrase: "女の感情記憶に時効はない", comm: "長期記憶の特性を理解", src: "[130]" },
+      { id: 237, cat: 5, phrase: "言葉の意味（男）と心情・状況（女）の違い", comm: "コミュニケーションのズレ", src: "[130]" },
+      { id: 238, cat: 5, phrase: "挨拶、お礼、謝罪ができないと浮く", comm: "社会人の基本", src: "[131]" },
+      { id: 239, cat: 5, phrase: "人によって態度を変えない", comm: "信頼を損なう行動", src: "[131]" },
+      { id: 240, cat: 5, phrase: "過度な自己主張を慎む", comm: "調和も大切です", src: "[131]" },
+      { id: 241, cat: 5, phrase: "職場に相応しいファッションを", comm: "TPOの遵守", src: "[131]" },
+      { id: 242, cat: 5, phrase: "「右手にロマン、左手にそろばん、心にジョーダン」", comm: "バランスの取れた人間", src: "[131]" },
+      { id: 243, cat: 5, phrase: "KDD（勘と度胸でドボン）を避ける", comm: "論理的裏付けを", src: "[131]" },
+      { id: 244, cat: 5, phrase: "GNN（義理・人情・浪花節）も時には必要", comm: "人間臭い繋がり", src: "[131]" },
+      { id: 245, cat: 5, phrase: "TTP（徹底してパクる）", comm: "良いものは素直に取り入れる", src: "[131]" },
+      { id: 246, cat: 5, phrase: "OKY（お前ここに来てやってみろ）", comm: "現場不在の指示への戒め", src: "[131]" },
+      { id: 247, cat: 5, phrase: "間違いを認めようとしない態度は嫌われる", comm: "素直さが一番", src: "[131]" },
+      { id: 248, cat: 5, phrase: "感情の起伏が激しいと周囲が疲弊する", comm: "自制心を", src: "[131]" },
+      { id: 249, cat: 5, phrase: "面倒なことを他人に押しつけない", comm: "責任を持って完遂する", src: "[131]" },
+      { id: 250, cat: 5, phrase: "意見をコロコロ変えない", comm: "一貫性こそが信頼", src: "[131]" },
+
+      // 6. 思考法・イノベーション（251-290）
+      { id: 251, cat: 6, phrase: "想像力とは問題解決力である", comm: "理想と現状のギャップを埋める力", src: "[48, 66, 132]" },
+      { id: 252, cat: 6, phrase: "複雑にするな、シンプルに考えろ", comm: "本質を捉えれば迅速に動ける", src: "[14, 132, 133]" },
+      { id: 253, cat: 6, phrase: "アイデアのつくり方（資料集め・咀嚼・孵化・誕生・具体化）", comm: "プロセスの意識", src: "[132, 134]" },
+      { id: 254, cat: 6, phrase: "「1,000のことにノーと言う」", comm: "本当に重要なことに集中する", src: "[47, 132]" },
+      { id: 255, cat: 6, phrase: "脱皮できない蛇は滅びる", comm: "古い皮を脱ぎ捨て新陳代謝する", src: "[27, 37, 78, 132]" },
+      { id: 256, cat: 6, phrase: "不都合な事実を直視せよ", comm: "確証バイアスに抗う", src: "[29, 132]" },
+      { id: 257, cat: 6, phrase: "一見無駄に見えるものが対応力を増す", comm: "余裕が柔軟性を生む", src: "[11, 132]" },
+      { id: 258, cat: 6, phrase: "正しいポジショニングが成否を分ける", comm: "スジの悪い事業は儲からない", src: "[132, 135]" },
+      { id: 259, cat: 6, phrase: "新しい「目」で見ること", comm: "ありふれたものに新しい命を", src: "[30, 132, 136]" },
+      { id: 260, cat: 6, phrase: "事実を探す前に仮説を持て", comm: "検証すべき対象を明確にする", src: "[70, 132]" },
+      { id: 261, cat: 6, phrase: "「見たい現実を見る」本性に流されない", comm: "冷徹なリアリズム", src: "[82, 97]" },
+      { id: 262, cat: 6, phrase: "問題を正しく定義すれば半分解決したも同然", comm: "ロジカルに言語化", src: "[70, 74, 84]" },
+      { id: 263, cat: 6, phrase: "アイデアは組み合わせである", comm: "既存の要素を新しく結びつける", src: "[3]" },
+      { id: 264, cat: 6, phrase: "情報を整理するための「箱」を作る", comm: "適切な表現が整理を助ける", src: "[137]" },
+      { id: 265, cat: 6, phrase: "イメージ化（映像化）で総合的に把握する", comm: "情報をつなげる力", src: "[137]" },
+      { id: 266, cat: 6, phrase: "「6割の確信」で動く、分析麻痺を避ける", comm: "不確実性下でのスピード", src: "[138]" },
+      { id: 267, cat: 6, phrase: "イノベーションは昨日を守るために資源を使わない", comm: "未来へ開放", src: "[27, 57]" },
+      { id: 268, cat: 6, phrase: "あらゆる計画はミッションを淵源とする", comm: "存在意義からの出発", src: "[139]" },
+      { id: 269, cat: 6, phrase: "リスクの評価：負える、負わざるをえない、回復できる", comm: "バランスの妙", src: "[68]" },
+      { id: 270, cat: 6, phrase: "セグメンテーション（誰がそれを欲しているか）", comm: "市場の細分化", src: "[140]" },
+      { id: 271, cat: 6, phrase: "ターゲティング（自社の強みが活かせるか）", comm: "標的の選択", src: "[68]" },
+      { id: 272, cat: 6, phrase: "ポジショニング（お客様の心の中の順位）", comm: "ブランドイメージの構築", src: "[68]" },
+      { id: 273, cat: 6, phrase: "価格設定（コスト志向・需要志向・競争志向）", comm: "3つのアプローチ", src: "[141]" },
+      { id: 274, cat: 6, phrase: "スキミングプライシング（上層吸収：初期の高価格）", comm: "ブランド力がある場合", src: "[142]" },
+      { id: 275, cat: 6, phrase: "ペネトレーションプライシング（市場浸透：低価格でシェア）", comm: "潜在市場が大きい場合", src: "[142]" },
+      { id: 276, cat: 6, phrase: "イールド・マネジメント（需要に応じた機動的価格）", comm: "売上最大化の技術", src: "[143]" },
+      { id: 277, cat: 6, phrase: "「ニーズ」を超えたところに「感動」がある", comm: "提案型ビジネスの本質", src: "[143]" },
+      { id: 278, cat: 6, phrase: "AISCEAS（認知・興味・検索・比較・検討・購買・共有）", comm: "購買ステップ", src: "[103]" },
+      { id: 279, cat: 6, phrase: "知的労働者が売っているのは「アイディア」である", comm: "付加価値の源泉", src: "[98]" },
+      { id: 280, cat: 6, phrase: "情報の豊かさは思慮深さの貧困をもたらす", comm: "情報の波に溺れない", src: "[144]" },
+      { id: 281, cat: 6, phrase: "システムの陰に「使えない人」がいる、思考停止に注意", comm: "システム頼みの危険", src: "[145]" },
+      { id: 282, cat: 6, phrase: "コンセプチュアルデザインは「何を目的とするか」の企画書", comm: "詳細な定義", src: "[146]" },
+      { id: 283, cat: 6, phrase: "トリアージ（緊急度による優先順位付け）", comm: "極限状況での合理的判断", src: "[10, 17]" },
+      { id: 284, cat: 6, phrase: "レピュテーションリスク（風評被害）への警戒", comm: "信頼は一瞬で崩れる", src: "[10]" },
+      { id: 285, cat: 6, phrase: "体験から何も学ばないのは「下痢」を繰り返すようなもの", comm: "咀嚼が不可欠", src: "[10]" },
+      { id: 286, cat: 6, phrase: "今日の一文字「備」：過去を糧に未来を創る", comm: "備えあれば憂いなし", src: "[105]" },
+      { id: 287, cat: 6, phrase: "戦略とは「動画のように見える」ストーリー", comm: "静的ではなく動的なイメージ", src: "[108]" },
+      { id: 288, cat: 6, phrase: "業務改革は模倣できる「プロセス」の見直しから", comm: "仕組みの改善", src: "[147]" },
+      { id: 289, cat: 6, phrase: "独自性は「意図的に獲得」するもの、それが戦略", comm: "偶然に頼らない", src: "[147]" },
+      { id: 290, cat: 6, phrase: "「この1点を切れば解ける」急所を見つける", comm: "レバレッジ・ポイント", src: "[67]" },
+
+      // 7. 時間・習慣・健康（291-325）
+      { id: 291, cat: 7, phrase: "時は流れない、積み重なる", comm: "一瞬一瞬が自分を形成", src: "[51, 52]" },
+      { id: 292, cat: 7, phrase: "「今日」は残りの人生の最初の一日", comm: "常にリスタート可能です", src: "[52, 55]" },
+      { id: 293, cat: 7, phrase: "昨日から学び、今日を生き、明日へ希望を持つ", comm: "時間軸の調和", src: "[52]" },
+      { id: 294, cat: 7, phrase: "今日が人生最後の日だとしたら？", comm: "本質的な優先順位の確認", src: "[43, 52]" },
+      { id: 295, cat: 7, phrase: "寝る前のスマホ、PC、TVは厳禁", comm: "自律神経を整え深い眠りへ", src: "[52, 130]" },
+      { id: 296, cat: 7, phrase: "不快な仕事を興味深い形に変える工夫", comm: "ジョブエンゲージメント", src: "[52, 73]" },
+      { id: 297, cat: 7, phrase: "1日最低5000歩歩き、30分に1回は立ち上がる", comm: "健康の基本習慣", src: "[52, 97]" },
+      { id: 298, cat: 7, phrase: "人間には「忘れる」能力がある", comm: "前を向くための救済装置", src: "[43, 52]" },
+      { id: 299, cat: 7, phrase: "寝る前に明日やることを書いておく", comm: "脳の不安を解消", src: "[73]" },
+      { id: 300, cat: 7, phrase: "情報のインプット・アウトプットを繰り返す", comm: "記憶定着の鍵", src: "[73]" },
+      { id: 301, cat: 7, phrase: "情報の提供は一度に3つまで", comm: "脳の処理限界に配慮", src: "[73]" },
+      { id: 302, cat: 7, phrase: "体の疲労より脳の疲労を意識する", comm: "精神的な休息を", src: "[73]" },
+      { id: 303, cat: 7, phrase: "朝のルーティンを作る", comm: "一日のリズムを整える", src: "[97]" },
+      { id: 304, cat: 7, phrase: "身だしなみを整える", comm: "テレワークでもスイッチをオン", src: "[97]" },
+      { id: 305, cat: 7, phrase: "昼休みはしっかり（90分）取る", comm: "メリハリが生産性を生む", src: "[97]" },
+      { id: 306, cat: 7, phrase: "昼食は自分で作る、間食は避ける", comm: "自己管理の基本", src: "[97]" },
+      { id: 307, cat: 7, phrase: "1週間に1冊は本を読む", comm: "継続的なインプット", src: "[97]" },
+      { id: 308, cat: 7, phrase: "12時までに床に就く", comm: "睡眠のゴールデンタイム", src: "[97]" },
+      { id: 309, cat: 7, phrase: "タバコは細胞に酸化ストレスを与え、老化を進める", comm: "健康リスクの認識", src: "[129]" },
+      { id: 310, cat: 7, phrase: "「寝落ち」は若者言葉、ビジネスでは注意", comm: "言葉遣いのマナー", src: "[148]" },
+      { id: 311, cat: 7, phrase: "プラシーボ効果（心理的な暗示作用）の活用", comm: "心の持ち状態で効果が変わる", src: "[148]" },
+      { id: 312, cat: 7, phrase: "時間は金なり、光陰矢の如し", comm: "流れる時間を大切に", src: "[46]" },
+      { id: 313, cat: 7, phrase: "忙しさに「これで十分」はない、蟻も忙しい", comm: "何に忙しいかが問題", src: "[45, 64, 85]" },
+      { id: 314, cat: 7, phrase: "「急いで結婚すると、退屈に苦しむ」", comm: "時間と共に変わる価値観", src: "[101]" },
+      { id: 315, cat: 7, phrase: "「時は金なり」は、時間の価値を知ること", comm: "ぐずぐずしない", src: "[26]" },
+      { id: 316, cat: 7, phrase: "一歩一歩なら歩き続けることができる", comm: "記録が歩みを励ます", src: "[26]" },
+      { id: 317, cat: 7, phrase: "時間の使い方が下手な者ほど「忙しい」と言う", comm: "自己管理の欠如", src: "[149]" },
+      { id: 318, cat: 7, phrase: "チャンスの女神は一瞬のうちに去っていく", comm: "即断即決の重要性", src: "[150]" },
+      { id: 319, cat: 7, phrase: "毎日が新鮮、今日を大切に", comm: "残りの人生のスタート地点", src: "[55]" },
+      { id: 320, cat: 7, phrase: "流行を追って面倒を背負い込まない", comm: "古く良きものを大切に", src: "[55]" },
+      { id: 321, cat: 7, phrase: "「若水」で料理を作る習わし", comm: "季節の節目を大切にする心", src: "[151]" },
+      { id: 322, cat: 7, phrase: "「陰極まって陽に転ず」", comm: "冬の後には必ず春が来る", src: "[151]" },
+      { id: 323, cat: 7, phrase: "「待つことが出来る動物ほど高等な精神」", comm: "イヌは20秒、人間は？", src: "[34]" },
+      { id: 324, cat: 7, phrase: "時間を制するものが優位に立つ", comm: "戦略的な時間配分", src: "[75]" },
+      { id: 325, cat: 7, phrase: "起承転結ではなく「起承結」が分かりやすい", comm: "簡潔な伝達", src: "[73]" },
+
+      // 8. 人生・哲学・ユーモア・教訓（326-365）
+      { id: 326, cat: 8, phrase: "かけた情けは水に流せ、受けた恩は石に刻め", comm: "謙虚な生き方の極意", src: "[33, 48, 146]" },
+      { id: 327, cat: 8, phrase: "卵が自ら割れば生命、人に割られれば卵焼き", comm: "主体的な変革の価値", src: "[33, 81]" },
+      { id: 328, cat: 8, phrase: "自分のキャンバスに自分で絵を描く", comm: "人生の主導権を握る", src: "[12, 33, 46, 70]" },
+      { id: 329, cat: 8, phrase: "向かい合う相手の表情は、自分を映す鏡", comm: "自分の態度を整える", src: "[8, 13, 60]" },
+      { id: 330, cat: 8, phrase: "「負けました」と潔く頭を下げる", comm: "再出発のための通過点", src: "[33, 83]" },
+      { id: 331, cat: 8, phrase: "金のない悲劇、金のある悲劇", comm: "どちらも人生の試練", src: "[5, 33, 43, 152]" },
+      { id: 332, cat: 8, phrase: "幸せをいくら探しても見つからない、感じる心を持つ", comm: "幸福の所在", src: "[55]" },
+      { id: 333, cat: 8, phrase: "「ぼけたらあかん長生きしなはれ」", comm: "謙虚さと知恵を持って老いる", src: "[153, 154]" },
+      { id: 334, cat: 8, phrase: "知っていることでも知らんふり、円満のコツ", comm: "若手に花を持たせる", src: "[153, 154]" },
+      { id: 335, cat: 8, phrase: "自分はみんなより劣っていると思えば、話が入る", comm: "傲慢さを捨てる", src: "[83]" },
+      { id: 336, cat: 8, phrase: "人間だけが笑い、そして赤面する", comm: "感情豊かな動物の証", src: "[85]" },
+      { id: 337, cat: 8, phrase: "完全であろうとすればするほど、小さくなる", comm: "ゆとりを持つ", src: "[85]" },
+      { id: 338, cat: 8, phrase: "人生に往復切符はない、片道切符を握りしめる", comm: "今の瞬間を大切に", src: "[40]" },
+      { id: 339, cat: 8, phrase: "好奇心は快楽、役に立つかより知ることが楽しい", comm: "知的探求の喜び", src: "[42]" },
+      { id: 340, cat: 8, phrase: "幸福は分かち合っても減らない、ろうそくの火と同じ", comm: "善意の伝播", src: "[42]" },
+      { id: 341, cat: 8, phrase: "役に立つ物が増えすぎると、役に立たない者が増える", comm: "文明への風刺", src: "[42]" },
+      { id: 342, cat: 8, phrase: "「道」は人が歩くから道になる、希望も同じ", comm: "行動が未来を作る", src: "[31]" },
+      { id: 343, cat: 8, phrase: "小さな変化を意図的に起こす", comm: "1時間早く起きる等で自分を変える", src: "[31]" },
+      { id: 344, cat: 8, phrase: "「わけ合えばあまる、うばい合えば足らぬ」", comm: "相田みつをの真理", src: "[146]" },
+      { id: 345, cat: 8, phrase: "真剣だと知恵、中途半端だと愚痴、いい加減だと言い訳", comm: "取り組み姿勢", src: "[17]" },
+      { id: 346, cat: 8, phrase: "「あ・お・い・く・ま」（あせるな、おこるな、いばるな、くさるな、まけるな）", comm: "人生五訓", src: "[10]" },
+      { id: 347, cat: 8, phrase: "不運な時は変化を目指せ", comm: "要諦は虚心になること", src: "[13]" },
+      { id: 348, cat: 8, phrase: "「人生は愉しい」とお客さまに知ってもらう", comm: "商売を通じた喜びの提供", src: "[13]" },
+      { id: 349, cat: 8, phrase: "期待値を下げれば、今のものに感謝が湧く", comm: "心の調整術", src: "[136]" },
+      { id: 350, cat: 8, phrase: "自分を「変える」のではなく「成長」させる", comm: "本質的な向上", src: "[136]" },
+      { id: 351, cat: 8, phrase: "熱意がある限り年老いることはない", comm: "心の若さの定義", src: "[136]" },
+      { id: 352, cat: 8, phrase: "寒さに震えた者ほど太陽を暖かく感じる", comm: "悩みが命の尊さを教える", src: "[136]" },
+      { id: 353, cat: 8, phrase: "立場により下り坂にも上り坂にも見える、それが本質ではない", comm: "多角的な視点", src: "[121]" },
+      { id: 354, cat: 8, phrase: "夢は逃げない、逃げているのは自分だ", comm: "自己責任の意識", src: "[121]" },
+      { id: 355, cat: 8, phrase: "自分自身を発見することが一番難解で大切", comm: "孤独な思考の時間", src: "[121]" },
+      { id: 356, cat: 8, phrase: "イタリアにはイタリア人を入れておいたから不公平ではない", comm: "神様のジョーク", src: "[155]" },
+      { id: 357, cat: 8, phrase: "ウイルスはもともと私たちの遺伝子の一部だった", comm: "進化を加速する存在", src: "[156]" },
+      { id: 358, cat: 8, phrase: "「r＞g」", comm: "資本収益は経済成長を常に上回る", src: "[157]" },
+      { id: 359, cat: 8, phrase: "「東京封鎖」", comm: "致死率60%のパンデミックへの予言的小説", src: "[158]" },
+      { id: 360, cat: 8, phrase: "「この国には何でもある、でも希望だけがない」", comm: "村上龍の言葉", src: "[72]" },
+      { id: 361, cat: 8, phrase: "「結婚前は両目を開け、結婚後は片目を閉じよ」", comm: "家庭円満の秘訣", src: "[123]" },
+      { id: 362, cat: 8, phrase: "一生幸せでいたいなら、健康でいることだ", comm: "普遍的な東洋の知恵", src: "[125]" },
+      { id: 363, cat: 8, phrase: "「人災」は責任転嫁をする「くれない族」", comm: "成長を阻む態度", src: "[159]" },
+      { id: 364, cat: 8, phrase: "「人財」は職場にとっての財産、10の頼みに10以上の成果", comm: "目指すべき姿", src: "[159]" },
+      { id: 365, cat: 8, phrase: "「第一のルールは楽しむこと、第二のルールはない」", comm: "人生の根本哲学", src: "[125, 131]" }
+    ];
+
+    // カテゴリ定義
+    const categories = {
+      1: { name: "困難・挑戦・逆境", icon: "fa-fire-alt", color: "from-rose-500 to-orange-500", text: "text-rose-500", bg: "bg-rose-50 border-rose-100" },
+      2: { name: "自己成長・学び", icon: "fa-book-reader", color: "from-blue-500 to-indigo-500", text: "text-blue-500", bg: "bg-blue-50 border-blue-100" },
+      3: { name: "仕事・経営・マネジメント", icon: "fa-briefcase", color: "from-amber-500 to-yellow-600", text: "text-amber-600", bg: "bg-amber-50 border-amber-100" },
+      4: { name: "リーダーシップ・組織", icon: "fa-users-cog", color: "from-purple-500 to-fuchsia-500", text: "text-purple-500", bg: "bg-purple-50 border-purple-100" },
+      5: { name: "人間関係・コミュニケーション", icon: "fa-comments", color: "from-teal-500 to-emerald-500", text: "text-teal-600", bg: "bg-teal-50 border-teal-100" },
+      6: { name: "思考法・イノベーション", icon: "fa-lightbulb", color: "from-cyan-500 to-sky-500", text: "text-cyan-600", bg: "bg-cyan-50 border-cyan-100" },
+      7: { name: "時間・習慣・健康", icon: "fa-heartbeat", color: "from-red-500 to-rose-600", text: "text-rose-600", bg: "bg-rose-50 border-rose-100" },
+      8: { name: "人生・哲学・ユーモア・教訓", icon: "fa-seedling", color: "from-violet-500 to-indigo-600", text: "text-indigo-600", bg: "bg-indigo-50 border-indigo-100" }
+    };
+
+    // アプリケーションクラス
+    class ShigenApp {
+      constructor() {
+        this.currentTab = 'home';
+        this.todayMaxim = null;
+        this.selectedMaximForAdvisor = null;
+        this.favorites = []; // お気に入りリスト (IDの配列 - Local Storageから復元)
+        this.loadedCount = 12; // 一度に見せる最大件数 (検索タブ)
+        this.filteredMaximsList = [...maxims];
+        this.selectedCategoryFilter = 'all';
+        this.audioPlaying = false;
+        this.apiKey = ''; // 設定からロード
+      }
+
+      init() {
+        // お気に入り・APIキーの復元
+        this.loadSettings();
+        this.loadFavorites();
+
+        this.updateTodayMaxim();
+        this.renderCategoryGrid();
+        this.setupCategoryFilters();
+        this.filterMaxims();
+        this.updateFavoritesCount();
+        this.setupAdvisorWithMaxim(this.todayMaxim); // 初期状態として本日の言葉をセット
+        this.updateAPIStatusUI();
+      }
+
+      changeTab(tabName) {
+        this.currentTab = tabName;
+        
+        // タブ切り替え
+        ['home', 'search', 'favorites', 'advisor'].forEach(t => {
+          const el = document.getElementById(`tab-${t}`);
+          const navPc = document.getElementById(`nav-${t}`);
+          const navMob = document.getElementById(`m-nav-${t}`);
+          
+          if (t === tabName) {
+            el.classList.remove('hidden');
+            if(navPc) {
+              navPc.className = "px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-amber-600 bg-amber-50";
+            }
+            if(navMob) {
+              navMob.className = "flex flex-col items-center space-y-1 text-amber-600";
+            }
+          } else {
+            el.classList.add('hidden');
+            if(navPc) {
+              navPc.className = "px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-stone-600 hover:text-stone-900 hover:bg-stone-50";
+            }
+            if(navMob) {
+              navMob.className = "flex flex-col items-center space-y-1 text-stone-400";
+            }
+          }
+        });
+
+        // タブ固有のイベント発火
+        if (tabName === 'favorites') {
+          this.renderFavorites();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // 日替わりの言葉決定ロジック
+      updateTodayMaxim() {
+        const today = new Date();
+        const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+        // 擬似乱数 (LGC) 
+        let r = Math.sin(seed) * 10000;
+        r = r - Math.floor(r);
+        const index = Math.floor(r * maxims.length);
+        this.todayMaxim = maxims[index];
+
+        // ホーム画面にレンダリング
+        document.getElementById('today-phrase').innerText = this.todayMaxim.phrase;
+        document.getElementById('today-commentary').innerText = this.todayMaxim.comm;
+        document.getElementById('today-id').innerText = `ID: #${String(this.todayMaxim.id).padStart(3, '0')}`;
+        document.getElementById('today-source').innerText = `出典: ${this.todayMaxim.src}`;
+        
+        const catInfo = categories[this.todayMaxim.cat];
+        const catBadge = document.getElementById('today-category');
+        catBadge.innerText = catInfo.name;
+        catBadge.className = `px-2.5 py-1 rounded-md text-xs font-semibold border ${catInfo.bg} ${catInfo.text}`;
+
+        this.updateTodayFavButton();
+      }
+
+      // 音声読み上げ
+      async speakText(text, voiceSelectId) {
+        if (this.audioPlaying) {
+          if (window.speechSynthesis) window.speechSynthesis.cancel();
+          this.audioPlaying = false;
+          this.updateTtsIcons(false);
+          return false;
+        }
+
+        const voiceSelect = document.getElementById(voiceSelectId);
+        const voiceName = voiceSelect ? voiceSelect.value : "Aoede";
+
+        // UI切り替え
+        this.audioPlaying = true;
+        this.updateTtsIcons(true);
+        
+        // APIキーが設定されている場合は高音質なGemini live TTSを試みる
+        if (this.apiKey) {
+          try {
+            const payload = {
+              contents: [{ parts: [{ text: `朗読してください。感情を込めて、優しく、語りかけるように：${text}` }] }],
+              generationConfig: {
+                responseModalities: ["AUDIO"],
+                speechConfig: {
+                  voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } }
+                }
+              }
+            };
+            
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${this.apiKey}`;
+            const response = await fetch(apiUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            
+            if (!response.ok) throw new Error('API request failed');
+            
+            const result = await response.json();
+            const part = result?.candidates?.[0]?.content?.parts?.[0];
+            const audioData = part?.inlineData?.data;
+            const mimeType = part?.inlineData?.mimeType;
+
+            if (audioData && mimeType && mimeType.startsWith("audio/")) {
+              const sampleRate = parseInt(mimeType.match(/rate=(\d+)/)?.[1] || "24000", 10);
+              const pcmData = this.base64ToArrayBuffer(audioData);
+              const pcm16 = new Int16Array(pcmData);
+              const wavBlob = this.pcmToWav(pcm16, sampleRate);
+              const audioUrl = URL.createObjectURL(wavBlob);
+              
+              const audio = new Audio(audioUrl);
+              audio.onended = () => { this.audioPlaying = false; this.updateTtsIcons(false); };
+              audio.onerror = () => { this.audioPlaying = false; this.updateTtsIcons(false); };
+              audio.play();
+              return;
+            } else {
+              throw new Error('Invalid audio data');
+            }
+          } catch (error) {
+            console.warn('Gemini TTS failed, falling back to Web Speech API', error);
+          }
+        }
+
+        // Web Speech API（ブラウザ標準機能）によるフォールバック（APIキー不要・完全無料）
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel(); // 既存の再生をクリア
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'ja-JP';
+          utterance.rate = 0.95;
+          utterance.pitch = 1.05;
+          utterance.onend = () => { this.audioPlaying = false; this.updateTtsIcons(false); };
+          utterance.onerror = () => { this.audioPlaying = false; this.updateTtsIcons(false); };
+          
+          window.speechSynthesis.speak(utterance);
+        } else {
+          console.error('Speech synthesis not supported');
+          this.audioPlaying = false;
+          this.updateTtsIcons(false);
+        }
+      }
+
+      speakToday() {
+        const text = `${this.todayMaxim.phrase}。${this.todayMaxim.comm}`;
+        this.speakText(text, 'ai-voice-select');
+      }
+
+      updateTtsIcons(isPlaying) {
+        const todayTtsIcon = document.getElementById('today-tts-icon');
+        const todayTtsText = document.getElementById('today-tts-text');
+        if (todayTtsIcon) {
+          if (isPlaying) {
+            todayTtsIcon.className = "fa-solid fa-circle-stop animate-pulse text-red-500";
+            if (todayTtsText) todayTtsText.innerText = "停止する";
+          } else {
+            todayTtsIcon.className = "fa-solid fa-volume-high text-amber-400";
+            if (todayTtsText) todayTtsText.innerText = "朗読する";
+          }
+        }
+      }
+
+      // ArrayBuffer変換
+      base64ToArrayBuffer(base64) {
+        const binaryString = window.atob(base64);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        return bytes.buffer;
+      }
+
+      // PCM to WAV 変換
+      pcmToWav(pcm16Data, sampleRate) {
+        const buffer = new ArrayBuffer(44 + pcm16Data.length * 2);
+        const view = new DataView(buffer);
+        
+        const writeString = (view, offset, string) => {
+          for (let i = 0; i < string.length; i++) {
+            view.setUint8(offset + i, string.charCodeAt(i));
+          }
+        };
+
+        writeString(view, 0, 'RIFF');
+        view.setUint32(4, 36 + pcm16Data.length * 2, true);
+        writeString(view, 8, 'WAVE');
+        writeString(view, 12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true); // Linear PCM
+        view.setUint16(22, 1, true); // Mono
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * 2, true); // Byte rate
+        view.setUint16(32, 2, true); // Block align
+        view.setUint16(34, 16, true); // Bits per sample
+        writeString(view, 36, 'data');
+        view.setUint32(40, pcm16Data.length * 2, true);
+        
+        for (let i = 0; i < pcm16Data.length; i++) {
+          view.setInt16(44 + i * 2, pcm16Data[i], true);
+        }
+        
+        return new Blob([view], { type: 'audio/wav' });
+      }
+
+      // お気に入り永続化 (Local Storage対応)
+      loadFavorites() {
+        try {
+          const saved = localStorage.getItem('shigen365_favorites');
+          if (saved) {
+            this.favorites = JSON.parse(saved);
+          }
+        } catch (e) {
+          console.error("Failed to load favorites", e);
+          this.favorites = [];
+        }
+      }
+
+      saveFavorites() {
+        try {
+          localStorage.setItem('shigen365_favorites', JSON.stringify(this.favorites));
+        } catch (e) {
+          console.error("Failed to save favorites", e);
+        }
+      }
+
+      toggleFavorite(id) {
+        const index = this.favorites.indexOf(id);
+        if (index === -1) {
+          this.favorites.push(id);
+        } else {
+          this.favorites.splice(index, 1);
+        }
+        this.saveFavorites();
+        this.updateFavoritesCount();
+        this.updateTodayFavButton();
+        this.renderFavorites();
+        this.renderMaximsList(); // リストも再レンダリングしてお気に入り状態を更新
+      }
+
+      toggleTodayFavorite() {
+        this.toggleFavorite(this.todayMaxim.id);
+      }
+
+      updateTodayFavButton() {
+        const icon = document.getElementById('today-fav-icon');
+        const btn = document.getElementById('today-fav-btn');
+        if (this.favorites.includes(this.todayMaxim.id)) {
+          icon.className = "fa-solid fa-heart text-lg text-rose-500";
+          btn.className = "px-4 py-3 bg-rose-50 hover:bg-rose-100 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center border border-rose-200";
+        } else {
+          icon.className = "fa-regular fa-heart text-lg text-stone-300 hover:text-rose-500";
+          btn.className = "px-4 py-3 bg-white/5 hover:bg-white/10 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center border border-white/5";
+        }
+      }
+
+      updateFavoritesCount() {
+        const count = this.favorites.length;
+        const badges = [document.getElementById('fav-badge'), document.getElementById('m-fav-badge')];
+        badges.forEach(b => {
+          if (b) {
+            if (count > 0) {
+              b.innerText = count;
+              b.classList.remove('hidden');
+            } else {
+              b.classList.add('hidden');
+            }
+          }
+        });
+
+        // すべて削除ボタン制御
+        const clearBtn = document.getElementById('clear-all-favs');
+        if (clearBtn) {
+          if (count > 0) clearBtn.classList.remove('hidden');
+          else clearBtn.classList.add('hidden');
+        }
+      }
+
+      clearAllFavorites() {
+        if(confirm("お気に入りをすべて削除してよろしいですか？")) {
+          this.favorites = [];
+          this.saveFavorites();
+          this.updateFavoritesCount();
+          this.updateTodayFavButton();
+          this.renderFavorites();
+          this.renderMaximsList();
+        }
+      }
+
+      // カテゴリグリッドレンダリング (ホーム)
+      renderCategoryGrid() {
+        const grid = document.getElementById('category-grid');
+        grid.innerHTML = '';
+        Object.entries(categories).forEach(([id, info]) => {
+          const card = document.createElement('div');
+          card.className = "bg-white p-5 rounded-2xl border border-stone-200 hover:border-amber-300 hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between h-40";
+          card.onclick = () => {
+            this.selectedCategoryFilter = id;
+            document.getElementById('category-select').value = id;
+            this.changeTab('search');
+            this.filterMaxims();
+          };
+
+          card.innerHTML = `
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-tr ${info.color} flex items-center justify-center text-white shadow-sm">
+                <i class="fa-solid ${info.icon}"></i>
+              </div>
+              <h4 class="font-bold text-stone-800 text-sm leading-tight">${info.name}</h4>
+            </div>
+            <div class="flex items-center justify-between text-stone-400 text-2xs font-semibold">
+              <span>カテゴリー: #${id}</span>
+              <span class="text-amber-600">言葉を見る <i class="fa-solid fa-arrow-right ml-1"></i></span>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      // 検索用カテゴリフィルター
+      setupCategoryFilters() {
+        const select = document.getElementById('category-select');
+        select.innerHTML = '<option value="all">すべてのカテゴリ</option>';
+        Object.entries(categories).forEach(([id, info]) => {
+          const option = document.createElement('option');
+          option.value = id;
+          option.innerText = `${id}. ${info.name}`;
+          select.appendChild(option);
+        });
+
+        // 横並びバッジ
+        const badgeContainer = document.getElementById('category-badges');
+        badgeContainer.innerHTML = `
+          <button onclick="app.setCategoryFilter('all')" id="badge-all" class="px-3 py-1.5 rounded-full text-xs font-semibold border bg-stone-900 text-white border-stone-900 transition-all">
+            すべて
+          </button>
+        `;
+        Object.entries(categories).forEach(([id, info]) => {
+          const btn = document.createElement('button');
+          btn.id = `badge-${id}`;
+          btn.onclick = () => this.setCategoryFilter(id);
+          btn.className = `px-3 py-1.5 rounded-full text-xs font-semibold border bg-white text-stone-600 border-stone-200 hover:bg-stone-50 transition-all`;
+          btn.innerText = info.name;
+          badgeContainer.appendChild(btn);
+        });
+      }
+
+      setCategoryFilter(id) {
+        this.selectedCategoryFilter = id;
+        document.getElementById('category-select').value = id;
+        
+        // バッジのアクティブ切り替え
+        const badges = document.querySelectorAll('#category-badges button');
+        badges.forEach(b => {
+          b.className = "px-3 py-1.5 rounded-full text-xs font-semibold border bg-white text-stone-600 border-stone-200 hover:bg-stone-50 transition-all";
+        });
+        const activeBadge = document.getElementById(`badge-${id}`);
+        if(activeBadge) {
+          activeBadge.className = "px-3 py-1.5 rounded-full text-xs font-semibold border bg-stone-900 text-white border-stone-900 transition-all";
+        }
+
+        this.filterMaxims();
+      }
+
+      // 検索・フィルタリングのコアロジック
+      filterMaxims() {
+        const query = document.getElementById('search-input').value.toLowerCase().trim();
+        const cat = document.getElementById('category-select').value;
+        this.selectedCategoryFilter = cat;
+
+        // 横バッジのアクティブ状態同期
+        const badges = document.querySelectorAll('#category-badges button');
+        badges.forEach(b => {
+          b.className = "px-3 py-1.5 rounded-full text-xs font-semibold border bg-white text-stone-600 border-stone-200 hover:bg-stone-50 transition-all";
+        });
+        const activeBadge = document.getElementById(`badge-${cat}`);
+        if(activeBadge) {
+          activeBadge.className = "px-3 py-1.5 rounded-full text-xs font-semibold border bg-stone-900 text-white border-stone-900 transition-all";
+        }
+
+        this.filteredMaximsList = maxims.filter(m => {
+          const matchCat = (cat === 'all' || String(m.cat) === cat);
+          const matchQuery = !query || 
+                             m.phrase.toLowerCase().includes(query) || 
+                             m.comm.toLowerCase().includes(query) || 
+                             String(m.id).includes(query) ||
+                             m.src.toLowerCase().includes(query);
+          return matchCat && matchQuery;
+        });
+
+        this.sortMaxims();
+      }
+
+      sortMaxims() {
+        const sortType = document.getElementById('sort-select').value;
+        if (sortType === 'asc') {
+          this.filteredMaximsList.sort((a, b) => a.id - b.id);
+        } else if (sortType === 'desc') {
+          this.filteredMaximsList.sort((a, b) => b.id - a.id);
+        } else if (sortType === 'random') {
+          this.filteredMaximsList.sort(() => Math.random() - 0.5);
+        }
+
+        this.loadedCount = 12; // 表示件数リセット
+        this.renderMaximsList();
+      }
+
+      clearFilters() {
+        document.getElementById('search-input').value = '';
+        this.setCategoryFilter('all');
+      }
+
+      loadMore() {
+        this.loadedCount += 12;
+        this.renderMaximsList();
+      }
+
+      // リスト描画 (探すタブ)
+      renderMaximsList() {
+        const list = document.getElementById('maxim-card-list');
+        list.innerHTML = '';
+        const countEl = document.getElementById('results-count');
+        
+        countEl.innerText = `該当する言葉: ${this.filteredMaximsList.length} 件`;
+
+        const visibleList = this.filteredMaximsList.slice(0, this.loadedCount);
+        
+        if (visibleList.length === 0) {
+          list.innerHTML = `
+            <div class="col-span-full py-12 text-center text-stone-400">
+              <i class="fa-solid fa-ban text-2xl mb-2"></i>
+              <p class="text-xs font-medium">条件に合う言葉が見つかりませんでした。</p>
+            </div>
+          `;
+          document.getElementById('load-more-container').classList.add('hidden');
+          return;
+        }
+
+        visibleList.forEach(m => {
+          const catInfo = categories[m.cat];
+          const isFav = this.favorites.includes(m.id);
+          const card = document.createElement('div');
+          card.className = "bg-white p-5 rounded-2xl border border-stone-200 hover:border-amber-400/50 hover:shadow-sm transition-all duration-200 flex flex-col justify-between gap-4";
+          
+          card.innerHTML = `
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <span class="px-2 py-0.5 rounded text-3xs font-bold font-mono text-stone-400 bg-stone-50 border border-stone-100">
+                  ID: #${String(m.id).padStart(3, '0')}
+                </span>
+                <span class="px-2 py-0.5 rounded text-3xs font-semibold ${catInfo.bg} ${catInfo.text} border">
+                  ${catInfo.name}
+                </span>
+              </div>
+              <h4 class="serif-font font-bold text-stone-900 leading-snug sm:text-base text-sm py-1">
+                ${m.phrase}
+              </h4>
+              <p class="text-stone-500 text-xs leading-relaxed font-light">
+                ${m.comm}
+              </p>
+            </div>
+            
+            <div class="flex items-center justify-between pt-2 border-t border-stone-100">
+              <span class="text-3xs text-stone-400 italic">出典: ${m.src}</span>
+              <div class="flex items-center space-x-1">
+                <button onclick="app.speakText('${m.phrase}。${m.comm}', 'ai-voice-select')" class="w-7 h-7 bg-stone-50 hover:bg-stone-100 text-stone-600 rounded-lg flex items-center justify-center transition-all" title="朗読する">
+                  <i class="fa-solid fa-volume-high text-2xs text-stone-400 hover:text-stone-700"></i>
+                </button>
+                <button onclick="app.setupAdvisorWithMaximAndGo(${m.id})" class="w-7 h-7 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg flex items-center justify-center transition-all" title="AI相談">
+                  <i class="fa-solid fa-brain text-2xs"></i>
+                </button>
+                <button onclick="app.toggleFavorite(${m.id})" class="w-7 h-7 bg-stone-50 hover:bg-stone-100 rounded-lg flex items-center justify-center transition-all" title="お気に入り">
+                  <i class="${isFav ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart text-stone-400'} text-2xs"></i>
+                </button>
+              </div>
+            </div>
+          `;
+          list.appendChild(card);
+        });
+
+        // もっと見るボタン表示制御
+        const loadMoreBtn = document.getElementById('load-more-container');
+        if (this.filteredMaximsList.length > this.loadedCount) {
+          loadMoreBtn.classList.remove('hidden');
+        } else {
+          loadMoreBtn.classList.add('hidden');
+        }
+      }
+
+      // お気に入りリスト描画
+      renderFavorites() {
+        const list = document.getElementById('fav-card-list');
+        const emptyState = document.getElementById('fav-empty-state');
+        list.innerHTML = '';
+
+        if (this.favorites.length === 0) {
+          list.classList.add('hidden');
+          emptyState.classList.remove('hidden');
+          return;
+        }
+
+        list.classList.remove('hidden');
+        emptyState.classList.add('hidden');
+
+        this.favorites.forEach(favId => {
+          const m = maxims.find(item => item.id === favId);
+          if (!m) return;
+
+          const catInfo = categories[m.cat];
+          const card = document.createElement('div');
+          card.className = "bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between gap-4";
+          
+          card.innerHTML = `
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <span class="px-2 py-0.5 rounded text-3xs font-bold font-mono text-stone-400 bg-stone-50">
+                  ID: #${String(m.id).padStart(3, '0')}
+                </span>
+                <span class="px-2 py-0.5 rounded text-3xs font-semibold ${catInfo.bg} ${catInfo.text} border">
+                  ${catInfo.name}
+                </span>
+              </div>
+              <h4 class="serif-font font-bold text-stone-900 leading-snug sm:text-base text-sm">
+                ${m.phrase}
+              </h4>
+              <p class="text-stone-500 text-xs leading-relaxed">
+                ${m.comm}
+              </p>
+            </div>
+            
+            <div class="flex items-center justify-between pt-2 border-t border-stone-100">
+              <span class="text-3xs text-stone-400 italic">出典: ${m.src}</span>
+              <div class="flex items-center space-x-1">
+                <button onclick="app.speakText('${m.phrase}。${m.comm}', 'ai-voice-select')" class="w-7 h-7 bg-stone-50 hover:bg-stone-100 text-stone-600 rounded-lg flex items-center justify-center transition-all" title="朗読する">
+                  <i class="fa-solid fa-volume-high text-2xs text-stone-400 hover:text-stone-700"></i>
+                </button>
+                <button onclick="app.setupAdvisorWithMaximAndGo(${m.id})" class="w-7 h-7 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg flex items-center justify-center transition-all" title="AI相談">
+                  <i class="fa-solid fa-brain text-2xs"></i>
+                </button>
+                <button onclick="app.toggleFavorite(${m.id})" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 rounded-lg flex items-center justify-center transition-all" title="お気に入りを解除">
+                  <i class="fa-solid fa-heart text-rose-500 text-2xs"></i>
+                </button>
+              </div>
+            </div>
+          `;
+          list.appendChild(card);
+        });
+      }
+
+      // AIお悩み相談室：言葉のセット
+      setupAdvisorWithMaxim(maxim) {
+        this.selectedMaximForAdvisor = maxim;
+        
+        document.getElementById('adv-phrase').innerText = maxim.phrase;
+        document.getElementById('adv-comm').innerText = maxim.comm;
+        document.getElementById('adv-phrase').className = "serif-font font-bold text-stone-900 leading-snug";
+        document.getElementById('adv-maxim-id').innerText = `ID: #${String(maxim.id).padStart(3, '0')}`;
+        document.getElementById('adv-maxim-id').classList.remove('hidden');
+      }
+
+      setupAdvisorWithMaximAndGo(id) {
+        const m = maxims.find(item => item.id === id);
+        if (m) {
+          this.setupAdvisorWithMaxim(m);
+          this.changeTab('advisor');
+        }
+      }
+
+      consultTodayWithAI() {
+        this.setupAdvisorWithMaxim(this.todayMaxim);
+        this.changeTab('advisor');
+      }
+
+      consultFortuneWithAI() {
+        this.closeFortuneModal();
+        this.changeTab('advisor');
+      }
+
+      // チャット送信
+      async sendMessage(event) {
+        event.preventDefault();
+        const input = document.getElementById('chat-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        // APIキーが未設定の場合は、キーを求める案内を表示する
+        if (!this.apiKey) {
+          this.appendMessage('user', text);
+          input.value = '';
+          const guideId = this.appendMessage('ai', '思考中...');
+          this.updateMessage(guideId, `現在、AIに相談する機能のための「APIキー」が設定されていません。\n\n【APIキーの設定方法】\n1. 画面右上のギアアイコン（⚙️）またはフッターの「APIキーを設定する」をクリックします。\n2. Google AI Studioで無料発行できるGemini APIキーを入力して保存してください。\n3. 保存後、このAI相談室が完全に有効化されます。\n\n※ APIキーはあなたのブラウザ（LocalStorage）にのみ安全に保存され、第三者に共有される心配はありません。`);
+          return;
+        }
+
+        // 相談ワードがセットされていない場合は今日のを借りる
+        if (!this.selectedMaximForAdvisor) {
+          this.selectedMaximForAdvisor = this.todayMaxim;
+          this.setupAdvisorWithMaxim(this.todayMaxim);
+        }
+
+        // 1. ユーザー発言追加
+        this.appendMessage('user', text);
+        input.value = '';
+
+        // 送信ボタン無効化
+        const btn = document.getElementById('chat-send-btn');
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i><span>考え中...</span>`;
+
+        // 仮の「AIタイピング中...」を追加
+        const typingId = this.appendMessage('ai', '思考中...');
+
+        try {
+          // Gemini API リクエスト
+          const systemPrompt = `
+            あなたは『人生とビジネスを導く至言集』を熟知した、プロフェッショナルなAIメンター、至言コンシェルジュです。
+            ユーザーが指定した至言「${this.selectedMaximForAdvisor.phrase}」（解説：${this.selectedMaximForAdvisor.comm}）の精神をベースにして、ユーザーの悩みに対する深いアドバイスとアクションプランを提供してください。
+            
+            【回答のルール】
+            1. 親しみやすく、温かみがありながらも、プロフェッショナルなコーチとしてのトーン（日本語）で回答します。
+            2. 以下の構成で回答してください：
+               - 【至言の深掘り】: 指定した至言に隠された心理や哲学を、悩みに寄り添いつつ端的に語る。
+               - 【お悩みへの適用】: ユーザーの具体的な課題に、この至言がどうアプローチできるかを解説する。
+               - 【今日からできる一歩】: 思考停止を防ぐため、今日または明日すぐに実行できる超具体的な「1つのアクションプラン」を提示する。
+            3. あまり長すぎず、読みやすいように箇条書きや適度な改行を使い、300〜400文字程度で要点を絞って伝えてください。
+          `;
+
+          const payload = {
+            contents: [{ parts: [{ text: text }] }],
+            systemInstruction: {
+              parts: [{ text: systemPrompt }]
+            }
+          };
+
+          const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${this.apiKey}`;
+
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) throw new Error('API Throttled or Error');
+
+          const result = await response.json();
+          const responseText = result.candidates?.[0]?.content?.parts?.[0]?.text || "申し訳ありません。回答を導き出せませんでした。";
+
+          // メッセージを更新
+          this.updateMessage(typingId, responseText);
+
+        } catch (e) {
+          console.error(e);
+          // エラー時のフォールバック
+          this.updateMessage(typingId, `「${this.selectedMaximForAdvisor.phrase}」をヒントに思考してみましょう。\n\n不安や悩みがあるときは、${this.selectedMaximForAdvisor.comm}とあるように、何らかの行動や捉え方の変革が突破口になります。今日から小さな一歩として、まずは状況を紙に書き出し整理することをおすすめします。`);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = `<span>相談する</span><i class="fa-solid fa-paper-plane text-xs"></i>`;
+        }
+      }
+
+      appendMessage(role, text) {
+        const history = document.getElementById('chat-history');
+        const id = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
+        const div = document.createElement('div');
+        div.id = id;
+        div.className = "flex gap-3 " + (role === 'user' ? 'justify-end' : '');
+
+        if (role === 'user') {
+          div.innerHTML = `
+            <div class="bg-amber-500 text-stone-950 rounded-2xl rounded-tr-none p-3.5 max-w-[85%] font-medium">
+              <p class="leading-relaxed text-xs sm:text-sm">${text}</p>
+            </div>
+          `;
+        } else {
+          div.innerHTML = `
+            <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-800 flex-shrink-0 text-xs">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <div class="bg-stone-100 text-stone-800 rounded-2xl rounded-tl-none p-3.5 max-w-[85%] space-y-2">
+              <p class="font-medium text-xs text-stone-500">至言コンシェルジュ</p>
+              <div class="leading-relaxed text-xs sm:text-sm whitespace-pre-wrap">${text}</div>
+            </div>
+          `;
+        }
+
+        history.appendChild(div);
+        history.scrollTop = history.scrollHeight;
+        return id;
+      }
+
+      updateMessage(id, newText) {
+        const msg = document.getElementById(id);
+        if (msg) {
+          const contentEl = msg.querySelector('.whitespace-pre-wrap');
+          if (contentEl) {
+            contentEl.innerText = newText;
+          }
+          const history = document.getElementById('chat-history');
+          history.scrollTop = history.scrollHeight;
+        }
+      }
+
+      clearChat() {
+        if (confirm("チャット履歴をクリアしてよろしいですか？")) {
+          const history = document.getElementById('chat-history');
+          history.innerHTML = `
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-800 flex-shrink-0 text-xs">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <div class="bg-stone-100 text-stone-800 rounded-2xl rounded-tl-none p-3.5 max-w-[85%] space-y-2">
+                <p class="font-medium text-xs text-stone-500">至言コンシェルジュ</p>
+                <p class="leading-relaxed text-xs sm:text-sm">
+                  チャット履歴をリセットしました。またいつでも相談してくださいね。
+                </p>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // おみくじ機能
+      drawFortune() {
+        const randomIndex = Math.floor(Math.random() * maxims.length);
+        const m = maxims[randomIndex];
+
+        // 運勢を決定する
+        const tiers = ["大吉", "吉", "中吉", "小吉", "末吉"];
+        // 運勢の算出にIDやランダム性を利用
+        const tier = tiers[Math.floor(Math.random() * tiers.length)];
+        
+        document.getElementById('fortune-tier').innerText = tier;
+        document.getElementById('fortune-phrase').innerText = m.phrase;
+        document.getElementById('fortune-commentary').innerText = m.comm;
+        document.getElementById('fortune-id').innerText = `ID: #${String(m.id).padStart(3, '0')}`;
+
+        // モーダルオープン時に、このおみくじ言葉をAI相談用に選択する
+        this.selectedMaximForAdvisor = m;
+        this.setupAdvisorWithMaxim(m);
+
+        // モーダルオープン
+        const modal = document.getElementById('fortune-modal');
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        modal.querySelector('.transform').classList.remove('scale-95');
+        modal.querySelector('.transform').classList.add('scale-100');
+      }
+
+      closeFortuneModal() {
+        const modal = document.getElementById('fortune-modal');
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        modal.querySelector('.transform').classList.remove('scale-100');
+        modal.querySelector('.transform').classList.add('scale-95');
+      }
+
+      // 設定（APIキー）管理
+      loadSettings() {
+        try {
+          const savedKey = localStorage.getItem('shigen365_gemini_key');
+          if (savedKey) {
+            this.apiKey = savedKey;
+            document.getElementById('api-key-input').value = savedKey;
+          }
+        } catch (e) {
+          console.error("Failed to load API key", e);
+        }
+      }
+
+      saveSettings() {
+        const keyInput = document.getElementById('api-key-input').value.trim();
+        try {
+          if (keyInput) {
+            localStorage.setItem('shigen365_gemini_key', keyInput);
+            this.apiKey = keyInput;
+          } else {
+            localStorage.removeItem('shigen365_gemini_key');
+            this.apiKey = '';
+          }
+          this.updateAPIStatusUI();
+          this.closeSettingsModal();
+        } catch (e) {
+          alert("設定の保存に失敗しました。");
+        }
+      }
+
+      updateAPIStatusUI() {
+        const statusEl = document.getElementById('advisor-status');
+        if (statusEl) {
+          if (this.apiKey) {
+            statusEl.className = "flex items-center text-emerald-500 font-semibold";
+            statusEl.innerHTML = `<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1 animate-pulse"></span>ONLINE`;
+          } else {
+            statusEl.className = "flex items-center text-stone-400 font-semibold";
+            statusEl.innerHTML = `<span class="w-1.5 h-1.5 bg-stone-400 rounded-full mr-1"></span>OFFLINE`;
+          }
+        }
+      }
+
+      showSettingsModal() {
+        const modal = document.getElementById('settings-modal');
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        modal.querySelector('.transform').classList.remove('scale-95');
+        modal.querySelector('.transform').classList.add('scale-100');
+      }
+
+      closeSettingsModal() {
+        const modal = document.getElementById('settings-modal');
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        modal.querySelector('.transform').classList.remove('scale-100');
+        modal.querySelector('.transform').classList.add('scale-95');
+      }
+
+      showAboutModal() {
+        const modal = document.getElementById('about-modal');
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        modal.querySelector('.transform').classList.remove('scale-95');
+        modal.querySelector('.transform').classList.add('scale-100');
+      }
+
+      closeAboutModal() {
+        const modal = document.getElementById('about-modal');
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        modal.querySelector('.transform').classList.remove('scale-100');
+        modal.querySelector('.transform').classList.add('scale-95');
+      }
+    }
+
+    // アプリインスタンス作成＆起動
+    let app;
+    window.onload = function() {
+      app = new ShigenApp();
+      app.init();
+    };
+  </script>
+</body>
+</html>
