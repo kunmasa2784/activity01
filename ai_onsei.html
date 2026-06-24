@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>和音 (Waon) - AI日本語音声ジェネレーター</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts (Noto Sans JP) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;750;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .customized-scrollbar::-webkit-scrollbar {
+      width: 5px;
+    }
+    .customized-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.4);
+      border-radius: 999px;
+    }
+    .customized-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.2);
+      border-radius: 999px;
+    }
+    .customized-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(99, 102, 241, 0.4);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- 隠しHTML5 Audio要素（再生の安定性を向上させるための中核部分） -->
+  <audio id="audio-element" class="hidden" preload="auto" crossorigin="anonymous"></audio>
+
+  <!-- ヘッダー -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-gradient-to-tr from-indigo-500 to-pink-500 p-2.5 rounded-xl shadow-lg shadow-indigo-500/20">
+          <i data-lucide="mic" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-indigo-200 to-pink-200 bg-clip-text text-transparent">
+            和音 - Waon
+          </h1>
+          <p class="text-xs text-slate-400">AI 日本語音声合成スタジオ</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 text-xs text-slate-400 bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-700/50">
+        <span class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Gemini 2.5 TTS 稼働中
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- メインレイアウト -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    
+    <!-- 左側：入力とコントロールパネル (7/12) -->
+    <section class="lg:col-span-7 flex flex-col gap-6">
+      
+      <!-- テキスト入力カード -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
+        <div class="flex items-center justify-between mb-3">
+          <label class="text-sm font-semibold flex items-center gap-2 text-indigo-300">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            1. 読み上げるテキストを入力
+          </label>
+          <span id="char-count" class="text-xs text-slate-500">0 文字</span>
+        </div>
+        
+        <textarea
+          id="text-input"
+          placeholder="ここに読み上げたい日本語の文章を入力してください..."
+          rows="5"
+          class="w-full bg-slate-950/80 border border-slate-850 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl p-4 text-slate-200 placeholder-slate-600 outline-none transition-all resize-none text-base leading-relaxed"
+        ></textarea>
+
+        <!-- サンプル文クイック選択 -->
+        <div class="mt-3">
+          <p class="text-xs text-slate-400 mb-2 font-medium">文章のサンプル：</p>
+          <div id="sample-buttons" class="flex flex-wrap gap-1.5">
+            <!-- JavaScript で動的に生成 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- スピーカー＆トーン設定カード -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex-1 flex flex-col gap-5">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <label class="text-sm font-semibold flex items-center gap-2 text-indigo-300">
+              <i data-lucide="languages" class="w-4 h-4"></i>
+              2. スピーカーを選択
+            </label>
+            
+            <!-- フィルターボタン -->
+            <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs">
+              <button id="filter-all" class="px-2 py-1 rounded-md transition-all bg-indigo-600 text-white shadow-md">
+                すべて
+              </button>
+              <button id="filter-female" class="px-2 py-1 rounded-md transition-all text-slate-400 hover:text-slate-200">
+                女性
+              </button>
+              <button id="filter-male" class="px-2 py-1 rounded-md transition-all text-slate-400 hover:text-slate-200">
+                男性
+              </button>
+            </div>
+          </div>
+
+          <!-- スピーカーグリッド（スクロール可能） -->
+          <div id="voices-grid" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 max-h-[220px] overflow-y-auto pr-1 customized-scrollbar">
+            <!-- JavaScript で動的に生成 -->
+          </div>
+        </div>
+
+        <!-- トーン・感情設定 -->
+        <div class="border-t border-slate-800/60 pt-4">
+          <label class="text-sm font-semibold flex items-center gap-2 text-indigo-300 mb-3">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            3. 話し方のトーン・感情表現
+          </label>
+          
+          <div id="tones-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <!-- JavaScript で動的に生成 -->
+          </div>
+        </div>
+
+        <!-- 生成実行エリア -->
+        <div class="mt-auto border-t border-slate-800/60 pt-4 flex flex-col gap-3">
+          <div id="error-container" class="hidden bg-rose-950/30 border border-rose-900/40 rounded-xl p-3 flex items-start gap-2.5 text-xs text-rose-300">
+            <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 mt-0.5"></i>
+            <p id="error-message"></p>
+          </div>
+
+          <button
+            id="generate-btn"
+            class="w-full py-4 px-6 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg transition-all bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white shadow-indigo-600/10 hover:shadow-indigo-600/25 transform active:scale-[0.98]"
+          >
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+            <span id="generate-btn-text">自然な日本語音声を生成する</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右側：ビジュアライザー ＆ 生成履歴 (5/12) -->
+    <section class="lg:col-span-5 flex flex-col gap-6">
+      
+      <!-- リアルタイム波形ビジュアライザー -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col gap-3">
+        <h3 class="text-sm font-semibold flex items-center gap-2 text-indigo-300">
+          <i data-lucide="volume-2" class="w-4 h-4"></i>
+          音声出力モニター
+        </h3>
+        <div class="relative bg-slate-950 rounded-xl h-[100px] overflow-hidden border border-slate-850 flex items-center justify-center">
+          <canvas id="canvas-element" width="400" height="100" class="w-full h-full object-cover"></canvas>
+          <div id="visualizer-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-xs text-slate-500 gap-1 bg-slate-950/80">
+            <i data-lucide="volume-2" class="w-5 h-5 opacity-40 animate-pulse"></i>
+            <span>音声を再生するとここに波形が表示されます</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 生成履歴 & ライブラリ -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex-1 flex flex-col min-h-[350px]">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-sm font-semibold flex items-center gap-2 text-indigo-300">
+            <i data-lucide="bookmark" class="w-4 h-4"></i>
+            生成履歴・ライブラリ
+          </h3>
+          <button id="clear-all-btn" class="hidden text-xs text-slate-500 hover:text-rose-400 transition-colors flex items-center gap-1">
+            すべて削除
+          </button>
+        </div>
+
+        <!-- 履歴リスト -->
+        <div id="history-list" class="flex-1 overflow-y-auto max-h-[420px] pr-1 flex flex-col gap-3 customized-scrollbar">
+          <!-- JavaScript で動的に生成 -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- フッター -->
+  <footer class="border-t border-slate-900 bg-slate-950/80 px-6 py-4 mt-auto">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <p>© 2026 和音 - Waon. Built with Gemini 2.5 TTS Technology.</p>
+      <div class="flex gap-4">
+        <span class="hover:text-slate-300 transition-colors cursor-pointer">利用規約</span>
+        <span class="hover:text-slate-300 transition-colors cursor-pointer">プライバシーポリシー</span>
+        <span class="hover:text-slate-300 transition-colors cursor-pointer">ヘルプ</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript アプリロジック -->
+  <script>
+    // --- 定数定義 ---
+    const VOICES = [
+      { id: "Leda", name: "さくら (Sakura)", gender: "female", description: "標準的で聞き取りやすいクリアな声", tags: ["アナウンサー風", "標準"] },
+      { id: "Aoede", name: "あおい (Aoi)", gender: "female", description: "優しく穏やかで、包み込むような落ち着いた声", tags: ["ナレーション", "癒やし"] },
+      { id: "Autonoe", name: "ひなた (Hinata)", gender: "female", description: "明るくハキハキとした元気な声", tags: ["キャラクター", "元気"] },
+      { id: "Callirrhoe", name: "みやび (Miyabi)", gender: "female", description: "大人っぽく知的な、落ち着いた声", tags: ["解説・講義", "上品"] },
+      { id: "Despina", name: "つむぎ (Tsumugi)", gender: "female", description: "可愛らしく親しみやすい少女のような声", tags: ["アニメ風", "ポップ"] },
+      { id: "Kore", name: "こはる (Koharu)", gender: "female", description: "標準的で聞き取りやすい、落ち着いた女性の声", tags: ["標準", "アナウンス"] },
+      { id: "Iapetus", name: "たくみ (Takumi)", gender: "male", description: "知的で信頼感のある、標準的な男性の声", tags: ["ビジネス", "標準"] },
+      { id: "Charon", name: "れん (Ren)", gender: "male", description: "深みと渋さのある、落ち着いた大人の男性の声", tags: ["朗読", "低音"] },
+      { id: "Puck", name: "しょうた (Shota)", gender: "male", description: "爽やかで若々しく、活力のある男性の声", tags: ["チュートリアル", "爽やか"] },
+      { id: "Fenrir", name: "だいき (Daiki)", gender: "male", description: "力強く説得力のある、骨太な男性の声", tags: ["アナウンス", "力強い"] },
+      { id: "Enceladus", name: "こうじ (Koji)", gender: "male", description: "穏やかで安心感を与える、マイルドな低音ボイス", tags: ["ポッドキャスト", "温厚"] }
+    ];
+
+    const TONE_PRESETS = [
+      { id: "default", name: "標準", prefix: "", description: "自然なニュートラルな語り口" },
+      { id: "cheerful", name: "明るく元気", prefix: "Say cheerfully: ", description: "声のトーンを上げて、朗らかに話します" },
+      { id: "calm", name: "落ち着いて", prefix: "Say calmly: ", description: "ゆっくりと説得力を持って話します" },
+      { id: "whisper", name: "ささやくように", prefix: "Say in a whisper: ", description: "静かに、耳元で話しかけるように話します" },
+      { id: "excited", name: "興奮気味に", prefix: "Say excitedly: ", description: "感情を高ぶらせて、熱っぽく話します" },
+      { id: "sad", name: "少し悲しげに", prefix: "Say sadly: ", description: "憂いを含んだ静かなトーンで話します" }
+    ];
+
+    const SAMPLE_TEXTS = [
+      "こんにちは。和音へようこそ！自然な日本語の音声を簡単に作成し、保存することができます。お好みの声と話し方を選んで、試してみてくださいね。",
+      "明日の天気をお伝えします。午前中は広く晴れますが、午後からは大気の状態が不安定になり、所々で急な雨や雷雨があるでしょう。お出かけの際は折りたたみ傘をお持ちください。",
+      "本日はお忙しい中、お集まりいただき誠にありがとうございます。ただいまより、新しいAIアシスタントに関するプレゼンテーションを開始いたします。",
+      "むかし、むかし、あるところに、おじいさんとおばあさんが住んでいました。おじいさんは山へ芝刈りに、おばあさんは川へ洗濯に行きました。"
+    ];
+
+    // --- アプリケーションの状態（State） ---
+    let state = {
+      text: SAMPLE_TEXTS[0],
+      selectedVoice: VOICES[6], // デフォルト「たくみ」
+      selectedTone: TONE_PRESETS[0],
+      genderFilter: "all",
+      isGenerating: false,
+      playingId: null,
+      history: []
+    };
+
+    // --- Web Audio API 関連変数 ---
+    let audioContext = null;
+    let analyser = null;
+    let source = null;
+    let animationFrameId = null;
+
+    // --- DOM要素の取得 ---
+    const audioElement = document.getElementById("audio-element");
+    const textInput = document.getElementById("text-input");
+    const charCount = document.getElementById("char-count");
+    const generateBtn = document.getElementById("generate-btn");
+    const generateBtnText = document.getElementById("generate-btn-text");
+    const errorContainer = document.getElementById("error-container");
+    const errorMessage = document.getElementById("error-message");
+    const canvas = document.getElementById("canvas-element");
+    const visualizerPlaceholder = document.getElementById("visualizer-placeholder");
+    const clearAllBtn = document.getElementById("clear-all-btn");
+    const historyList = document.getElementById("history-list");
+    const voicesGrid = document.getElementById("voices-grid");
+    const tonesGrid = document.getElementById("tones-grid");
+    const sampleButtons = document.getElementById("sample-buttons");
+
+    // フィルターボタン
+    const filterAllBtn = document.getElementById("filter-all");
+    const filterFemaleBtn = document.getElementById("filter-female");
+    const filterMaleBtn = document.getElementById("filter-male");
+
+    // --- 初期化処理 ---
+    function init() {
+      // ローカルストレージから履歴の読み込み
+      const savedHistory = localStorage.getItem("waon_speech_history");
+      if (savedHistory) {
+        try {
+          state.history = JSON.parse(savedHistory);
+        } catch (e) {
+          state.history = [];
+        }
+      }
+
+      // 初回入力の設定
+      textInput.value = state.text;
+      updateCharCount();
+
+      // 各UIのレンダリング
+      renderSampleTexts();
+      renderVoices();
+      renderTones();
+      renderHistory();
+
+      // Lucide アイコンの初期変換
+      lucide.createIcons();
+
+      // イベントリスナーの登録
+      textInput.addEventListener("input", (e) => {
+        state.text = e.target.value;
+        updateCharCount();
+      });
+
+      filterAllBtn.addEventListener("click", () => setGenderFilter("all"));
+      filterFemaleBtn.addEventListener("click", () => setGenderFilter("female"));
+      filterMaleBtn.addEventListener("click", () => setGenderFilter("male"));
+
+      generateBtn.addEventListener("click", generateSpeech);
+      clearAllBtn.addEventListener("click", clearAllHistory);
+    }
+
+    // 文字数カウンターの更新
+    function updateCharCount() {
+      charCount.textContent = `${state.text.length} 文字`;
+    }
+
+    // ジェンダーフィルターの設定変更
+    function setGenderFilter(gender) {
+      state.genderFilter = gender;
+      [filterAllBtn, filterFemaleBtn, filterMaleBtn].forEach(btn => {
+        btn.className = "px-2 py-1 rounded-md transition-all text-slate-400 hover:text-slate-200";
+      });
+
+      if (gender === "all") filterAllBtn.className = "px-2 py-1 rounded-md transition-all bg-indigo-600 text-white shadow-md";
+      if (gender === "female") filterFemaleBtn.className = "px-2 py-1 rounded-md transition-all bg-indigo-600 text-white shadow-md";
+      if (gender === "male") filterMaleBtn.className = "px-2 py-1 rounded-md transition-all bg-indigo-600 text-white shadow-md";
+
+      renderVoices();
+    }
+
+    // サンプルテキストボタンの描画
+    function renderSampleTexts() {
+      sampleButtons.innerHTML = "";
+      SAMPLE_TEXTS.forEach((sample, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "text-xs bg-slate-800 hover:bg-indigo-900/30 hover:text-indigo-200 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700/50 hover:border-indigo-800/50 transition-all truncate max-w-[200px]";
+        btn.textContent = `サンプル ${idx + 1}`;
+        btn.addEventListener("click", () => {
+          state.text = sample;
+          textInput.value = sample;
+          updateCharCount();
+        });
+        sampleButtons.appendChild(btn);
+      });
+    }
+
+    // ボイスグリッドのレンダリング
+    function renderVoices() {
+      voicesGrid.innerHTML = "";
+      const filtered = VOICES.filter(v => state.genderFilter === "all" || v.gender === state.genderFilter);
+
+      filtered.forEach(voice => {
+        const isSelected = state.selectedVoice.id === voice.id;
+        const btn = document.createElement("button");
+        btn.className = `text-left p-3 rounded-xl border transition-all flex flex-col gap-1.5 ${
+          isSelected
+            ? "bg-indigo-950/40 border-indigo-500 shadow-lg shadow-indigo-500/5 ring-1 ring-indigo-500"
+            : "bg-slate-950/40 border-slate-850 hover:bg-slate-800/40 hover:border-slate-750"
+        }`;
+
+        const isFemale = voice.gender === "female";
+        const indicatorColor = isFemale ? "bg-pink-400" : "bg-sky-400";
+        const badgeClass = isFemale 
+          ? "bg-pink-950/50 text-pink-300 border border-pink-900/30" 
+          : "bg-sky-950/50 text-sky-300 border border-sky-900/30";
+        const genderText = isFemale ? "女性" : "男性";
+
+        // タグHTMLの生成
+        const tagsHtml = voice.tags.map(tag => `<span class="text-[10px] bg-slate-900 text-slate-400 px-1.5 py-0.5 rounded">#${tag}</span>`).join("");
+
+        btn.innerHTML = `
+          <div class="flex items-center justify-between w-full">
+            <span class="font-semibold text-sm flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full ${indicatorColor}"></span>
+              ${voice.name}
+            </span>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full ${badgeClass}">
+              ${genderText}
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 line-clamp-1">${voice.description}</p>
+          <div class="flex flex-wrap gap-1">${tagsHtml}</div>
+        `;
+
+        btn.addEventListener("click", () => {
+          state.selectedVoice = voice;
+          renderVoices();
+        });
+
+        voicesGrid.appendChild(btn);
+      });
+    }
+
+    // トーングリッドのレンダリング
+    function renderTones() {
+      tonesGrid.innerHTML = "";
+      TONE_PRESETS.forEach(tone => {
+        const isSelected = state.selectedTone.id === tone.id;
+        const btn = document.createElement("button");
+        btn.className = `p-2.5 rounded-xl border text-xs text-center transition-all ${
+          isSelected
+            ? "bg-purple-950/40 border-purple-500 text-purple-200 ring-1 ring-purple-500"
+            : "bg-slate-950/40 border-slate-850 hover:bg-slate-800 hover:text-slate-200"
+        }`;
+
+        btn.innerHTML = `
+          <div class="font-semibold">${tone.name}</div>
+          <div class="text-[10px] text-slate-400 truncate mt-0.5">${tone.description}</div>
+        `;
+
+        btn.addEventListener("click", () => {
+          state.selectedTone = tone;
+          renderTones();
+        });
+
+        tonesGrid.appendChild(btn);
+      });
+    }
+
+    // 履歴リストのレンダリング
+    function renderHistory() {
+      historyList.innerHTML = "";
+      if (state.history.length > 0) {
+        clearAllBtn.classList.remove("hidden");
+      } else {
+        clearAllBtn.classList.add("hidden");
+      }
+
+      if (state.history.length === 0) {
+        historyList.innerHTML = `
+          <div class="flex flex-col items-center justify-center text-center h-full text-slate-500 py-12 gap-2">
+            <i data-lucide="help-circle" class="w-8 h-8 opacity-30"></i>
+            <p class="text-xs font-medium">まだ生成された音声はありません</p>
+            <p class="text-[11px] text-slate-600 max-w-[200px]">
+              左側の入力欄に文字を入力して「生成する」ボタンを押してみましょう。
+            </p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      state.history.forEach(item => {
+        const isPlaying = state.playingId === item.id;
+        const card = document.createElement("div");
+        card.className = `group p-3.5 rounded-xl border text-left transition-all cursor-pointer relative flex flex-col gap-2.5 ${
+          isPlaying
+            ? "bg-indigo-950/30 border-indigo-500/70 shadow-md shadow-indigo-500/5"
+            : "bg-slate-950/60 border-slate-850 hover:border-slate-750"
+        }`;
+
+        const isToneActive = item.tone && item.tone.id !== "default";
+        const toneBadge = isToneActive 
+          ? `<span class="text-[10px] bg-purple-950 text-purple-300 px-1.5 py-0.2 rounded border border-purple-900/30">${item.tone.name}</span>` 
+          : "";
+
+        const playBtnClass = isPlaying
+          ? "bg-indigo-600 text-white"
+          : "bg-slate-800 group-hover:bg-indigo-600/10 group-hover:text-indigo-400 text-slate-300";
+
+        const playIcon = isPlaying ? "pause" : "play";
+        const bookmarkIcon = item.isFavorite ? "bookmark-check" : "bookmark";
+        const bookmarkColor = item.isFavorite ? "text-amber-400" : "text-slate-500 hover:text-slate-300";
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <button class="play-trigger-btn p-2 rounded-lg transition-all ${playBtnClass}">
+                <i data-lucide="${playIcon}" class="w-3.5 h-3.5 fill-current"></i>
+              </button>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xs font-semibold text-slate-200">
+                    ${item.voice.name}
+                  </span>
+                  ${toneBadge}
+                </div>
+                <span class="text-[10px] text-slate-500">${item.createdAt}</span>
+              </div>
+            </div>
+
+            <!-- アクションボタン群 -->
+            <div class="flex items-center gap-1">
+              <button class="fav-btn p-1.5 rounded-md hover:bg-slate-800 transition-all ${bookmarkColor}">
+                <i data-lucide="${bookmarkIcon}" class="w-4 h-4 ${item.isFavorite ? 'fill-current' : ''}"></i>
+              </button>
+              <button class="download-btn p-1.5 rounded-md hover:bg-slate-800 text-slate-500 hover:text-indigo-400 transition-all">
+                <i data-lucide="download" class="w-4 h-4"></i>
+              </button>
+              <button class="delete-btn p-1.5 rounded-md hover:bg-slate-800 text-slate-500 hover:text-rose-400 transition-all">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- 読み上げ原稿 -->
+          <p class="text-xs text-slate-300 line-clamp-2 leading-relaxed bg-slate-900/40 p-2 rounded-lg border border-slate-850">
+            ${item.text}
+          </p>
+
+          <div class="text-[10px] text-slate-500 self-end">
+            容量: ${(item.blobSize / 1024).toFixed(1)} KB (WAV)
+          </div>
+        `;
+
+        // 各種ボタンのイベントハンドリング
+        card.addEventListener("click", (e) => {
+          // ボタン群への直接クリックでない限りは全体再生/停止
+          if (!e.target.closest("button")) {
+            playAudio(item.audioUrl, item.id);
+          }
+        });
+
+        card.querySelector(".play-trigger-btn").addEventListener("click", (e) => {
+          e.stopPropagation();
+          playAudio(item.audioUrl, item.id);
+        });
+
+        card.querySelector(".fav-btn").addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleFavorite(item.id);
+        });
+
+        card.querySelector(".download-btn").addEventListener("click", (e) => {
+          e.stopPropagation();
+          downloadAudio(item.audioUrl, `waon_speech_${item.voice.id}_${item.id.slice(0, 5)}.wav`);
+        });
+
+        card.querySelector(".delete-btn").addEventListener("click", (e) => {
+          e.stopPropagation();
+          deleteHistoryItem(item.id);
+        });
+
+        historyList.appendChild(card);
+      });
+
+      // 追加したLucideアイコンを変換
+      lucide.createIcons();
+    }
+
+    // --- 音声生成とAPI連携 ---
+
+    // PCM16 から WAV ヘッダー付与変換
+    function pcmToWav(pcmBase64, sampleRate = 24000) {
+      const binaryString = atob(pcmBase64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      
+      const buffer = new ArrayBuffer(44 + bytes.length);
+      const view = new DataView(buffer);
+      
+      const writeString = (view, offset, string) => {
+        for (let i = 0; i < string.length; i++) {
+          view.setUint8(offset + i, string.charCodeAt(i));
+        }
+      };
+      
+      writeString(view, 0, 'RIFF');
+      view.setUint32(4, 36 + bytes.length, true);
+      writeString(view, 8, 'WAVE');
+      writeString(view, 12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true);
+      view.setUint16(22, 1, true);
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, sampleRate * 2, true); 
+      view.setUint16(32, 2, true);
+      view.setUint16(34, 16, true);
+      writeString(view, 36, 'data');
+      view.setUint32(40, bytes.length, true);
+      
+      for (let i = 0; i < bytes.length; i++) {
+        view.setUint8(44 + i, bytes[i]);
+      }
+      
+      return new Blob([buffer], { type: 'audio/wav' });
+    }
+
+    // API コール（リトライ付き）
+    async function fetchAudioWithRetry(payload, retries = 5, delay = 1000) {
+      const apiKey = ""; // ランタイムで自動注入されます
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTPエラー! ステータス: ${response.status}`);
+        }
+
+        return await response.json();
+      } catch (err) {
+        if (retries > 0) {
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return fetchAudioWithRetry(payload, retries - 1, delay * 2);
+        }
+        throw err;
+      }
+    }
+
+    // 音声生成メイン処理
+    async function generateSpeech() {
+      if (!state.text.trim()) {
+        showError("読み上げるテキストを入力してください。");
+        return;
+      }
+
+      setGeneratingState(true);
+      hideError();
+
+      const formattedText = `${state.selectedTone.prefix}${state.text}`;
+      const payload = {
+        contents: [{
+          parts: [{ text: formattedText }]
+        }],
+        generationConfig: {
+          responseModalities: ["AUDIO"],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: {
+                voiceName: state.selectedVoice.id
+              }
+            }
+          }
+        },
+        model: "gemini-2.5-flash-preview-tts"
+      };
+
+      try {
+        const result = await fetchAudioWithRetry(payload);
+        const candidate = result.candidates?.[0];
+        const audioPart = candidate?.content?.parts?.find(part => part.inlineData);
+
+        if (!audioPart || !audioPart.inlineData?.data) {
+          throw new Error("音声データの取得に失敗しました。レスポンスが空です。");
+        }
+
+        const mimeType = audioPart.inlineData.mimeType || "audio/L16;rate=24000";
+        const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+        const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+
+        const wavBlob = pcmToWav(audioPart.inlineData.data, sampleRate);
+        const audioUrl = URL.createObjectURL(wavBlob);
+
+        const newHistoryItem = {
+          id: crypto.randomUUID(),
+          text: state.text,
+          voice: state.selectedVoice,
+          tone: state.selectedTone,
+          audioUrl: audioUrl,
+          blobSize: wavBlob.size,
+          createdAt: new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          isFavorite: false
+        };
+
+        state.history = [newHistoryItem, ...state.history];
+        saveHistory();
+        renderHistory();
+
+        // 即座に自動再生
+        playAudio(audioUrl, newHistoryItem.id);
+
+      } catch (err) {
+        console.error(err);
+        showError("音声の生成に失敗しました。時間をおいて再試行してください。");
+      } finally {
+        setGeneratingState(false);
+      }
+    }
+
+    // ボタンのインジケータ制御
+    function setGeneratingState(isGenerating) {
+      state.isGenerating = isGenerating;
+      if (isGenerating) {
+        generateBtn.disabled = true;
+        generateBtn.className = "w-full py-4 px-6 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg transition-all bg-indigo-800 text-indigo-300 cursor-not-allowed opacity-80";
+        generateBtnText.textContent = "高音質な音声を生成中...";
+      } else {
+        generateBtn.disabled = false;
+        generateBtn.className = "w-full py-4 px-6 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg transition-all bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white shadow-indigo-600/10 hover:shadow-indigo-600/25 transform active:scale-[0.98]";
+        generateBtnText.textContent = "自然な日本語音声を生成する";
+      }
+    }
+
+    // --- 再生およびビジュアライザーロジック ---
+
+    function playAudio(url, id) {
+      if (!audioElement) return;
+
+      // すでに同じ音声が再生中の場合は一時停止
+      if (state.playingId === id) {
+        audioElement.pause();
+        state.playingId = null;
+        renderHistory();
+        stopVisualizer();
+        return;
+      }
+
+      try {
+        audioElement.pause();
+        audioElement.src = url;
+        audioElement.load();
+
+        if (audioContext && audioContext.state === "suspended") {
+          audioContext.resume().catch(e => console.warn(e));
+        }
+
+        audioElement.play()
+          .then(() => {
+            state.playingId = id;
+            renderHistory();
+            setupVisualizer(audioElement);
+          })
+          .catch(err => {
+            console.error("音声の再生に失敗しました:", err);
+            showError("ブラウザの再生保護が作動しました。ライブラリ内の再生マークを直接タップして再生してください。");
+          });
+
+        audioElement.onended = () => {
+          state.playingId = null;
+          renderHistory();
+          stopVisualizer();
+        };
+
+      } catch (err) {
+        console.error("再生処理エラー:", err);
+      }
+    }
+
+    // Web Audio API の設定と波形表示
+    function setupVisualizer(elem) {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+
+      try {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (!analyser) {
+          analyser = audioContext.createAnalyser();
+          analyser.fftSize = 256;
+        }
+        if (!source) {
+          source = audioContext.createMediaElementSource(elem);
+          source.connect(analyser);
+          analyser.connect(audioContext.destination);
+        }
+
+        visualizerPlaceholder.classList.add("hidden");
+        const ctx = canvas.getContext("2d");
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        function draw() {
+          animationFrameId = requestAnimationFrame(draw);
+          analyser.getByteFrequencyData(dataArray);
+
+          ctx.fillStyle = "rgb(15, 23, 42)";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          const barWidth = (canvas.width / bufferLength) * 1.5;
+          let barHeight;
+          let x = 0;
+
+          for (let i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i];
+            const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - barHeight);
+            gradient.addColorStop(0, "#4f46e5");
+            gradient.addColorStop(0.5, "#a855f7");
+            gradient.addColorStop(1, "#ec4899");
+
+            ctx.fillStyle = gradient;
+            const currentHeight = (barHeight / 255) * canvas.height * 0.8;
+            ctx.beginPath();
+            ctx.roundRect(x, canvas.height - currentHeight, barWidth - 2, currentHeight, [4, 4, 0, 0]);
+            ctx.fill();
+
+            x += barWidth;
+          }
+        }
+
+        if (audioContext.state === "suspended") {
+          audioContext.resume();
+        }
+        draw();
+
+      } catch (e) {
+        console.warn("ビジュアライザー起動スキップ:", e);
+      }
+    }
+
+    function stopVisualizer() {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      visualizerPlaceholder.classList.remove("hidden");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // WAVファイルの直接ダウンロード
+    function downloadAudio(url, filename) {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // 履歴アイテムの削除
+    function deleteHistoryItem(id) {
+      if (state.playingId === id) {
+        audioElement.pause();
+        state.playingId = null;
+        stopVisualizer();
+      }
+      state.history = state.history.filter(item => item.id !== id);
+      saveHistory();
+      renderHistory();
+    }
+
+    // 全履歴クリア
+    function clearAllHistory() {
+      if (confirm("すべての履歴をクリアしますか？")) {
+        audioElement.pause();
+        state.playingId = null;
+        stopVisualizer();
+        state.history = [];
+        saveHistory();
+        renderHistory();
+      }
+    }
+
+    // お気に入りトグル
+    function toggleFavorite(id) {
+      state.history = state.history.map(item => {
+        if (item.id === id) {
+          return { ...item, isFavorite: !item.isFavorite };
+        }
+        return item;
+      });
+      saveHistory();
+      renderHistory();
+    }
+
+    // ローカルストレージ保存
+    function saveHistory() {
+      localStorage.setItem("waon_speech_history", JSON.stringify(state.history));
+    }
+
+    // --- エラーハンドリング ---
+    function showError(msg) {
+      errorMessage.textContent = msg;
+      errorContainer.classList.remove("hidden");
+    }
+
+    function hideError() {
+      errorContainer.classList.add("hidden");
+    }
+
+    // アプリ起動
+    window.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
