@@ -55,7 +55,7 @@
         }
     </style>
 </head>
-<body class="h-full font-sans antialiased bg-slate-50 text-slate-800 dark:bg-dark-bg dark:text-dark-text transition-theme">
+<body class="h-full font-sans antialiased bg-slate-50 text-slate-800 dark:bg-dark-bg dark:text-dark-text transition-theme select-none md:select-text">
 
     <div id="app" class="flex h-full overflow-hidden relative">
         
@@ -90,9 +90,22 @@
                 </div>
             </div>
 
-            <!-- 【新機能】タグ一覧フィルター（横スクロール可能） -->
-            <div id="tag-filter-bar" class="px-3 py-2 bg-slate-50/50 dark:bg-zinc-900/30 border-b border-slate-100 dark:border-dark-border flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-                <!-- JavaScriptで動的にタグリストが生成されます -->
+            <!-- 【機能強化】左サイドにまとめたタグ一覧フィルターセクション（折りたたみ可能） -->
+            <div class="border-b border-slate-100 dark:border-dark-border bg-slate-50/50 dark:bg-zinc-900/30">
+                <button onclick="toggleTagSection()" class="w-full px-4 py-2 flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-dark-muted hover:bg-slate-100 dark:hover:bg-zinc-800/50 transition-colors">
+                    <span class="flex items-center gap-1.5">
+                        <i data-lucide="tags" class="w-3.5 h-3.5"></i>
+                        <span>タグで絞り込み</span>
+                    </span>
+                    <i id="tag-section-arrow" data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                </button>
+                
+                <!-- 折りたたみ対象エリア -->
+                <div id="tag-filter-container" class="px-3 pb-3 max-h-40 overflow-y-auto hidden">
+                    <div id="tag-filter-bar" class="flex flex-wrap gap-1.5 pt-1">
+                        <!-- JavaScriptで動的にタグリストが生成されます -->
+                    </div>
+                </div>
             </div>
 
             <!-- メモ一覧リスト -->
@@ -108,6 +121,9 @@
                 </button>
             </div>
         </aside>
+
+        <!-- 【新機能】ドラッグで左右幅を自由に変更できるリサイザーバー -->
+        <div id="sidebar-resizer" class="hidden md:block w-1.5 hover:w-2 bg-slate-200/80 dark:bg-dark-border/80 hover:bg-indigo-500 dark:hover:bg-indigo-400 active:bg-indigo-600 cursor-col-resize transition-all flex-shrink-0 z-20" title="ドラッグしてサイズ変更"></div>
 
         <!-- 右側：エディタエリア -->
         <main id="editor-container" class="flex-1 flex flex-col bg-white dark:bg-dark-surface transition-theme hidden md:flex">
@@ -160,7 +176,7 @@
                     </div>
                 </div>
 
-                <!-- 【新機能】タグ編集エリア -->
+                <!-- タグ編集エリア -->
                 <div class="px-6 py-2.5 bg-slate-50/50 dark:bg-zinc-900/10 border-b border-slate-100 dark:border-dark-border flex flex-wrap items-center gap-2">
                     <div class="flex items-center gap-1 text-xs text-slate-400 dark:text-dark-muted">
                         <i data-lucide="tag" class="w-3.5 h-3.5"></i>
@@ -177,13 +193,17 @@
                     </div>
                 </div>
 
-                <!-- 【新機能】簡単ツールバー（箇条書きボタン） -->
-                <div class="px-6 py-2 bg-slate-50/20 dark:bg-zinc-900/5 border-b border-slate-100 dark:border-dark-border flex items-center gap-2">
-                    <button onclick="insertBulletPoint()" class="flex items-center gap-1 px-3 py-1 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 dark:bg-zinc-800 dark:hover:bg-indigo-950/30 dark:hover:text-indigo-400 text-xs font-semibold rounded-lg text-slate-600 dark:text-dark-text transition-colors" title="箇条書きを挿入">
+                <!-- ツールバー（箇条書き・番号付きリスト） -->
+                <div class="px-6 py-2 bg-slate-50/20 dark:bg-zinc-900/5 border-b border-slate-100 dark:border-dark-border flex flex-wrap items-center gap-2">
+                    <button onclick="insertBulletPoint('bullet')" class="flex items-center gap-1 px-3 py-1 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 dark:bg-zinc-800 dark:hover:bg-indigo-950/30 dark:hover:text-indigo-400 text-xs font-semibold rounded-lg text-slate-600 dark:text-dark-text transition-colors" title="箇条書きを挿入">
                         <i data-lucide="list" class="w-4 h-4"></i>
-                        <span>箇条書きを挿入 (•)</span>
+                        <span>箇条書き (・)</span>
                     </button>
-                    <span class="text-[10px] text-slate-400 dark:text-dark-muted">※ 改行すると自動的に次の行にも「・」が付きます。Enterを2回押すと箇条書きを終了します。</span>
+                    <button onclick="insertBulletPoint('number')" class="flex items-center gap-1 px-3 py-1 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 dark:bg-zinc-800 dark:hover:bg-indigo-950/30 dark:hover:text-indigo-400 text-xs font-semibold rounded-lg text-slate-600 dark:text-dark-text transition-colors" title="番号付き箇条書きを挿入">
+                        <i data-lucide="list-ordered" class="w-4 h-4"></i>
+                        <span>番号付き (1.)</span>
+                    </button>
+                    <span class="text-[10px] text-slate-400 dark:text-dark-muted hidden lg:inline">※ Tabキーで右インデント（下位階層）、Shift+Tabで左に戻す。Enterを2回押すと終了。</span>
                 </div>
 
                 <!-- 編集入力エリア -->
@@ -202,7 +222,7 @@
         </button>
     </div>
 
-    <!-- 🔰 使い方ガイドポップアップ（タグ・箇条書きの説明を追加） -->
+    <!-- 🔰 使い方ガイドポップアップ -->
     <div id="help-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white dark:bg-dark-surface border border-slate-200 dark:border-dark-border rounded-2xl max-w-md w-full p-6 shadow-2xl transition-theme overflow-y-auto max-h-[90vh]">
             <div class="flex justify-between items-start mb-4">
@@ -215,26 +235,32 @@
             </div>
             
             <div class="space-y-4 text-sm text-slate-600 dark:text-dark-text">
-                <div class="p-3 bg-indigo-50 dark:bg-indigo-950/30 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
-                    <h4 class="font-bold text-indigo-900 dark:text-indigo-400 mb-1">⚫ 新機能：かんたん箇条書き</h4>
+                <div class="p-3 bg-slate-50 dark:bg-zinc-850 rounded-xl border border-slate-100 dark:border-zinc-800">
+                    <h4 class="font-bold text-indigo-900 dark:text-indigo-400 mb-1">↔️ 左サイドバーのサイズ調整</h4>
                     <p class="text-xs leading-relaxed">
-                        入力欄の上の<strong>「箇条書きを挿入」</strong>を押すと、行頭に「・」が挿入されます。<br>
-                        箇条書きの状態で改行すると、<strong>自動的に次の行にも「・」が付きます</strong>。入力をやめる時は、何も書かずにEnterをもう一度押すだけです。
+                        PCでは、左サイドバーと右側のメモ入力欄の境界線（リサイザーバー）を<strong>左右にドラッグしてサイズを自由に変更</strong>できます。自分に最適な比率で作業できます。
+                    </p>
+                </div>
+
+                <div class="p-3 bg-indigo-50 dark:bg-indigo-950/30 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
+                    <h4 class="font-bold text-indigo-900 dark:text-indigo-400 mb-1">⚫ 便利：箇条書き & 自動連番</h4>
+                    <p class="text-xs leading-relaxed">
+                        ツールバーの「・」や「1.」を押すと、箇条書きが作れます。<br>
+                        箇条書きの状態で改行すると、<strong>自動的に次の行にも記号（数字は自動的に+1カウントアップ）が付きます</strong>。入力をやめる時は、何も書かずにEnterをもう一度押すだけです。
+                    </p>
+                </div>
+
+                <div class="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-xl border border-blue-100 dark:border-blue-900/50">
+                    <h4 class="font-bold text-blue-900 dark:text-blue-400 mb-1">⌨️ Tabキーで階層（インデント）操作</h4>
+                    <p class="text-xs leading-relaxed">
+                        入力中に <strong>Tabキー</strong> を押すと、行頭にスペースが入り下位の階層へ下がります。元の階層に戻したい時は、<strong>Shiftキーを押しながらTabキー</strong> を押すだけで簡単に戻せます。複数行を同時に選んで一括で下げることもできます。
                     </p>
                 </div>
 
                 <div class="p-3 bg-teal-50 dark:bg-teal-950/30 rounded-xl border border-teal-100 dark:border-teal-900/50">
                     <h4 class="font-bold text-teal-900 dark:text-teal-400 mb-1">🏷️ 新機能：タグで仕分け</h4>
                     <p class="text-xs leading-relaxed">
-                        メモの中に「+ タグを追加」と書かれた枠があります。そこに好きな言葉を入力してEnterキーを押すと、タグが登録されます。削除はタグの「×」を押すだけ。<br>
-                        一覧の上の<strong>タグをタップすると瞬時にそのメモだけを絞り込めます。</strong>
-                    </p>
-                </div>
-
-                <div class="p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-100 dark:border-emerald-900/50">
-                    <h4 class="font-bold text-emerald-900 dark:text-emerald-400 mb-1">💾 保存ボタンは不要</h4>
-                    <p class="text-xs leading-relaxed">
-                        一文字入力するごとにブラウザが<strong>自動で記憶</strong>しています。そのままブラウザを閉じても大丈夫です。
+                        メモの中に「+ タグを追加」と書かれた枠があります。そこに好きな言葉を入力してEnterキーを押すと、タグが登録されます。左サイドバーの「タグで絞り込み」を開くと<strong>登録されたすべてのタグを一覧・管理できます。</strong>
                     </p>
                 </div>
             </div>
@@ -267,12 +293,12 @@
         let searchQuery = "";
         let selectedFilterTag = ""; // 選択中の絞り込みタグ
         let isDarkMode = false;
+        let isTagSectionOpen = false; // タグエリア開閉フラグ
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedNotes = localStorage.getItem('simple_notes');
             if (savedNotes) {
                 notes = JSON.parse(savedNotes);
-                // 過去バージョンから移行する際、tags配列がない場合は初期化
                 notes.forEach(n => {
                     if (!n.tags) n.tags = [];
                 });
@@ -289,6 +315,7 @@
                 saveNotesToStorage();
             }
 
+            // テーマ初期化
             const savedTheme = localStorage.getItem('simple_notes_theme');
             const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
@@ -299,7 +326,22 @@
                 isDarkMode = false;
             }
 
+            // 【新機能】サイドバー幅の初期化 (PC用)
+            const savedSidebarWidth = localStorage.getItem('simple_notes_sidebar_width');
+            if (savedSidebarWidth && window.innerWidth >= 768) {
+                document.getElementById('sidebar').style.width = `${savedSidebarWidth}px`;
+            }
+
+            // 【新機能】タグ一覧の開閉状態の初期化
+            const savedTagSectionState = localStorage.getItem('simple_notes_tag_open');
+            if (savedTagSectionState === 'true') {
+                isTagSectionOpen = true;
+                document.getElementById('tag-filter-container').classList.remove('hidden');
+                document.getElementById('tag-section-arrow').style.transform = 'rotate(180deg)';
+            }
+
             updateThemeIcon();
+            initSidebarResizer(); // 【新機能】ドラッグリサイザーの起動
             renderTagFilterBar();
             renderNotesList();
             
@@ -320,48 +362,137 @@
             localStorage.setItem('simple_notes', JSON.stringify(notes));
         }
 
-        // --- すべてのタグを抽出してフィルターバーを生成 ---
+        // --- 【新機能】サイドバーの幅調整ドラッグ処理 ---
+        function initSidebarResizer() {
+            const sidebar = document.getElementById('sidebar');
+            const resizer = document.getElementById('sidebar-resizer');
+            let isResizing = false;
+
+            // マウス操作
+            resizer.addEventListener('mousedown', (e) => {
+                isResizing = true;
+                document.body.style.cursor = 'col-resize';
+                document.body.classList.add('select-none'); // テキスト選択防止
+            });
+
+            // タッチ操作 (タブレット・スマホPC表示など)
+            resizer.addEventListener('touchstart', (e) => {
+                isResizing = true;
+                document.body.classList.add('select-none');
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+                let newWidth = e.clientX;
+                
+                // 制限幅 (最小200px、最大幅は画面幅の60%以下)
+                const minWidth = 200;
+                const maxWidth = window.innerWidth * 0.6;
+
+                if (newWidth < minWidth) newWidth = minWidth;
+                if (newWidth > maxWidth) newWidth = maxWidth;
+
+                sidebar.style.width = `${newWidth}px`;
+                localStorage.setItem('simple_notes_sidebar_width', newWidth);
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!isResizing) return;
+                const touch = e.touches[0];
+                let newWidth = touch.clientX;
+                
+                const minWidth = 200;
+                const maxWidth = window.innerWidth * 0.6;
+
+                if (newWidth < minWidth) newWidth = minWidth;
+                if (newWidth > maxWidth) newWidth = maxWidth;
+
+                sidebar.style.width = `${newWidth}px`;
+                localStorage.setItem('simple_notes_sidebar_width', newWidth);
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isResizing) {
+                    isResizing = false;
+                    document.body.style.cursor = 'default';
+                    document.body.classList.remove('select-none');
+                }
+            });
+
+            document.addEventListener('touchend', () => {
+                if (isResizing) {
+                    isResizing = false;
+                    document.body.classList.remove('select-none');
+                }
+            });
+        }
+
+        // --- 【新機能】タグ一覧セクションの開閉制御 ---
+        function toggleTagSection() {
+            isTagSectionOpen = !isTagSectionOpen;
+            const container = document.getElementById('tag-filter-container');
+            const arrow = document.getElementById('tag-section-arrow');
+
+            if (isTagSectionOpen) {
+                container.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+                localStorage.setItem('simple_notes_tag_open', 'true');
+            } else {
+                container.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+                localStorage.setItem('simple_notes_tag_open', 'false');
+            }
+        }
+
+        // --- 【機能強化】すべてのタグを左サイドにまとめ、件数カウント付きで再生成 ---
         function renderTagFilterBar() {
             const bar = document.getElementById('tag-filter-bar');
             
-            // 重複のない全タグを抽出
-            const allTags = [];
+            // タグごとの件数を計算
+            const tagCounts = {};
             notes.forEach(note => {
                 if (note.tags) {
                     note.tags.forEach(tag => {
-                        if (!allTags.includes(tag)) {
-                            allTags.push(tag);
-                        }
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
                     });
                 }
             });
 
+            const allTags = Object.keys(tagCounts).sort();
+
             if (allTags.length === 0) {
-                bar.className = "hidden";
+                bar.innerHTML = `
+                    <p class="text-[11px] text-slate-400 dark:text-dark-muted py-1 italic">
+                        登録されたタグはありません
+                    </p>
+                `;
                 return;
-            } else {
-                bar.className = "px-3 py-2 bg-slate-50/50 dark:bg-zinc-900/30 border-b border-slate-100 dark:border-dark-border flex items-center gap-1.5 overflow-x-auto no-scrollbar";
             }
 
             // 「すべて」フィルターボタン
             let html = `
-                <button onclick="setFilterTag('')" class="px-2.5 py-1 text-xs rounded-full font-medium transition-all flex-shrink-0 ${
+                <button onclick="setFilterTag('')" class="px-2.5 py-1 text-xs rounded-lg font-semibold transition-all flex items-center gap-1 shadow-sm ${
                     selectedFilterTag === ''
-                        ? 'bg-indigo-600 text-white shadow-sm'
-                        : 'bg-white hover:bg-slate-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-600 dark:text-dark-text'
-                }">すべて</button>
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-white hover:bg-slate-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-600 dark:text-dark-text border border-slate-200/60 dark:border-zinc-700'
+                }">
+                    <span>すべて</span>
+                    <span class="text-[10px] opacity-75">(${notes.length})</span>
+                </button>
             `;
 
             allTags.forEach(tag => {
                 const isSelected = tag === selectedFilterTag;
+                const count = tagCounts[tag];
                 html += `
-                    <button onclick="setFilterTag('${escapeHtml(tag)}')" class="px-2.5 py-1 text-xs rounded-full font-medium transition-all flex-shrink-0 flex items-center gap-1 ${
+                    <button onclick="setFilterTag('${escapeHtml(tag)}')" class="px-2.5 py-1 text-xs rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
                         isSelected
-                            ? 'bg-indigo-600 text-white shadow-sm'
-                            : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-950/40 dark:hover:bg-indigo-950/80 dark:text-indigo-400'
+                            ? 'bg-indigo-600 text-white shadow-md'
+                            : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-950/40 dark:hover:bg-indigo-950/80 dark:text-indigo-400 border border-indigo-100/50 dark:border-indigo-900/30'
                     }">
                         <i data-lucide="tag" class="w-3 h-3 ${isSelected ? 'text-white' : 'text-indigo-400 dark:text-indigo-500'}"></i>
                         <span>${escapeHtml(tag)}</span>
+                        <span class="text-[9px] px-1 bg-white/30 dark:bg-black/20 rounded-full font-bold">${count}</span>
                     </button>
                 `;
             });
@@ -385,12 +516,10 @@
             const filteredNotes = notes
                 .filter(note => {
                     const query = searchQuery.toLowerCase();
-                    // 検索ワード(タイトル、本文、タグ)のチェック
                     const matchesSearch = note.title.toLowerCase().includes(query) || 
                                           note.content.toLowerCase().includes(query) || 
                                           (note.tags && note.tags.some(t => t.toLowerCase().includes(query)));
                     
-                    // 選択されたタグフィルターのチェック
                     const matchesTagFilter = !selectedFilterTag || (note.tags && note.tags.includes(selectedFilterTag));
                     
                     return matchesSearch && matchesTagFilter;
@@ -401,7 +530,7 @@
                 listContainer.innerHTML = `
                     <div class="p-8 text-center text-slate-400 dark:text-dark-muted text-sm">
                         <i data-lucide="search-code" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
-                        メモが見つかりません
+                        該当するメモがありません
                     </div>
                 `;
                 lucide.createIcons();
@@ -426,7 +555,6 @@
                 const dateOptions = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
                 const displayDate = new Date(note.updatedAt).toLocaleDateString('ja-JP', dateOptions);
 
-                // タグのバッジ群のHTML作成
                 let tagsHtml = '';
                 if (note.tags && note.tags.length > 0) {
                     tagsHtml = '<div class="flex flex-wrap gap-1 mt-1.5">';
@@ -472,16 +600,14 @@
             document.getElementById('note-title').value = note.title;
             document.getElementById('note-content').value = note.content;
 
-            // タグチップの描画
             renderActiveNoteTags(note);
-
             updateCharCount(note.content);
             setSaveStatus(true);
             renderNotesList();
 
-            // モバイル時はエディタを全画面表示
             if (window.innerWidth < 768) {
                 document.getElementById('sidebar').classList.add('hidden');
+                document.getElementById('sidebar-resizer').classList.add('hidden'); // モバイルはリサイザーも非表示
                 document.getElementById('editor-container').classList.remove('hidden');
             }
         }
@@ -519,7 +645,6 @@
                     if (note) {
                         if (!note.tags) note.tags = [];
                         
-                        // 重複チェック
                         if (!note.tags.includes(tagValue)) {
                             note.tags.push(tagValue);
                             saveNotesToStorage();
@@ -529,7 +654,7 @@
                         }
                     }
                 }
-                input.value = ''; // 入力欄をクリア
+                input.value = '';
             }
         }
 
@@ -546,8 +671,8 @@
             }
         }
 
-        // --- 箇条書き機能：ボタンを押したときにカーソル位置に箇条書き行頭文字を挿入 ---
-        function insertBulletPoint() {
+        // --- 箇条書き機能 ---
+        function insertBulletPoint(type = 'bullet') {
             const textarea = document.getElementById('note-content');
             if (!textarea) return;
 
@@ -555,10 +680,8 @@
             const end = textarea.selectionEnd;
             const value = textarea.value;
 
-            // 挿入する文字
-            const bullet = "・ ";
+            const bullet = type === 'number' ? "1. " : "・ ";
             
-            // カーソル位置を考慮して挿入。もし行頭、または直前が改行ならそのまま挿入。
             let textToInsert = bullet;
             if (start > 0 && value[start - 1] !== '\n') {
                 textToInsert = "\n" + bullet;
@@ -567,43 +690,107 @@
             textarea.value = value.substring(0, start) + textToInsert + value.substring(end);
             textarea.focus();
             
-            // カーソル位置を挿入した文字の直後にセット
             const newCursorPos = start + textToInsert.length;
             textarea.setSelectionRange(newCursorPos, newCursorPos);
 
             updateActiveNote();
         }
 
-        // --- エディタ部分でのキー入力を検知（箇条書き自動引き継ぎ処理） ---
+        // --- エディタ部分でのキー入力を検知（箇条書き自動引き継ぎ & Tab階層構造） ---
         function handleContentKeydown(event) {
             const textarea = event.target;
-            
-            // Enterキーが押された際、現在の行頭が「・ 」か「- 」なら自動で次の行にも引き継ぐ
-            if (event.key === 'Enter') {
-                const start = textarea.selectionStart;
-                const value = textarea.value;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const value = textarea.value;
 
-                // 現在のカーソル位置から一番近い「直前の改行」を見つけて、現在の行のテキストを取得する
+            // 1. Tabキーによるインデント調整（下位階層・上位階層）
+            if (event.key === 'Tab') {
+                event.preventDefault();
+
+                const startLineIdx = value.lastIndexOf('\n', start - 1) + 1;
+                const endLineIdx = value.indexOf('\n', end);
+                const actualEndLineIdx = endLineIdx === -1 ? value.length : endLineIdx;
+
+                const selectedText = value.substring(startLineIdx, actualEndLineIdx);
+                const lines = selectedText.split('\n');
+
+                let newText = '';
+                let changeLen = 0;
+
+                if (event.shiftKey) {
+                    newText = lines.map(line => {
+                        if (line.startsWith('  ')) {
+                            changeLen -= 2;
+                            return line.substring(2);
+                        } else if (line.startsWith('\t')) {
+                            changeLen -= 1;
+                            return line.substring(1);
+                        } else if (line.startsWith(' ')) {
+                            changeLen -= 1;
+                            return line.substring(1);
+                        }
+                        return line;
+                    }).join('\n');
+                } else {
+                    newText = lines.map(line => {
+                        changeLen += 2;
+                        return '  ' + line;
+                    }).join('\n');
+                }
+
+                textarea.value = value.substring(0, startLineIdx) + newText + value.substring(actualEndLineIdx);
+
+                if (start === end) {
+                    const firstLineOrig = lines[0];
+                    const firstLineNew = newText.split('\n')[0];
+                    const diff = firstLineNew.length - firstLineOrig.length;
+                    const newCursorPos = Math.max(startLineIdx, start + diff);
+                    textarea.setSelectionRange(newCursorPos, newCursorPos);
+                } else {
+                    textarea.setSelectionRange(startLineIdx, startLineIdx + newText.length);
+                }
+
+                updateActiveNote();
+                return;
+            }
+            
+            // 2. Enterキーによる箇条書き自動引き継ぎ
+            if (event.key === 'Enter') {
                 const lastNewlineIdx = value.lastIndexOf('\n', start - 1);
                 const lineStartIdx = lastNewlineIdx === -1 ? 0 : lastNewlineIdx + 1;
                 const currentLine = value.substring(lineStartIdx, start);
 
-                // もし行頭が「・ 」または「- 」、もしくは「* 」の場合
-                const match = currentLine.match(/^(・\s*|-\s*|\*\s*)/);
+                const bulletMatch = currentLine.match(/^(\s*)(・\s*|-\s*|\*\s*|•\s*)/);
+                const numberMatch = currentLine.match(/^(\s*)([0-9]+)([.)]\s*)/);
 
-                if (match) {
-                    event.preventDefault(); // デフォルトの改行を防止
+                if (bulletMatch) {
+                    event.preventDefault();
+                    const indent = bulletMatch[1];
+                    const bullet = bulletMatch[2];
+                    const prefix = indent + bullet;
 
-                    const bullet = match[1]; // 引き継ぎたい記号
-
-                    // もし「・」だけで何も中身を書かずにEnterを押した場合は、箇条書きを終了させる（空行にする）
                     if (currentLine.trim() === bullet.trim()) {
-                        // 現在の箇条書きのプレフィックスを削除してただの空行にする
                         textarea.value = value.substring(0, lineStartIdx) + "\n" + value.substring(start);
                         textarea.setSelectionRange(lineStartIdx + 1, lineStartIdx + 1);
                     } else {
-                        // 新しい行に「・ 」などのプレフィックス付きで改行を挿入
-                        const textToInsert = "\n" + bullet;
+                        const textToInsert = "\n" + prefix;
+                        textarea.value = value.substring(0, start) + textToInsert + value.substring(start);
+                        const newCursorPos = start + textToInsert.length;
+                        textarea.setSelectionRange(newCursorPos, newCursorPos);
+                    }
+                    updateActiveNote();
+                } else if (numberMatch) {
+                    event.preventDefault();
+                    const indent = numberMatch[1];
+                    const numStr = numberMatch[2];
+                    const delimiter = numberMatch[3];
+
+                    if (currentLine.trim() === (numStr + delimiter).trim()) {
+                        textarea.value = value.substring(0, lineStartIdx) + "\n" + value.substring(start);
+                        textarea.setSelectionRange(lineStartIdx + 1, lineStartIdx + 1);
+                    } else {
+                        const nextNum = parseInt(numStr, 10) + 1;
+                        const textToInsert = "\n" + indent + nextNum + delimiter;
                         textarea.value = value.substring(0, start) + textToInsert + value.substring(start);
                         const newCursorPos = start + textToInsert.length;
                         textarea.setSelectionRange(newCursorPos, newCursorPos);
@@ -619,7 +806,7 @@
                 id: crypto.randomUUID ? crypto.randomUUID() : 'note-' + Date.now(),
                 title: '',
                 content: '',
-                tags: selectedFilterTag ? [selectedFilterTag] : [], // 絞り込み中のタグがある場合は初期値として追加
+                tags: selectedFilterTag ? [selectedFilterTag] : [],
                 updatedAt: new Date().toISOString()
             };
 
@@ -653,6 +840,7 @@
 
                 debounce(() => {
                     renderNotesList();
+                    renderTagFilterBar(); // タグの変更に合わせてサイドバー件数も更新
                     setSaveStatus(true);
                 }, 500)();
             }
@@ -759,12 +947,13 @@
         }
 
         function showNoNoteSelected() {
-            document.getElementById('no-note-selected').classList.remove('hidden');
+            document.getElementById('no-note-selected').classList.add('hidden');
             document.getElementById('active-editor').classList.add('hidden');
         }
 
         function showSidebar() {
             document.getElementById('sidebar').classList.remove('hidden');
+            document.getElementById('sidebar-resizer').classList.add('hidden');
             document.getElementById('editor-container').classList.add('hidden');
             renderNotesList();
             renderTagFilterBar();
