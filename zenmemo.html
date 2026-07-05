@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="ja" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シンプルメモ帳 - Simple Memo</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#121212',
+                            surface: '#1e1e1e',
+                            border: '#2d2d2d',
+                            text: '#e0e0e0',
+                            muted: '#a0a0a0'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .transition-theme {
+            transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .light ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 3px;
+        }
+        /* スクロールバー非表示（タグリスト用） */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="h-full font-sans antialiased bg-slate-50 text-slate-800 dark:bg-dark-bg dark:text-dark-text transition-theme select-none md:select-text">
+
+    <div id="app" class="flex h-full overflow-hidden relative">
+        
+        <!-- 左側：サイドバー（メモ一覧） -->
+        <aside id="sidebar" class="w-full md:w-80 flex-shrink-0 flex flex-col border-r border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface transition-theme z-10">
+            <!-- サイドバーヘッダー -->
+            <div class="p-4 border-b border-slate-200 dark:border-dark-border flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="edit-3" class="w-5 h-5 text-indigo-600 dark:text-indigo-400"></i>
+                        <h1 class="font-bold text-base tracking-wider">シンプルメモ</h1>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <!-- 使い方ガイドボタン -->
+                        <button onclick="openHelpModal()" class="px-2 py-1 text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 rounded-md font-medium transition-colors flex items-center gap-1" title="使い方を見る">
+                            <i data-lucide="help-circle" class="w-3.5 h-3.5"></i> 使い方
+                        </button>
+                        <!-- テーマ切り替え -->
+                        <button onclick="toggleDarkMode()" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-500 dark:text-dark-muted transition-colors" title="テーマ切り替え">
+                            <i id="theme-icon" data-lucide="moon" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 検索バー -->
+            <div class="p-3 border-b border-slate-100 dark:border-dark-border">
+                <div class="relative">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
+                    <input type="text" id="search-input" oninput="handleSearch()" placeholder="タイトル・本文・タグで検索..." 
+                        class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-theme">
+                </div>
+            </div>
+
+            <!-- 【機能強化】左サイドにまとめたタグ一覧フィルターセクション（折りたたみ可能） -->
+            <div class="border-b border-slate-100 dark:border-dark-border bg-slate-50/50 dark:bg-zinc-900/30">
+                <button onclick="toggleTagSection()" class="w-full px-4 py-2 flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-dark-muted hover:bg-slate-100 dark:hover:bg-zinc-800/50 transition-colors">
+                    <span class="flex items-center gap-1.5">
+                        <i data-lucide="tags" class="w-3.5 h-3.5"></i>
+                        <span>タグで絞り込み</span>
+                    </span>
+                    <i id="tag-section-arrow" data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                </button>
+                
+                <!-- 折りたたみ対象エリア -->
+                <div id="tag-filter-container" class="px-3 pb-3 max-h-40 overflow-y-auto hidden">
+                    <div id="tag-filter-bar" class="flex flex-wrap gap-1.5 pt-1">
+                        <!-- JavaScriptで動的にタグリストが生成されます -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- メモ一覧リスト -->
+            <div id="notes-list" class="flex-1 overflow-y-auto divide-y divide-slate-100 dark:divide-dark-border">
+                <!-- JavaScriptで動的に生成されます -->
+            </div>
+
+            <!-- サイドバー下部：バックアップ -->
+            <div class="p-3 border-t border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-zinc-900/50 text-xs flex justify-between items-center">
+                <span class="text-slate-400 dark:text-dark-muted">データは自動記憶中</span>
+                <button onclick="exportAllNotes()" class="flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:underline" title="パソコンやスマホにまとめて保存">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i> 全て保存
+                </button>
+            </div>
+        </aside>
+
+        <!-- 【新機能】ドラッグで左右幅を自由に変更できるリサイザーバー -->
+        <div id="sidebar-resizer" class="hidden md:block w-1.5 hover:w-2 bg-slate-200/80 dark:bg-dark-border/80 hover:bg-indigo-500 dark:hover:bg-indigo-400 active:bg-indigo-600 cursor-col-resize transition-all flex-shrink-0 z-20" title="ドラッグしてサイズ変更"></div>
+
+        <!-- 右側：エディタエリア -->
+        <main id="editor-container" class="flex-1 flex flex-col bg-white dark:bg-dark-surface transition-theme hidden md:flex">
+            <!-- モバイル用のヘッダー -->
+            <div class="p-3 border-b border-slate-200 dark:border-dark-border flex items-center justify-between md:hidden bg-slate-100 dark:bg-zinc-900">
+                <button onclick="showSidebar()" class="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-zinc-800 border-2 border-indigo-500 rounded-lg text-indigo-600 dark:text-indigo-400 font-bold text-sm shadow-sm active:bg-slate-50">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    一覧に戻る
+                </button>
+                <div class="flex items-center gap-1">
+                    <button onclick="createNewNote()" class="p-2 text-indigo-600 dark:text-indigo-400" title="新規メモ作成">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    </button>
+                    <button onclick="confirmDeleteNote()" class="p-2 text-rose-500" title="メモを削除">
+                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- メモ未選択状態プレースホルダー -->
+            <div id="no-note-selected" class="flex-1 flex flex-col items-center justify-center text-slate-400 dark:text-dark-muted p-6">
+                <i data-lucide="sticky-note" class="w-16 h-16 mb-4 text-slate-300 dark:text-zinc-700"></i>
+                <p class="text-lg font-medium">表示するメモがありません</p>
+                <p class="text-sm mt-1 mb-6 text-center">左側のリストから読みたいメモを選ぶか、新しく作成してください</p>
+                <button onclick="createNewNote()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow-md flex items-center gap-2">
+                    <i data-lucide="plus" class="w-4 h-4"></i> 新しいメモを作成する
+                </button>
+            </div>
+
+            <!-- アクティブなメモのエディタ -->
+            <div id="active-editor" class="flex-1 flex flex-col hidden">
+                <!-- エディタ操作バー -->
+                <div class="px-6 py-3 border-b border-slate-100 dark:border-dark-border flex items-center justify-between text-xs text-slate-400 dark:text-dark-muted">
+                    <div class="flex items-center gap-2">
+                        <span id="save-status" class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+                            <i data-lucide="check" class="w-3.5 h-3.5"></i> 自動保存完了
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span id="char-count">0 文字</span>
+                        <button onclick="createNewNote()" class="hidden md:flex items-center gap-1 px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400 rounded font-medium">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> 新規作成
+                        </button>
+                        <button onclick="downloadActiveNote()" class="flex items-center gap-1 text-slate-500 hover:text-indigo-600 transition-colors" title="テキストファイルとして保存">
+                            <i data-lucide="file-text" class="w-4 h-4"></i> 保存
+                        </button>
+                        <button onclick="confirmDeleteNote()" class="hidden md:flex items-center gap-1 text-rose-500 hover:text-rose-600">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i> 削除
+                        </button>
+                    </div>
+                </div>
+
+                <!-- タグ編集エリア -->
+                <div class="px-6 py-2.5 bg-slate-50/50 dark:bg-zinc-900/10 border-b border-slate-100 dark:border-dark-border flex flex-wrap items-center gap-2">
+                    <div class="flex items-center gap-1 text-xs text-slate-400 dark:text-dark-muted">
+                        <i data-lucide="tag" class="w-3.5 h-3.5"></i>
+                        <span>タグ:</span>
+                    </div>
+                    <!-- 登録済みのタグを表示するエリア -->
+                    <div id="active-note-tags" class="flex flex-wrap items-center gap-1.5">
+                        <!-- 動的に挿入されます -->
+                    </div>
+                    <!-- 新規タグ入力フォーム -->
+                    <div class="relative flex items-center">
+                        <input type="text" id="new-tag-input" onkeydown="handleTagInputKeydown(event)" placeholder="+ タグを追加 (Enterで登録)" 
+                            class="text-xs px-2 py-1 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 focus:bg-white dark:hover:bg-zinc-700 dark:focus:bg-zinc-900 border-none rounded outline-none focus:ring-1 focus:ring-indigo-500 w-36 transition-all">
+                    </div>
+                </div>
+
+                <!-- ツールバー（箇条書き・番号付きリスト） -->
+                <div class="px-6 py-2 bg-slate-50/20 dark:bg-zinc-900/5 border-b border-slate-100 dark:border-dark-border flex flex-wrap items-center gap-2">
+                    <button onclick="insertBulletPoint('bullet')" class="flex items-center gap-1 px-3 py-1 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 dark:bg-zinc-800 dark:hover:bg-indigo-950/30 dark:hover:text-indigo-400 text-xs font-semibold rounded-lg text-slate-600 dark:text-dark-text transition-colors" title="箇条書きを挿入">
+                        <i data-lucide="list" class="w-4 h-4"></i>
+                        <span>箇条書き (・)</span>
+                    </button>
+                    <button onclick="insertBulletPoint('number')" class="flex items-center gap-1 px-3 py-1 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 dark:bg-zinc-800 dark:hover:bg-indigo-950/30 dark:hover:text-indigo-400 text-xs font-semibold rounded-lg text-slate-600 dark:text-dark-text transition-colors" title="番号付き箇条書きを挿入">
+                        <i data-lucide="list-ordered" class="w-4 h-4"></i>
+                        <span>番号付き (1.)</span>
+                    </button>
+                    <span class="text-[10px] text-slate-400 dark:text-dark-muted hidden lg:inline">※ Tabキーで右インデント（下位階層）、Shift+Tabで左に戻す。Enterを2回押すと終了。</span>
+                </div>
+
+                <!-- 編集入力エリア -->
+                <div class="flex-1 flex flex-col p-6 overflow-y-auto">
+                    <input type="text" id="note-title" oninput="updateActiveNote()" placeholder="無題のメモ" 
+                        class="w-full text-2xl font-bold bg-transparent border-none outline-none mb-4 placeholder-slate-300 dark:placeholder-zinc-600 text-slate-900 dark:text-white">
+                    <textarea id="note-content" oninput="updateActiveNote()" onkeydown="handleContentKeydown(event)" placeholder="ここをタップしてメモを入力..." 
+                        class="w-full flex-1 bg-transparent border-none outline-none resize-none placeholder-slate-300 dark:placeholder-zinc-600 text-slate-700 dark:text-slate-200 leading-relaxed font-mono text-sm"></textarea>
+                </div>
+            </div>
+        </main>
+
+        <!-- 右下の目立つフローティング新規作成ボタン (FAB) -->
+        <button id="floating-add-btn" onclick="createNewNote()" class="fixed bottom-6 right-6 p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full shadow-2xl z-50 flex items-center justify-center hover:scale-105 active:scale-95 transition-all" title="新しいメモを作る">
+            <i data-lucide="plus" class="w-6 h-6"></i>
+        </button>
+    </div>
+
+    <!-- 🔰 使い方ガイドポップアップ -->
+    <div id="help-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white dark:bg-dark-surface border border-slate-200 dark:border-dark-border rounded-2xl max-w-md w-full p-6 shadow-2xl transition-theme overflow-y-auto max-h-[90vh]">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-xl">🔰</span> シンプルメモの使い方
+                </h3>
+                <button onclick="closeHelpModal()" class="text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4 text-sm text-slate-600 dark:text-dark-text">
+                <div class="p-3 bg-slate-50 dark:bg-zinc-850 rounded-xl border border-slate-100 dark:border-zinc-800">
+                    <h4 class="font-bold text-indigo-900 dark:text-indigo-400 mb-1">↔️ 左サイドバーのサイズ調整</h4>
+                    <p class="text-xs leading-relaxed">
+                        PCでは、左サイドバーと右側のメモ入力欄の境界線（リサイザーバー）を<strong>左右にドラッグしてサイズを自由に変更</strong>できます。自分に最適な比率で作業できます。
+                    </p>
+                </div>
+
+                <div class="p-3 bg-indigo-50 dark:bg-indigo-950/30 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
+                    <h4 class="font-bold text-indigo-900 dark:text-indigo-400 mb-1">⚫ 便利：箇条書き & 自動連番</h4>
+                    <p class="text-xs leading-relaxed">
+                        ツールバーの「・」や「1.」を押すと、箇条書きが作れます。<br>
+                        箇条書きの状態で改行すると、<strong>自動的に次の行にも記号（数字は自動的に+1カウントアップ）が付きます</strong>。入力をやめる時は、何も書かずにEnterをもう一度押すだけです。
+                    </p>
+                </div>
+
+                <div class="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-xl border border-blue-100 dark:border-blue-900/50">
+                    <h4 class="font-bold text-blue-900 dark:text-blue-400 mb-1">⌨️ Tabキーで階層（インデント）操作</h4>
+                    <p class="text-xs leading-relaxed">
+                        入力中に <strong>Tabキー</strong> を押すと、行頭にスペースが入り下位の階層へ下がります。元の階層に戻したい時は、<strong>Shiftキーを押しながらTabキー</strong> を押すだけで簡単に戻せます。複数行を同時に選んで一括で下げることもできます。
+                    </p>
+                </div>
+
+                <div class="p-3 bg-teal-50 dark:bg-teal-950/30 rounded-xl border border-teal-100 dark:border-teal-900/50">
+                    <h4 class="font-bold text-teal-900 dark:text-teal-400 mb-1">🏷️ 新機能：タグで仕分け</h4>
+                    <p class="text-xs leading-relaxed">
+                        メモの中に「+ タグを追加」と書かれた枠があります。そこに好きな言葉を入力してEnterキーを押すと、タグが登録されます。左サイドバーの「タグで絞り込み」を開くと<strong>登録されたすべてのタグを一覧・管理できます。</strong>
+                    </p>
+                </div>
+            </div>
+
+            <button onclick="closeHelpModal()" class="w-full mt-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-md transition-colors">
+                使い方がわかりました！
+            </button>
+        </div>
+    </div>
+
+    <!-- カスタム削除確認モーダル -->
+    <div id="delete-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white dark:bg-dark-surface border border-slate-200 dark:border-dark-border rounded-xl max-w-sm w-full p-6 shadow-xl transition-theme">
+            <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">メモを削除しますか？</h3>
+            <p class="text-sm text-slate-500 dark:text-dark-muted mb-6">本当に削除してもよろしいですか？（この操作は取り消せません）</p>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeDeleteModal()" class="px-4 py-2 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors">
+                    キャンセル
+                </button>
+                <button onclick="deleteActiveNote()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-sm font-medium transition-colors">
+                    削除する
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let notes = [];
+        let activeNoteId = null;
+        let searchQuery = "";
+        let selectedFilterTag = ""; // 選択中の絞り込みタグ
+        let isDarkMode = false;
+        let isTagSectionOpen = false; // タグエリア開閉フラグ
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedNotes = localStorage.getItem('simple_notes');
+            if (savedNotes) {
+                notes = JSON.parse(savedNotes);
+                notes.forEach(n => {
+                    if (!n.tags) n.tags = [];
+                });
+            } else {
+                notes = [
+                    {
+                        id: 'sample-1',
+                        title: 'シンプルメモ帳へようこそ！',
+                        content: 'このアプリは、無駄な機能を極限まで省いた「書くこと」に特化したメモ帳です。\n\n【追加された新機能】\n・上のツールバーの「箇条書きを挿入」を押すと「・」リストが作れます。\n・改行すると、自動で次の行にも「・」がつながります。消したい時はEnterを二回押すか削除してください。\n・タイトルのすぐ下で、メモに「タグ」を設定できます。',
+                        tags: ['使い方', 'お気に入り'],
+                        updatedAt: new Date().toISOString()
+                    }
+                ];
+                saveNotesToStorage();
+            }
+
+            // テーマ初期化
+            const savedTheme = localStorage.getItem('simple_notes_theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+                document.documentElement.classList.add('dark');
+                isDarkMode = true;
+            } else {
+                document.documentElement.classList.remove('dark');
+                isDarkMode = false;
+            }
+
+            // 【新機能】サイドバー幅の初期化 (PC用)
+            const savedSidebarWidth = localStorage.getItem('simple_notes_sidebar_width');
+            if (savedSidebarWidth && window.innerWidth >= 768) {
+                document.getElementById('sidebar').style.width = `${savedSidebarWidth}px`;
+            }
+
+            // 【新機能】タグ一覧の開閉状態の初期化
+            const savedTagSectionState = localStorage.getItem('simple_notes_tag_open');
+            if (savedTagSectionState === 'true') {
+                isTagSectionOpen = true;
+                document.getElementById('tag-filter-container').classList.remove('hidden');
+                document.getElementById('tag-section-arrow').style.transform = 'rotate(180deg)';
+            }
+
+            updateThemeIcon();
+            initSidebarResizer(); // 【新機能】ドラッグリサイザーの起動
+            renderTagFilterBar();
+            renderNotesList();
+            
+            if (window.innerWidth < 768) {
+                showSidebar();
+            } else {
+                if (notes.length > 0) {
+                    selectNote(notes[0].id);
+                } else {
+                    showNoNoteSelected();
+                }
+            }
+
+            lucide.createIcons();
+        });
+
+        function saveNotesToStorage() {
+            localStorage.setItem('simple_notes', JSON.stringify(notes));
+        }
+
+        // --- 【新機能】サイドバーの幅調整ドラッグ処理 ---
+        function initSidebarResizer() {
+            const sidebar = document.getElementById('sidebar');
+            const resizer = document.getElementById('sidebar-resizer');
+            let isResizing = false;
+
+            // マウス操作
+            resizer.addEventListener('mousedown', (e) => {
+                isResizing = true;
+                document.body.style.cursor = 'col-resize';
+                document.body.classList.add('select-none'); // テキスト選択防止
+            });
+
+            // タッチ操作 (タブレット・スマホPC表示など)
+            resizer.addEventListener('touchstart', (e) => {
+                isResizing = true;
+                document.body.classList.add('select-none');
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+                let newWidth = e.clientX;
+                
+                // 制限幅 (最小200px、最大幅は画面幅の60%以下)
+                const minWidth = 200;
+                const maxWidth = window.innerWidth * 0.6;
+
+                if (newWidth < minWidth) newWidth = minWidth;
+                if (newWidth > maxWidth) newWidth = maxWidth;
+
+                sidebar.style.width = `${newWidth}px`;
+                localStorage.setItem('simple_notes_sidebar_width', newWidth);
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!isResizing) return;
+                const touch = e.touches[0];
+                let newWidth = touch.clientX;
+                
+                const minWidth = 200;
+                const maxWidth = window.innerWidth * 0.6;
+
+                if (newWidth < minWidth) newWidth = minWidth;
+                if (newWidth > maxWidth) newWidth = maxWidth;
+
+                sidebar.style.width = `${newWidth}px`;
+                localStorage.setItem('simple_notes_sidebar_width', newWidth);
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isResizing) {
+                    isResizing = false;
+                    document.body.style.cursor = 'default';
+                    document.body.classList.remove('select-none');
+                }
+            });
+
+            document.addEventListener('touchend', () => {
+                if (isResizing) {
+                    isResizing = false;
+                    document.body.classList.remove('select-none');
+                }
+            });
+        }
+
+        // --- 【新機能】タグ一覧セクションの開閉制御 ---
+        function toggleTagSection() {
+            isTagSectionOpen = !isTagSectionOpen;
+            const container = document.getElementById('tag-filter-container');
+            const arrow = document.getElementById('tag-section-arrow');
+
+            if (isTagSectionOpen) {
+                container.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+                localStorage.setItem('simple_notes_tag_open', 'true');
+            } else {
+                container.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+                localStorage.setItem('simple_notes_tag_open', 'false');
+            }
+        }
+
+        // --- 【機能強化】すべてのタグを左サイドにまとめ、件数カウント付きで再生成 ---
+        function renderTagFilterBar() {
+            const bar = document.getElementById('tag-filter-bar');
+            
+            // タグごとの件数を計算
+            const tagCounts = {};
+            notes.forEach(note => {
+                if (note.tags) {
+                    note.tags.forEach(tag => {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                    });
+                }
+            });
+
+            const allTags = Object.keys(tagCounts).sort();
+
+            if (allTags.length === 0) {
+                bar.innerHTML = `
+                    <p class="text-[11px] text-slate-400 dark:text-dark-muted py-1 italic">
+                        登録されたタグはありません
+                    </p>
+                `;
+                return;
+            }
+
+            // 「すべて」フィルターボタン
+            let html = `
+                <button onclick="setFilterTag('')" class="px-2.5 py-1 text-xs rounded-lg font-semibold transition-all flex items-center gap-1 shadow-sm ${
+                    selectedFilterTag === ''
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-white hover:bg-slate-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-600 dark:text-dark-text border border-slate-200/60 dark:border-zinc-700'
+                }">
+                    <span>すべて</span>
+                    <span class="text-[10px] opacity-75">(${notes.length})</span>
+                </button>
+            `;
+
+            allTags.forEach(tag => {
+                const isSelected = tag === selectedFilterTag;
+                const count = tagCounts[tag];
+                html += `
+                    <button onclick="setFilterTag('${escapeHtml(tag)}')" class="px-2.5 py-1 text-xs rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
+                        isSelected
+                            ? 'bg-indigo-600 text-white shadow-md'
+                            : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-950/40 dark:hover:bg-indigo-950/80 dark:text-indigo-400 border border-indigo-100/50 dark:border-indigo-900/30'
+                    }">
+                        <i data-lucide="tag" class="w-3 h-3 ${isSelected ? 'text-white' : 'text-indigo-400 dark:text-indigo-500'}"></i>
+                        <span>${escapeHtml(tag)}</span>
+                        <span class="text-[9px] px-1 bg-white/30 dark:bg-black/20 rounded-full font-bold">${count}</span>
+                    </button>
+                `;
+            });
+
+            bar.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        // --- タグ絞り込みの変更 ---
+        function setFilterTag(tag) {
+            selectedFilterTag = tag;
+            renderTagFilterBar();
+            renderNotesList();
+        }
+
+        // --- メモ一覧の描画 ---
+        function renderNotesList() {
+            const listContainer = document.getElementById('notes-list');
+            listContainer.innerHTML = '';
+
+            const filteredNotes = notes
+                .filter(note => {
+                    const query = searchQuery.toLowerCase();
+                    const matchesSearch = note.title.toLowerCase().includes(query) || 
+                                          note.content.toLowerCase().includes(query) || 
+                                          (note.tags && note.tags.some(t => t.toLowerCase().includes(query)));
+                    
+                    const matchesTagFilter = !selectedFilterTag || (note.tags && note.tags.includes(selectedFilterTag));
+                    
+                    return matchesSearch && matchesTagFilter;
+                })
+                .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
+            if (filteredNotes.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="p-8 text-center text-slate-400 dark:text-dark-muted text-sm">
+                        <i data-lucide="search-code" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+                        該当するメモがありません
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            filteredNotes.forEach(note => {
+                const isActive = note.id === activeNoteId;
+                const noteElement = document.createElement('div');
+                noteElement.className = `p-4 cursor-pointer border-l-4 transition-all ${
+                    isActive 
+                        ? 'bg-indigo-50/50 dark:bg-indigo-950/20 border-indigo-600 dark:border-indigo-400' 
+                        : 'border-transparent hover:bg-slate-50 dark:hover:bg-zinc-800/50'
+                }`;
+                noteElement.onclick = () => selectNote(note.id);
+
+                const displayTitle = note.title.trim() || '無題のメモ';
+                const displayContent = note.content.trim() 
+                    ? note.content.split('\n')[0].substring(0, 35) + (note.content.split('\n')[0].length > 35 ? '...' : '')
+                    : '中身が空のメモ';
+
+                const dateOptions = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                const displayDate = new Date(note.updatedAt).toLocaleDateString('ja-JP', dateOptions);
+
+                let tagsHtml = '';
+                if (note.tags && note.tags.length > 0) {
+                    tagsHtml = '<div class="flex flex-wrap gap-1 mt-1.5">';
+                    note.tags.slice(0, 3).forEach(t => {
+                        tagsHtml += `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-medium rounded bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-slate-400">
+                            🏷️ ${escapeHtml(t)}
+                        </span>`;
+                    });
+                    if (note.tags.length > 3) {
+                        tagsHtml += `<span class="text-[9px] text-slate-400 dark:text-dark-muted">+${note.tags.length - 3}</span>`;
+                    }
+                    tagsHtml += '</div>';
+                }
+
+                noteElement.innerHTML = `
+                    <div class="flex justify-between items-start gap-2 mb-1">
+                        <h3 class="font-semibold text-sm truncate ${isActive ? 'text-indigo-950 dark:text-white' : 'text-slate-800 dark:text-dark-text'}">
+                            ${escapeHtml(displayTitle)}
+                        </h3>
+                        <span class="text-[10px] text-slate-400 dark:text-dark-muted flex-shrink-0 whitespace-nowrap">${displayDate}</span>
+                    </div>
+                    <p class="text-xs text-slate-400 dark:text-dark-muted truncate">${escapeHtml(displayContent)}</p>
+                    ${tagsHtml}
+                `;
+
+                listContainer.appendChild(noteElement);
+            });
+        }
+
+        // --- メモの選択 ---
+        function selectNote(id) {
+            activeNoteId = id;
+            const note = notes.find(n => n.id === id);
+            
+            if (!note) {
+                showNoNoteSelected();
+                return;
+            }
+
+            document.getElementById('no-note-selected').classList.add('hidden');
+            document.getElementById('active-editor').classList.remove('hidden');
+            
+            document.getElementById('note-title').value = note.title;
+            document.getElementById('note-content').value = note.content;
+
+            renderActiveNoteTags(note);
+            updateCharCount(note.content);
+            setSaveStatus(true);
+            renderNotesList();
+
+            if (window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.add('hidden');
+                document.getElementById('sidebar-resizer').classList.add('hidden'); // モバイルはリサイザーも非表示
+                document.getElementById('editor-container').classList.remove('hidden');
+            }
+        }
+
+        // --- 現在表示中のメモに紐付くタグの表示 ---
+        function renderActiveNoteTags(note) {
+            const container = document.getElementById('active-note-tags');
+            container.innerHTML = '';
+            
+            if (!note.tags) note.tags = [];
+
+            note.tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = "inline-flex items-center gap-1 pl-2 pr-1 py-0.5 text-xs font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/30 rounded-md";
+                tagElement.innerHTML = `
+                    <span>${escapeHtml(tag)}</span>
+                    <button onclick="removeTag('${escapeHtml(tag)}')" class="hover:bg-indigo-100 dark:hover:bg-indigo-900 p-0.5 rounded text-indigo-400 dark:text-indigo-300 transition-colors">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                    </button>
+                `;
+                container.appendChild(tagElement);
+            });
+            lucide.createIcons();
+        }
+
+        // --- 新しいタグを追加 (Enterキー入力時) ---
+        function handleTagInputKeydown(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const input = document.getElementById('new-tag-input');
+                const tagValue = input.value.trim();
+
+                if (tagValue && activeNoteId) {
+                    const note = notes.find(n => n.id === activeNoteId);
+                    if (note) {
+                        if (!note.tags) note.tags = [];
+                        
+                        if (!note.tags.includes(tagValue)) {
+                            note.tags.push(tagValue);
+                            saveNotesToStorage();
+                            renderActiveNoteTags(note);
+                            renderTagFilterBar();
+                            renderNotesList();
+                        }
+                    }
+                }
+                input.value = '';
+            }
+        }
+
+        // --- タグの削除 ---
+        function removeTag(tagToRemove) {
+            if (!activeNoteId) return;
+            const note = notes.find(n => n.id === activeNoteId);
+            if (note && note.tags) {
+                note.tags = note.tags.filter(t => t !== tagToRemove);
+                saveNotesToStorage();
+                renderActiveNoteTags(note);
+                renderTagFilterBar();
+                renderNotesList();
+            }
+        }
+
+        // --- 箇条書き機能 ---
+        function insertBulletPoint(type = 'bullet') {
+            const textarea = document.getElementById('note-content');
+            if (!textarea) return;
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const value = textarea.value;
+
+            const bullet = type === 'number' ? "1. " : "・ ";
+            
+            let textToInsert = bullet;
+            if (start > 0 && value[start - 1] !== '\n') {
+                textToInsert = "\n" + bullet;
+            }
+
+            textarea.value = value.substring(0, start) + textToInsert + value.substring(end);
+            textarea.focus();
+            
+            const newCursorPos = start + textToInsert.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+
+            updateActiveNote();
+        }
+
+        // --- エディタ部分でのキー入力を検知（箇条書き自動引き継ぎ & Tab階層構造） ---
+        function handleContentKeydown(event) {
+            const textarea = event.target;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const value = textarea.value;
+
+            // 1. Tabキーによるインデント調整（下位階層・上位階層）
+            if (event.key === 'Tab') {
+                event.preventDefault();
+
+                const startLineIdx = value.lastIndexOf('\n', start - 1) + 1;
+                const endLineIdx = value.indexOf('\n', end);
+                const actualEndLineIdx = endLineIdx === -1 ? value.length : endLineIdx;
+
+                const selectedText = value.substring(startLineIdx, actualEndLineIdx);
+                const lines = selectedText.split('\n');
+
+                let newText = '';
+                let changeLen = 0;
+
+                if (event.shiftKey) {
+                    newText = lines.map(line => {
+                        if (line.startsWith('  ')) {
+                            changeLen -= 2;
+                            return line.substring(2);
+                        } else if (line.startsWith('\t')) {
+                            changeLen -= 1;
+                            return line.substring(1);
+                        } else if (line.startsWith(' ')) {
+                            changeLen -= 1;
+                            return line.substring(1);
+                        }
+                        return line;
+                    }).join('\n');
+                } else {
+                    newText = lines.map(line => {
+                        changeLen += 2;
+                        return '  ' + line;
+                    }).join('\n');
+                }
+
+                textarea.value = value.substring(0, startLineIdx) + newText + value.substring(actualEndLineIdx);
+
+                if (start === end) {
+                    const firstLineOrig = lines[0];
+                    const firstLineNew = newText.split('\n')[0];
+                    const diff = firstLineNew.length - firstLineOrig.length;
+                    const newCursorPos = Math.max(startLineIdx, start + diff);
+                    textarea.setSelectionRange(newCursorPos, newCursorPos);
+                } else {
+                    textarea.setSelectionRange(startLineIdx, startLineIdx + newText.length);
+                }
+
+                updateActiveNote();
+                return;
+            }
+            
+            // 2. Enterキーによる箇条書き自動引き継ぎ
+            if (event.key === 'Enter') {
+                const lastNewlineIdx = value.lastIndexOf('\n', start - 1);
+                const lineStartIdx = lastNewlineIdx === -1 ? 0 : lastNewlineIdx + 1;
+                const currentLine = value.substring(lineStartIdx, start);
+
+                const bulletMatch = currentLine.match(/^(\s*)(・\s*|-\s*|\*\s*|•\s*)/);
+                const numberMatch = currentLine.match(/^(\s*)([0-9]+)([.)]\s*)/);
+
+                if (bulletMatch) {
+                    event.preventDefault();
+                    const indent = bulletMatch[1];
+                    const bullet = bulletMatch[2];
+                    const prefix = indent + bullet;
+
+                    if (currentLine.trim() === bullet.trim()) {
+                        textarea.value = value.substring(0, lineStartIdx) + "\n" + value.substring(start);
+                        textarea.setSelectionRange(lineStartIdx + 1, lineStartIdx + 1);
+                    } else {
+                        const textToInsert = "\n" + prefix;
+                        textarea.value = value.substring(0, start) + textToInsert + value.substring(start);
+                        const newCursorPos = start + textToInsert.length;
+                        textarea.setSelectionRange(newCursorPos, newCursorPos);
+                    }
+                    updateActiveNote();
+                } else if (numberMatch) {
+                    event.preventDefault();
+                    const indent = numberMatch[1];
+                    const numStr = numberMatch[2];
+                    const delimiter = numberMatch[3];
+
+                    if (currentLine.trim() === (numStr + delimiter).trim()) {
+                        textarea.value = value.substring(0, lineStartIdx) + "\n" + value.substring(start);
+                        textarea.setSelectionRange(lineStartIdx + 1, lineStartIdx + 1);
+                    } else {
+                        const nextNum = parseInt(numStr, 10) + 1;
+                        const textToInsert = "\n" + indent + nextNum + delimiter;
+                        textarea.value = value.substring(0, start) + textToInsert + value.substring(start);
+                        const newCursorPos = start + textToInsert.length;
+                        textarea.setSelectionRange(newCursorPos, newCursorPos);
+                    }
+                    updateActiveNote();
+                }
+            }
+        }
+
+        // --- 新規メモの作成 ---
+        function createNewNote() {
+            const newNote = {
+                id: crypto.randomUUID ? crypto.randomUUID() : 'note-' + Date.now(),
+                title: '',
+                content: '',
+                tags: selectedFilterTag ? [selectedFilterTag] : [],
+                updatedAt: new Date().toISOString()
+            };
+
+            notes.unshift(newNote);
+            saveNotesToStorage();
+            
+            document.getElementById('search-input').value = '';
+            searchQuery = '';
+            
+            selectNote(newNote.id);
+            renderTagFilterBar();
+        }
+
+        // --- メモの更新（入力検知） ---
+        function updateActiveNote() {
+            if (!activeNoteId) return;
+
+            setSaveStatus(false);
+
+            const title = document.getElementById('note-title').value;
+            const content = document.getElementById('note-content').value;
+
+            const noteIndex = notes.findIndex(n => n.id === activeNoteId);
+            if (noteIndex !== -1) {
+                notes[noteIndex].title = title;
+                notes[noteIndex].content = content;
+                notes[noteIndex].updatedAt = new Date().toISOString();
+
+                saveNotesToStorage();
+                updateCharCount(content);
+
+                debounce(() => {
+                    renderNotesList();
+                    renderTagFilterBar(); // タグの変更に合わせてサイドバー件数も更新
+                    setSaveStatus(true);
+                }, 500)();
+            }
+        }
+
+        // --- 使い方ガイドモーダルの操作 ---
+        function openHelpModal() {
+            document.getElementById('help-modal').classList.remove('hidden');
+        }
+
+        function closeHelpModal() {
+            document.getElementById('help-modal').classList.add('hidden');
+        }
+
+        // --- TXTダウンロード ---
+        function downloadActiveNote() {
+            if (!activeNoteId) return;
+            const note = notes.find(n => n.id === activeNoteId);
+            if (!note) return;
+
+            const filename = (note.title.trim() || '無題のメモ') + '.txt';
+            let fileContent = `タイトル: ${note.title.trim() || '無題のメモ'}\n`;
+            if (note.tags && note.tags.length > 0) {
+                fileContent += `タグ: ${note.tags.join(', ')}\n`;
+            }
+            fileContent += `更新日時: ${new Date(note.updatedAt).toLocaleString('ja-JP')}\n`;
+            fileContent += `--------------------\n\n${note.content}`;
+            
+            const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8;' });
+            const link = document.createElement("a");
+            
+            if (navigator.msSaveBlob) {
+                navigator.msSaveBlob(blob, filename);
+            } else {
+                link.href = URL.createObjectURL(blob);
+                link.setAttribute("download", filename);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        // --- 全てエクスポート ---
+        function exportAllNotes() {
+            if (notes.length === 0) {
+                alert("保存するメモがありません。");
+                return;
+            }
+            const dateStr = new Date().toISOString().slice(0, 10);
+            const filename = `メモ帳バックアップ_${dateStr}.txt`;
+            
+            let fileContent = `■ シンプルメモ帳 バックアップデータ (${new Date().toLocaleString('ja-JP')})\n`;
+            fileContent += `==========================================\n\n`;
+
+            notes.forEach((note, index) => {
+                fileContent += `【メモ ${index + 1}】\n`;
+                fileContent += `タイトル: ${note.title.trim() || '無題のメモ'}\n`;
+                if (note.tags && note.tags.length > 0) {
+                    fileContent += `タグ: ${note.tags.join(', ')}\n`;
+                }
+                fileContent += `更新日時: ${new Date(note.updatedAt).toLocaleString('ja-JP')}\n`;
+                fileContent += `内容:\n${note.content}\n`;
+                fileContent += `\n------------------------------------------\n\n`;
+            });
+
+            const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function confirmDeleteNote() {
+            if (!activeNoteId) return;
+            document.getElementById('delete-modal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-modal').classList.add('hidden');
+        }
+
+        function deleteActiveNote() {
+            if (!activeNoteId) return;
+
+            notes = notes.filter(n => n.id !== activeNoteId);
+            saveNotesToStorage();
+            closeDeleteModal();
+
+            if (notes.length > 0) {
+                selectNote(notes[0].id);
+            } else {
+                activeNoteId = null;
+                showNoNoteSelected();
+                renderNotesList();
+            }
+
+            renderTagFilterBar();
+
+            if (window.innerWidth < 768) {
+                showSidebar();
+            }
+        }
+
+        function showNoNoteSelected() {
+            document.getElementById('no-note-selected').classList.add('hidden');
+            document.getElementById('active-editor').classList.add('hidden');
+        }
+
+        function showSidebar() {
+            document.getElementById('sidebar').classList.remove('hidden');
+            document.getElementById('sidebar-resizer').classList.add('hidden');
+            document.getElementById('editor-container').classList.add('hidden');
+            renderNotesList();
+            renderTagFilterBar();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('search-input').value;
+            renderNotesList();
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('simple_notes_theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('simple_notes_theme', 'light');
+            }
+            updateThemeIcon();
+        }
+
+        function updateThemeIcon() {
+            const iconElement = document.getElementById('theme-icon');
+            if (isDarkMode) {
+                iconElement.setAttribute('data-lucide', 'sun');
+                iconElement.parentElement.title = "ライトモードに変更";
+            } else {
+                iconElement.setAttribute('data-lucide', 'moon');
+                iconElement.parentElement.title = "ダークモードに変更";
+            }
+            lucide.createIcons();
+        }
+
+        function updateCharCount(text) {
+            const count = text ? text.length : 0;
+            document.getElementById('char-count').innerText = `${count} 文字`;
+        }
+
+        function setSaveStatus(isSaved) {
+            const statusElement = document.getElementById('save-status');
+            if (isSaved) {
+                statusElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i> 自動保存完了`;
+                statusElement.className = "flex items-center gap-1 text-emerald-600 dark:text-emerald-400";
+            } else {
+                statusElement.innerHTML = `<span class="inline-block w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> 保存中...`;
+                statusElement.className = "flex items-center gap-1.5 text-amber-600 dark:text-amber-400";
+            }
+            lucide.createIcons();
+        }
+
+        let timeoutId;
+        function debounce(func, delay) {
+            return function(...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            };
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
