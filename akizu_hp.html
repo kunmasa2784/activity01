@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>習志野市秋津第2団地 管理組合</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Noto Sans JP) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f4f1ea; /* 温かみのある落ち着いたアイボリー */
+            color: #2c3531;
+        }
+        /* スムーズな遷移効果 */
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .emergency-blink {
+            animation: blink 2s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { background-color: #dc2626; }
+            50% { background-color: #991b1b; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- 緊急連絡用グローバルアラート (管理者パネルから即座にON/OFF可能) -->
+    <div id="emergency-banner" class="emergency-blink text-white py-3 px-4 hidden relative z-50 shadow-md">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <span class="flex h-3 w-3 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+                </span>
+                <p class="font-bold text-sm sm:text-base">
+                    【緊急】<span id="emergency-text" data-ja="下水配管トラブルに伴う、高圧洗浄作業と排水自粛のお願い" data-en="Sewage plumbing issue: Please refrain from using drains during high-pressure cleaning." data-zh="下水管故障：高压清洗期间请勿排水" data-vi="Sự cố đường ống nước thải: Vui lòng không xả nước trong quá trình thông rửa">下水配管トラブルに伴う、高圧洗浄作業と排水自粛のお願い</span>
+                </p>
+            </div>
+            <button onclick="navigateTo('emergency')" class="bg-white text-red-700 hover:bg-red-50 px-3 py-1 rounded text-xs font-bold transition">
+                <span class="lang-text" data-ja="緊急連絡・対応詳細を見る" data-en="View Details" data-zh="查看详情" data-vi="Xem chi tiết">緊急連絡・対応詳細を見る</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- メインヘッダー -->
+    <header class="bg-[#1f3a3a] text-white sticky top-0 z-40 shadow-md border-b border-amber-800/20">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col lg:flex-row justify-between items-center gap-4">
+            <!-- ロゴ・タイトル -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                <div class="bg-amber-100 text-[#1f3a3a] p-2 rounded-lg">
+                    <i data-lucide="building" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base md:text-lg font-bold tracking-wider">習志野市秋津第2団地管理組合</h1>
+                        <span class="bg-emerald-800 text-[9px] px-1.5 py-0.5 rounded text-stone-200">公式HP案</span>
+                    </div>
+                    <p class="text-[10px] text-stone-300">Narashino Akitsu No.2 Estate Management Association | 創立46年・約421世帯</p>
+                </div>
+            </div>
+
+            <!-- ナビゲーション & アクション -->
+            <div class="flex flex-wrap items-center justify-center gap-4 text-sm">
+                <!-- 簡易翻訳切替 -->
+                <div class="flex items-center bg-[#132424] rounded-lg p-0.5 border border-stone-600">
+                    <button onclick="changeLanguage('ja')" id="lang-btn-ja" class="px-2 py-1 text-xs rounded font-bold bg-amber-600 text-white">日本語</button>
+                    <button onclick="changeLanguage('en')" id="lang-btn-en" class="px-2 py-1 text-xs rounded text-stone-300 hover:text-white">English</button>
+                    <button onclick="changeLanguage('zh')" id="lang-btn-zh" class="px-2 py-1 text-xs rounded text-stone-300 hover:text-white">中文</button>
+                    <button onclick="changeLanguage('vi')" id="lang-btn-vi" class="px-2 py-1 text-xs rounded text-stone-300 hover:text-white">Tiếng Việt</button>
+                </div>
+
+                <nav class="flex gap-4 md:gap-5 mr-1">
+                    <button onclick="navigateTo('home')" class="nav-link hover:text-stone-300 transition font-medium pb-1 border-b-2 border-transparent" id="nav-home">
+                        <span class="lang-text" data-ja="ホーム" data-en="Home" data-zh="主页" data-vi="Trang chủ">ホーム</span>
+                    </button>
+                    <button onclick="navigateTo('about')" class="nav-link hover:text-stone-300 transition font-medium pb-1 border-b-2 border-transparent" id="nav-about">
+                        <span class="lang-text" data-ja="団地概要・体制" data-en="About" data-zh="概要/体制" data-vi="Giới thiệu">団地概要・体制</span>
+                    </button>
+                    <button onclick="navigateTo('rules')" class="nav-link hover:text-stone-300 transition font-medium pb-1 border-b-2 border-transparent text-amber-300 font-semibold" id="nav-rules">
+                        <span class="lang-text" data-ja="生活ルール" data-en="Living Rules" data-zh="生活规则" data-vi="Quy định sinh hoạt">生活ルール</span>
+                    </button>
+                    <button onclick="navigateTo('portal')" class="nav-link hover:text-stone-300 transition font-medium pb-1 border-b-2 border-transparent" id="nav-portal">
+                        <span class="lang-text" data-ja="居住者専用" data-en="Residents Only" data-zh="住户专用" data-vi="Dành cho cư dân">居住者専用</span>
+                    </button>
+                </nav>
+
+                <!-- ログインステータスボタン -->
+                <button id="login-toggle-btn" onclick="toggleLogin()" class="flex items-center gap-1.5 bg-[#142626] hover:bg-[#0a1414] border border-stone-500 px-3 py-1 rounded-full text-xs transition">
+                    <i data-lucide="lock" class="w-3 h-3" id="login-icon"></i>
+                    <span id="login-btn-text" class="lang-text" data-ja="居住者ログイン" data-en="Resident Login" data-zh="住户登录" data-vi="Đăng nhập cư dân">居住者ログイン</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- メインヒーロー（トップページのみ表示） -->
+    <section id="hero-section" class="bg-gradient-to-r from-[#1f3a3a] to-[#2e524a] text-white py-12 md:py-16 px-4 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <span class="bg-amber-800/80 text-amber-100 text-[11px] px-3 py-1 rounded-full border border-amber-600/30 uppercase tracking-widest font-semibold">
+                <span class="lang-text" data-ja="次の50年へつなぐ、安心と豊かなコミュニティ" data-en="Connecting to the next 50 years: Safe & Rich Community" data-zh="迈向下一个50年：安心与丰富的社区" data-vi="Hướng tới 50 năm tiếp theo: An tâm và Cộng đồng phong phú">次の50年へつなぐ、安心と豊かなコミュニティ</span>
+            </span>
+            <h2 class="text-2xl md:text-4xl font-bold mt-4 leading-tight">
+                <span class="lang-text" data-ja="習志野市秋津第2団地 管理組合" data-en="Narashino City Akitsu No.2 Estate" data-zh="习志野市秋津第2团地" data-vi="Khu tập thể số 2 Akitsu, Thành phố Narashino">習志野市秋津第2団地 管理組合</span>
+            </h2>
+            <p class="text-stone-200 mt-3 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
+                <span class="lang-text" data-ja="当団地は築46年、総戸数約421世帯（集合住宅＋戸建てエリア）が暮らす緑豊かな街です。2路線利用可能で買い物も至便な抜群の環境と、互いに支え合う多文化なコミュニティを育んでいます。" data-en="Established 46 years ago, our estate is home to about 421 households. With access to 2 train lines and great shopping convenience, we nurture a rich multicultural community." data-zh="本团地建成已46年，共约421户（集合住宅与独栋区）。邻近2条铁路线，购物极其便利，正在培育一个互助共融的多文化社区。" data-vi="Khu tập thể có tuổi đời 46 năm, là nơi sinh sống của khoảng 421 hộ gia đình. Giao thông thuận tiện với 2 tuyến tàu và nhiều cửa hàng tiện ích, chúng tôi đang xây dựng một cộng đồng đa văn hóa hỗ trợ lẫn nhau.">当団地は築46年、総戸数約421世帯（集合住宅＋戸建てエリア）が暮らす緑豊かな街です。2路線利用可能で買い物も至便な抜群の環境と、互いに支え合う多文化なコミュニティを育んでいます。</span>
+            </p>
+            <div class="mt-6 flex flex-wrap justify-center gap-3">
+                <button onclick="navigateTo('rules')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-5 py-2 rounded-lg shadow transition text-xs md:text-sm flex items-center gap-1.5">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    <span class="lang-text" data-ja="ゴミ出し・生活ルール" data-en="Waste & Living Rules" data-zh="垃圾分类与生活规则" data-vi="Quy định xả rác & sinh hoạt">ゴミ出し・生活ルール</span>
+                </button>
+                <button onclick="navigateTo('portal')" class="bg-white text-[#1f3a3a] hover:bg-stone-100 font-bold px-5 py-2 rounded-lg shadow transition text-xs md:text-sm flex items-center gap-1.5">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                    <span class="lang-text" data-ja="居住者専用ポータル" data-en="Residents Portal" data-zh="住户专用门户" data-vi="Cổng thông tin cư dân">居住者専用ポータル</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- メインコンテンツ -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6">
+        
+        <!-- ================= HOME PAGE ================= -->
+        <div id="page-home" class="page-content fade-in space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 左：メイン情報（2カラム分） -->
+                <div class="lg:col-span-2 space-y-6">
+                    
+                    <!-- 【お知らせ・回覧板のデジタル化】 -->
+                    <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-stone-200">
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-stone-100">
+                            <h3 class="text-base md:text-lg font-bold text-[#1f3a3a] flex items-center gap-2">
+                                <i data-lucide="bell" class="w-5 h-5 text-amber-700"></i>
+                                <span class="lang-text" data-ja="お知らせ・回覧（ペーパーレス化推進）" data-en="Announcements & Notices" data-zh="通知与回执（推行无纸化）" data-vi="Thông báo & Bản tin (Thúc đẩy giảm giấy tờ)">お知らせ・回覧（ペーパーレス化推進）</span>
+                            </h3>
+                            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">
+                                <span class="lang-text" data-ja="スマホで簡単確認" data-en="Mobile Friendly" data-zh="手机便捷查看" data-vi="Kiểm tra dễ dàng trên điện thoại">スマホで簡単確認</span>
+                            </span>
+                        </div>
+                        
+                        <!-- お知らせリスト（管理者デモで追加可能） -->
+                        <div id="announcement-list" class="space-y-3">
+                            <!-- 下水注意喚起（緊急） -->
+                            <div class="p-3.5 rounded-lg bg-red-50 border border-red-200 flex gap-3 items-start">
+                                <div class="bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold mt-0.5 whitespace-nowrap">
+                                    <span class="lang-text" data-ja="注意" data-en="Alert" data-zh="注意" data-vi="Chú ý">注意</span>
+                                </div>
+                                <div class="flex-grow">
+                                    <span class="text-[10px] text-stone-500 font-mono">2026.06.28</span>
+                                    <h4 class="font-bold text-red-900 text-xs md:text-sm mt-0.5">
+                                        <span class="lang-text" data-ja="集合住宅 下水配管の高圧洗浄作業に伴う排水制限" data-en="Drainage restriction due to high-pressure cleaning of sewage pipes" data-zh="集合住宅下水管道高压清洗及排水限制" data-vi="Hạn chế xả nước do thông rửa áp lực cao đường ống nước thải căn hộ">集合住宅 下水配管の高圧洗浄作業に伴う排水制限</span>
+                                    </h4>
+                                    <p class="text-[11px] text-stone-600 mt-1">
+                                        <span class="lang-text" data-ja="一部系統での下水詰まり発生を受け、全棟排水管の高圧洗浄を実施いたします。指定時間帯の洗濯・入浴をお控えください。詳細は各階段下の掲示および回覧板、居住者専用ページをご参照ください。" data-en="Following a sewage block in some lines, high-pressure cleaning of all drainpipes will be executed. Please refrain from laundry/bathing during specified hours." data-zh="因部分管道发生堵塞，将对所有楼栋的排水管进行高压清洗。请在指定时间段内避免洗衣和沐浴。详见各楼梯口公示、回执及住户专用页面。" data-vi="Do xảy ra tắc nghẽn đường ống nước thải ở một số khu vực, chúng tôi sẽ tiến hành thông rửa áp lực cao cho toàn bộ đường ống xả. Vui lòng không giặt đồ/tắm rửa trong khung giờ quy định.">一部系統での下水詰まり発生を受け、全棟排水管の高圧洗浄を実施いたします。指定時間帯の洗濯・入浴をお控えください。詳細は各階段下の掲示および回覧板、居住者専用ページをご参照ください。</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- 広報紙デジタル版 -->
+                            <div class="p-3.5 rounded-lg bg-amber-50/40 border border-amber-200/50 flex gap-3 items-start">
+                                <div class="bg-[#1f3a3a] text-white text-[9px] px-1.5 py-0.5 rounded font-bold mt-0.5 whitespace-nowrap">
+                                    <span class="lang-text" data-ja="広報紙" data-en="Newsletter" data-zh="宣传报" data-vi="Bản tin">広報紙</span>
+                                </div>
+                                <div class="flex-grow">
+                                    <span class="text-[10px] text-stone-500 font-mono">2026.06.20</span>
+                                    <h4 class="font-bold text-[#1f3a3a] text-xs md:text-sm mt-0.5">
+                                        <span class="lang-text" data-ja="広報紙「秋津第2団地たより」7月号のWEB先行公開" data-en="Web Pre-release: 'Akitsu No.2 Newsletter' July Issue" data-zh="宣传报《秋津第2团地通讯》7月号网络版先行公开" data-vi="Công bố trước bản tin điện tử 'Bản tin số 2 Akitsu' số tháng 7">広報紙「秋津第2団地たより」7月号のWEB先行公開</span>
+                                    </h4>
+                                    <p class="text-[11px] text-stone-600 mt-1">
+                                        <span class="lang-text" data-ja="年4回発行の広報紙です。今号では「多文化共生の取り組み」「高齢者支援サロン活動報告」などを掲載しています。ログイン後のページよりPDFでダウンロード・閲覧いただけます。" data-en="Published 4 times a year. This issue covers 'Multicultural Initiatives' and 'Senior Support Salon Reports'. PDF is available on the Residents Page." data-zh="每年发行4次。本期内容包括“多文化共生举措”和“老年人支持沙龙活动报告”。登录后可在专用页面下载PDF。" data-vi="Bản tin xuất bản 4 lần/năm. Số này có các nội dung 'Nỗ lực đa văn hóa', 'Báo cáo hoạt động Salon hỗ trợ người cao tuổi'. Cư dân có thể tải về file PDF sau khi đăng nhập.">年4回発行の広報紙です。今号では「多文化共生の取り組み」「高齢者支援サロン活動報告」などを掲載しています。ログイン後のページよりPDFでダウンロード・閲覧いただけます。</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- 多文化共生・ゴミ出し関連 -->
+                            <div class="p-3.5 rounded-lg hover:bg-stone-50 transition border border-transparent hover:border-stone-100 flex gap-3 items-start">
+                                <div class="bg-emerald-700 text-white text-[9px] px-1.5 py-0.5 rounded font-bold mt-0.5 whitespace-nowrap">
+                                    <span class="lang-text" data-ja="生活" data-en="Rules" data-zh="生活" data-vi="Sinh hoạt">生活</span>
+                                </div>
+                                <div class="flex-grow">
+                                    <span class="text-[10px] text-stone-500 font-mono">2026.06.10</span>
+                                    <h4 class="font-bold text-stone-800 text-xs md:text-sm mt-0.5">
+                                        <span class="lang-text" data-ja="外国籍住民向け「英語・中国語・ベトナム語」のゴミ出しガイド配架" data-en="Multilingual Trash Disposal Guide Released (English, Chinese, Vietnamese)" data-zh="面向外籍住户的“英・中・越”垃圾分类指南已发布" data-vi="Phát hành Hướng dẫn xả rác bằng tiếng Anh, Trung, Việt cho cư dân nước ngoài">外国籍住民向け「英語・中国語・ベトナム語」のゴミ出しガイド配架</span>
+                                    </h4>
+                                    <p class="text-[11px] text-stone-600 mt-1">
+                                        <span class="lang-text" data-ja="近年の多文化化に伴い、外国籍の方もルールを守りやすくなるよう、翻訳版ガイドを作成いたしました。集会所および当サイトの「生活ルール」タブから閲覧可能です。" data-en="To support our growing multicultural population, translated guides are now available at the assembly hall and on the 'Living Rules' tab." data-zh="随着多元化程度的加深，为了让外籍住户更方便遵守规则，我们制作了翻译版指南。可在集会所及本站“生活规则”选项卡中查看。" data-vi="Để hỗ trợ cư dân nước ngoài dễ dàng tuân thủ quy định, chúng tôi đã biên soạn bản dịch hướng dẫn. Bạn có thể xem tại nhà sinh hoạt cộng đồng hoặc tab 'Quy định sinh hoạt' trên trang này.">近年の多文化化に伴い、外国籍の方もルールを守りやすくなるよう、翻訳版ガイドを作成いたしました。集会所および当サイトの「生活ルール」タブから閲覧可能です。</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 【団地のブランディング・魅力発信】外部への情報公開 -->
+                    <div class="bg-gradient-to-br from-amber-50 to-amber-100/50 p-5 md:p-6 rounded-xl border border-amber-800/10">
+                        <h3 class="text-base md:text-lg font-bold text-amber-900 flex items-center gap-2 mb-3">
+                            <i data-lucide="award" class="w-5 h-5 text-amber-700"></i>
+                            <span class="lang-text" data-ja="秋津第2団地の魅力（資産価値と住環境の向上）" data-en="The Appeal of Akitsu No.2 (Asset Value & Environment)" data-zh="秋津第2团地的魅力（提升资产价值与居住环境）" data-vi="Sức hút của Khu tập thể số 2 Akitsu (Nâng cao giá trị tài sản & Môi trường sống)">秋津第2団地の魅力（資産価値と住環境の向上）</span>
+                        </h3>
+                        <p class="text-xs text-stone-700 leading-relaxed mb-4">
+                            <span class="lang-text" data-ja="創立46年を迎え、豊かな樹木に囲まれた成熟した住環境が自慢です。買い物の利便性が高く、世代を超えた定住性が強み。近年は多文化共生やシニア支援にも積極的に取り組む「時代に対応し続ける団地」です。" data-en="Marking 46 years, we boast a mature residential environment surrounded by lush trees. Our strong points are shopping convenience and high stability over generations. We actively promote multicultural and senior support." data-zh="历经46年岁月，我们拥有被绿树环绕、成熟优美的居住环境。周边购物便利、高定居率是我们的优势。近年来，我们积极推进多文化共生及老年人帮扶，是一座“不断适应时代变化的团地”。" data-vi="Trải qua 46 năm hình thành, chúng tôi tự hào về một môi trường sống hoàn thiện được bao quanh bởi cây xanh. Tiện ích mua sắm cao, tỷ lệ định cư lâu dài lớn. Gần đây, chúng tôi tích cực triển khai đa văn hóa và hỗ trợ người cao tuổi.">創立46年を迎え、豊かな樹木に囲まれた成熟した住環境が自慢です。買い物の利便性が高く、世代を超えた定住性が強み。近年は多文化共生やシニア支援にも積極的に取り組む「時代に対応し続ける団地」です。</span>
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                            <div class="bg-white p-3 rounded-lg border border-amber-200/50">
+                                <span class="font-bold text-[#1f3a3a] block mb-1">
+                                    <i data-lucide="map-pin" class="w-3.5 h-3.5 inline mr-1 text-amber-600"></i>
+                                    <span class="lang-text" data-ja="抜群の交通・買い物環境" data-en="Transit & Shopping" data-zh="卓越的交通与购物环境" data-vi="Giao thông & Mua sắm thuận lợi">抜群の交通・買い物環境</span>
+                                </span>
+                                <span class="lang-text" data-ja="JR総武線・京成線の2路線が利用可能。近隣にはスーパーや医療施設が充実しており、車がなくても快適に暮らせます。" data-en="Access to JR Sobu & Keisei lines. Abundant local supermarkets & medical facilities enable comfortable car-free living." data-zh="可利用JR总武线和京成线。周边超市和医疗设施完备，不开车也能过得十分舒适。" data-vi="Sử dụng được cả 2 tuyến JR Sobu và Keisei. Xung quanh đầy đủ siêu thị và y tế, cuộc sống thuận tiện ngay cả khi không có ô tô.">JR総武線・京成線の2路線が利用可能。近隣にはスーパーや医療施設が充実しており、車がなくても快適に暮らせます。</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border border-amber-200/50">
+                                <span class="font-bold text-[#1f3a3a] block mb-1">
+                                    <i data-lucide="shield" class="w-3.5 h-3.5 inline mr-1 text-amber-600"></i>
+                                    <span class="lang-text" data-ja="高い定住性とコミュニティ" data-en="High Community Stability" data-zh="高定居率与和谐社区" data-vi="Tỷ lệ định cư & Cộng đồng cao">高い定住性とコミュニティ</span>
+                                </span>
+                                <span class="lang-text" data-ja="入居者の入れ替わりが少なく、治安が極めて良好です。広報紙の発行やシニアサロンの開催等、結びつきが強いのが自慢です。" data-en="Extremely safe with low resident turnover. We take pride in strong bonds through newsletters and senior support salons." data-zh="居民流失率低，治安极好。定期发行宣传报并举办老年沙龙，邻里关系紧密，令人自豪。" data-vi="Ít biến động cư dân, an ninh cực kỳ tốt. Chúng tôi tự hào về mối liên kết chặt chẽ thông qua việc phát hành bản tin và tổ chức salon cho người cao tuổi.">入居者の入れ替わりが少なく、治安が極めて良好です。広報紙の発行やシニアサロンの開催等、結びつきが強いのが自慢です。</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border border-amber-200/50">
+                                <span class="font-bold text-[#1f3a3a] block mb-1">
+                                    <i data-lucide="languages" class="w-3.5 h-3.5 inline mr-1 text-amber-600"></i>
+                                    <span class="lang-text" data-ja="多文化共生の取り組み" data-en="Multicultural Integration" data-zh="多文化共生实践" data-vi="Nỗ lực đa văn hóa">多文化共生の取り組み</span>
+                                </span>
+                                <span class="lang-text" data-ja="近年増えている外国籍住民の方々にも配慮し、複数言語でのルール周知を進めることで、住民トラブルのない安心な生活を提供します。" data-en="Considering recent growth of foreign residents, we translate local rules to ensure hassle-free, secure living." data-zh="顾及到近年来增加的外籍住户，推动多语言规则宣传，提供无居民纠纷的安心生活。" data-vi="Quan tâm tới cư dân nước ngoài ngày càng tăng gần đây, chúng tôi thúc đẩy hướng dẫn quy định bằng nhiều ngôn ngữ để đem lại cuộc sống yên bình, không tranh chấp.">近年増えている外国籍住民の方々にも配慮し、複数言語でのルール周知を進めることで、住民トラブルのない安心な生活を提供します。</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右：サイドバー（緊急クイックアクセス・基本情報） -->
+                <div class="space-y-6">
+                    <!-- 緊急窓口 (下水・災害連絡) -->
+                    <div class="bg-red-50 p-5 rounded-xl border border-red-200 shadow-sm">
+                        <h4 class="text-red-800 font-bold flex items-center gap-2 mb-2 text-sm">
+                            <i data-lucide="phone-call" class="w-4 h-4 text-red-600 animate-pulse"></i>
+                            <span class="lang-text" data-ja="緊急連絡・お問い合わせ" data-en="Emergency Contacts" data-zh="紧急联络与咨询" data-vi="Liên hệ khẩn cấp">緊急連絡・お問い合わせ</span>
+                        </h4>
+                        <p class="text-[11px] text-stone-600 leading-relaxed mb-3">
+                            <span class="lang-text" data-ja="下水詰まり、断水、エレベーター異常など、緊急時は管理室または夜間窓口へお電話ください。" data-en="In case of emergency like sewage leak, water cut, elevator failures, call the Admin Office." data-zh="遇到下水堵塞、断水、电梯故障等紧急情况，请致电管理室或夜间服务窗口。" data-vi="Khi gặp sự cố khẩn cấp như tắc nước thải, mất nước, sự cố thang máy, vui lòng gọi cho Phòng quản lý.">下水詰まり、断水、エレベーター異常など、緊急時は管理室または夜間窓口へお電話ください。</span>
+                        </p>
+                        <div class="space-y-2">
+                            <a href="tel:047-000-0000" class="flex justify-between items-center bg-white hover:bg-stone-50 p-2.5 rounded-lg border border-red-200 shadow-sm transition group">
+                                <div>
+                                    <p class="text-[9px] text-stone-400 font-semibold">
+                                        <span class="lang-text" data-ja="日中受付 9:00〜17:00" data-en="Daytime 9AM - 5PM" data-zh="白班 9:00〜17:00" data-vi="Ban ngày 9:00〜17:00">日中受付 9:00〜17:00</span>
+                                    </p>
+                                    <p class="text-xs font-bold text-stone-800 group-hover:text-red-700 transition">
+                                        <span class="lang-text" data-ja="管理事務室（秋津団地内）" data-en="Admin Office" data-zh="管理事务室" data-vi="Văn phòng quản lý">管理事務室（秋津団地内）</span>
+                                    </p>
+                                </div>
+                                <span class="bg-red-100 text-red-800 text-[10px] px-2 py-1 rounded font-bold flex items-center gap-1">
+                                    <i data-lucide="phone" class="w-3 h-3"></i> <span class="lang-text" data-ja="発信" data-en="Call" data-zh="拨打" data-vi="Gọi">発信</span>
+                                </span>
+                            </a>
+                            <a href="tel:0120-000-000" class="flex justify-between items-center bg-white hover:bg-stone-50 p-2.5 rounded-lg border border-red-200 shadow-sm transition group">
+                                <div>
+                                    <p class="text-[9px] text-stone-400 font-semibold">
+                                        <span class="lang-text" data-ja="24時間・夜間対応" data-en="24H Night Window" data-zh="24小时/夜间服务" data-vi="Hỗ trợ 24/24, ban đêm">24時間・夜間対応</span>
+                                    </p>
+                                    <p class="text-xs font-bold text-stone-800 group-hover:text-red-700 transition">
+                                        <span class="lang-text" data-ja="管理会社緊急ダイヤル" data-en="Management Emergency Line" data-zh="物业管理紧急热线" data-vi="Đường dây khẩn cấp công ty QL">管理会社緊急ダイヤル</span>
+                                    </p>
+                                </div>
+                                <span class="bg-red-100 text-red-800 text-[10px] px-2 py-1 rounded font-bold flex items-center gap-1">
+                                    <i data-lucide="phone" class="w-3 h-3"></i> <span class="lang-text" data-ja="発信" data-en="Call" data-zh="拨打" data-vi="Gọi">発信</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 団地の基本スペック -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
+                        <h4 class="text-stone-800 font-bold flex items-center gap-2 mb-3 pb-2 border-b border-stone-100 text-xs md:text-sm">
+                            <i data-lucide="info" class="w-4 h-4 text-[#1f3a3a]"></i>
+                            <span class="lang-text" data-ja="物件概要" data-en="Property Overview" data-zh="物业概要" data-vi="Tổng quan bất động sản">物件概要</span>
+                        </h4>
+                        <table class="w-full text-[11px] text-left text-stone-600 space-y-2">
+                            <tbody>
+                                <tr class="border-b border-stone-50">
+                                    <th class="py-1.5 text-stone-400 font-normal w-20">
+                                        <span class="lang-text" data-ja="所在地" data-en="Location" data-zh="所在地" data-vi="Địa chỉ">所在地</span>
+                                    </th>
+                                    <td class="py-1.5 text-stone-700">千葉県習志野市秋津○丁目</td>
+                                </tr>
+                                <tr class="border-b border-stone-50">
+                                    <th class="py-1.5 text-stone-400 font-normal">
+                                        <span class="lang-text" data-ja="築年数" data-en="Age" data-zh="建成时间" data-vi="Tuổi đời">築年数</span>
+                                    </th>
+                                    <td class="py-1.5 text-stone-700">1980年竣工（築46年）</td>
+                                </tr>
+                                <tr class="border-b border-stone-50">
+                                    <th class="py-1.5 text-stone-400 font-normal">
+                                        <span class="lang-text" data-ja="総世帯数" data-en="Total Units" data-zh="总户数" data-vi="Tổng số hộ">総世帯数</span>
+                                    </th>
+                                    <td class="py-1.5 text-stone-700">約421世帯（集合/戸建て）</td>
+                                </tr>
+                                <tr>
+                                    <th class="py-1.5 text-stone-400 font-normal">
+                                        <span class="lang-text" data-ja="管理組合" data-en="Board" data-zh="管委会" data-vi="Ban quản trị">管理組合</span>
+                                    </th>
+                                    <td class="py-1.5 text-stone-700">
+                                        <span class="lang-text" data-ja="習志野市秋津第2団地管理組合" data-en="Akitsu No.2 Association" data-zh="习志野市秋津第2团地管委会" data-vi="BQT khu tập thể số 2 Akitsu">習志野市秋津第2団地管理組合</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= STREAMING_CHUNK: Designing about page with 2-year term board description... ================= -->
+        <!-- ================= ABOUT PAGE ================= -->
+        <div id="page-about" class="page-content fade-in space-y-6 hidden">
+            <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-stone-200 max-w-4xl mx-auto">
+                <h3 class="text-lg md:text-xl font-bold text-[#1f3a3a] flex items-center gap-2 mb-4">
+                    <i data-lucide="award" class="w-6 h-6 text-amber-700"></i>
+                    <span class="lang-text" data-ja="管理組合の組織体制と持続可能性" data-en="Management Structure & Sustainability" data-zh="管理组合组织体制与可持续性" data-vi="Cơ cấu tổ chức và Tính bền vững của BQT">管理組合の組織体制と持続可能性</span>
+                </h3>
+                
+                <div class="space-y-4 text-xs md:text-sm text-stone-700 leading-relaxed">
+                    <p>
+                        <span class="lang-text" data-ja="当管理組合は、区分所有者全員で構成される住民組織です。築46年を経過し高齢化が進む中、資産価値の維持、ペーパーレスによる業務スリム化、そして外国籍住民増加に伴う多文化共生社会の調和を推進しています。" data-en="We are composed of all unit owners. Over our 46-year history, we actively address challenges of aging demographics, promote paperless efficiency, and foster multicultural harmony." data-zh="本管委会是由全体产权人组成的居民组织。在建成46年、老龄化加剧的背景下，我们致力于维护资产价值、推行无纸化简化业务，并促进中外籍居民融合的和谐多元文化社会。" data-vi="Ban quản trị là tổ chức cư dân gồm tất cả các chủ sở hữu căn hộ. Trong bối cảnh công trình đã 46 tuổi và già hóa dân số, chúng tôi hướng tới duy trì giá trị tài sản, giảm giấy tờ để tinh gọn công việc, và thúc đẩy sự hòa hợp trong cộng đồng đa văn hóa.">当管理組合は、区分所有者全員で構成される住民組織です。築46年を経過し高齢化が進む中、資産価値の維持、ペーパーレスによる業務スリム化、そして外国籍住民増加に伴う多文化共生社会の調和を推進しています。</span>
+                    </p>
+                    
+                    <!-- 特有の引き継ぎシステム -->
+                    <div class="bg-amber-50 p-4 rounded-lg border border-amber-800/10">
+                        <h4 class="font-bold text-[#1f3a3a] mb-2 flex items-center gap-1.5">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 text-amber-700"></i>
+                            <span class="lang-text" data-ja="役員の2年任期・重複引き継ぎシステムについて" data-en="2-Year Term & Overlap Handover System" data-zh="关于两任期・重复交接系统" data-vi="Hệ thống bàn giao gối đầu & Nhiệm kỳ 2 năm">役員の2年任期・重複引き継ぎシステムについて</span>
+                        </h4>
+                        <p class="text-xs text-stone-600">
+                            <span class="lang-text" data-ja="安定した運営の維持と、引き継ぎ作業の負担を軽減するため、役員の任期は【2年】としています。1年目の新任理事と、2年目の経験豊富な理事が半数ずつ重複して在籍する形をとり、業務やこのHPの更新方法などを順次、丁寧にバトンタッチしています。" data-en="To ensure stable operations and ease the burden of handovers, directors serve 2-year terms. Newly appointed 1st-year directors overlap with experienced 2nd-year directors by half, allowing step-by-step guidance, including website updates." data-zh="为保持运营稳定、减轻交接负担，管委会成员任期定为【2年】。每年新任委员与留任的资深委员各占一半，通过新老交替的方式，逐步、稳健地完成业务及本网站更新方法的交接。" data-vi="Để duy trì vận hành ổn định và giảm gánh nặng bàn giao, nhiệm kỳ của thành viên BQT là [2 năm]. Nửa số thành viên mới năm nhất và nửa số thành viên giàu kinh nghiệm năm hai sẽ hoạt động gối đầu nhau, giúp việc bàn giao công việc và cách cập nhật website được thực hiện tuần tự và chu đáo.">安定した運営の維持と、引き継ぎ作業の負担を軽減するため、役員の任期は【2年】としています。1年目の新任理事と、2年目の経験豊富な理事が半数ずつ重複して在籍する形をとり、業務やこのHPの更新方法などを順次、丁寧にバトンタッチしています。</span>
+                        </p>
+                    </div>
+
+                    <h4 class="font-bold text-stone-800 border-b border-stone-200 pb-1 mt-4">
+                        <span class="lang-text" data-ja="主要スケジュールと広報活動実績" data-en="Key Activities & PR Achievements" data-zh="主要日程与宣传活动实绩" data-vi="Lịch trình chính & Thành tích hoạt động truyền thông">主要スケジュールと広報活動実績</span>
+                    </h4>
+                    <ul class="list-disc list-inside space-y-2 text-xs text-stone-600">
+                        <li>
+                            <strong class="text-[#1f3a3a]"><span class="lang-text" data-ja="定期総会（毎年5月）：" data-en="Annual General Meeting (May):" data-zh="定期总会（每年5月）：" data-vi="Đại hội thường niên (Tháng 5 hằng năm):">定期総会（毎年5月）：</span></strong> 
+                            <span class="lang-text" data-ja="年度予算、活動報告、役員選任の議決。" data-en="Approves budget, reports, and director selection." data-zh="审议年度预算、活动报告及选任委员。" data-vi="Nghị quyết ngân sách năm, báo cáo hoạt động, bầu chọn BQT.">年度予算、活動報告、役員選任の議決。</span>
+                        </li>
+                        <li>
+                            <strong class="text-[#1f3a3a]"><span class="lang-text" data-ja="理事会（毎月第3土曜日）：" data-en="Board Meeting (Monthly on 3rd Sat):" data-zh="管委会会议（每月第3个星期六）：" data-vi="Họp BQT (Thứ Bảy tuần thứ 3 hằng tháng):">理事会（毎月第3土曜日）：</span></strong> 
+                            <span class="lang-text" data-ja="議題の協議。議事録は翌月1回、全戸掲示板および当HP居住者ページにアーカイブされます。" data-en="Discusses agendas. Minutes posted on noticeboards and this portal next month." data-zh="商议议题。议事录将于下月在楼栋公示栏及本站住户专用页面归档。" data-vi="Thảo luận các chuyên đề. Biên bản họp sẽ được lưu trữ trên bảng tin và Cổng cư dân vào tháng tiếp theo.">議題の協議。議事録は翌月1回、全戸掲示板および当HP居住者ページにアーカイブされます。</span>
+                        </li>
+                        <li>
+                            <strong class="text-[#1f3a3a]"><span class="lang-text" data-ja="広報紙「秋津第2団地たより」発行（年4回：7, 10, 1, 3月）：" data-en="Newsletter Issuance (4x / Year: Jul, Oct, Jan, Mar):" data-zh="宣传报《秋津第2团地通讯》发行（年4次：7、10、1、3月）：" data-vi="Phát hành bản tin 'Bản tin số 2 Akitsu' (4 lần/năm: Tháng 7, 10, 1, 3):">広報紙「秋津第2団地たより」発行（年4回：7, 10, 1, 3月）：</span></strong> 
+                            <span class="lang-text" data-ja="これまでは全紙配布していましたが、本HPの開設に伴い電子版（ペーパーレス）への順次移行を計画し、紙の印刷コスト削減を図っています。" data-en="Previously paper-only; with this website, we plan gradual digital transition (paperless) to save print costs." data-zh="以往采用全纸质派发，随着本网站的建立，计划逐步向电子版（无纸化）过渡，以降低纸张印刷成本。" data-vi="Trước đây phát bằng giấy, nay đồng hành với website này, chúng tôi lên kế hoạch chuyển đổi dần sang bản điện tử để tiết kiệm chi phí in ấn.">これまでは全紙配布していましたが、本HPの開設に伴い電子版（ペーパーレス）への順次移行を計画し、紙の印刷コスト削減を図っています。</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RULES PAGE (MULTILANGUAGE LIFE RULES) ================= -->
+        <div id="page-rules" class="page-content fade-in space-y-6 hidden">
+            <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-stone-200 max-w-4xl mx-auto">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-stone-200 pb-3 mb-4">
+                    <div>
+                        <h3 class="text-lg md:text-xl font-bold text-[#1f3a3a] flex items-center gap-2">
+                            <i data-lucide="info" class="w-6 h-6 text-emerald-700"></i>
+                            <span class="lang-text" data-ja="生活・ゴミ出しルール（多言語対応）" data-en="Living & Trash Rules (Multilingual)" data-zh="生活与垃圾分类规则（多语言）" data-vi="Quy định sinh hoạt & rác thải (Đa ngôn ngữ)">生活・ゴミ出しルール（多言語対応）</span>
+                        </h3>
+                        <p class="text-[11px] text-stone-500">
+                            <span class="lang-text" data-ja="全ての入居者が気持ちよく暮らせるよう、ルールを守りましょう。" data-en="Let's follow local rules so all residents can live harmoniously." data-zh="为了让所有居民舒适生活，请共同遵守规则。" data-vi="Hãy tuân thủ quy định để mọi cư dân đều có cuộc sống thoải mái.">全ての入居者が気持ちよく暮らせるよう、ルールを守りましょう。</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ゴミ出しカレンダー -->
+                <div class="space-y-4">
+                    <h4 class="font-bold text-stone-800 text-sm flex items-center gap-1.5">
+                        <span class="bg-[#1f3a3a] w-1.5 h-4.5 block rounded"></span>
+                        <span class="lang-text" data-ja="習志野市 収集カレンダー（当エリア）" data-en="Narashino City Trash Schedule (Our Area)" data-zh="习志野市垃圾收集日程表（本区域）" data-vi="Lịch gom rác Thành phố Narashino (Khu vực này)">習志野市 収集カレンダー（当エリア）</span>
+                    </h4>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-amber-50/50 p-3 rounded-lg border border-stone-100 text-center">
+                            <span class="text-[10px] text-stone-400 font-bold block">
+                                <span class="lang-text" data-ja="可燃ごみ" data-en="Burnable" data-zh="可燃垃圾" data-vi="Rác cháy được">可燃ごみ</span>
+                            </span>
+                            <span class="text-sm font-bold text-amber-900">
+                                <span class="lang-text" data-ja="火曜・金曜" data-en="Tue & Fri" data-zh="星期二/星期五" data-vi="Thứ 3 & Thứ 6">火曜・金曜</span>
+                            </span>
+                            <span class="text-[10px] text-stone-500 block mt-1">
+                                <span class="lang-text" data-ja="朝8:30までに集積所へ" data-en="By 8:30 AM" data-zh="朝8:30前送到收集点" data-vi="Trước 8:30 sáng">朝8:30までに集積所へ</span>
+                            </span>
+                        </div>
+                        <div class="bg-[#1f3a3a]/5 p-3 rounded-lg border border-stone-100 text-center">
+                            <span class="text-[10px] text-stone-400 font-bold block">
+                                <span class="lang-text" data-ja="不燃ごみ" data-en="Non-burnable" data-zh="不可燃垃圾" data-vi="Rác không cháy được">不燃ごみ</span>
+                            </span>
+                            <span class="text-sm font-bold text-[#1f3a3a]">
+                                <span class="lang-text" data-ja="第2・第4水曜" data-en="2nd & 4th Wed" data-zh="第2/第4星期三" data-vi="Thứ 4 tuần 2 & 4">第2・第4水曜</span>
+                            </span>
+                            <span class="text-[10px] text-stone-500 block mt-1">
+                                <span class="lang-text" data-ja="指定の青い袋で" data-en="Use specified blue bag" data-zh="使用指定蓝色袋" data-vi="Túi màu xanh quy định">指定の青い袋で</span>
+                            </span>
+                        </div>
+                        <div class="bg-emerald-50/50 p-3 rounded-lg border border-stone-100 text-center">
+                            <span class="text-[10px] text-stone-400 font-bold block">
+                                <span class="lang-text" data-ja="資源・段ボール" data-en="Recyclable & Cardboard" data-zh="资源垃圾・纸箱" data-vi="Rác tái chế & Các tông">資源・段ボール</span>
+                            </span>
+                            <span class="text-sm font-bold text-emerald-800">
+                                <span class="lang-text" data-ja="毎週木曜" data-en="Every Thursday" data-zh="每周四" data-vi="Thứ 5 hằng tuần">毎週木曜</span>
+                            </span>
+                            <span class="text-[10px] text-stone-500 block mt-1">
+                                <span class="lang-text" data-ja="紐でしっかり縛る" data-en="Tie with string" data-zh="用绳子扎好" data-vi="Buộc chặt bằng dây">紐でしっかり縛る</span>
+                            </span>
+                        </div>
+                        <div class="bg-red-50/30 p-3 rounded-lg border border-stone-100 text-center">
+                            <span class="text-[10px] text-stone-400 font-bold block">
+                                <span class="lang-text" data-ja="有害・粗大ごみ" data-en="Hazardous / Oversized" data-zh="有害・大件垃圾" data-vi="Rác độc hại & Rác cồng kềnh">有害・粗大ごみ</span>
+                            </span>
+                            <span class="text-sm font-bold text-red-800">
+                                <span class="lang-text" data-ja="事前申込制" data-en="By Appointment" data-zh="需事前申请" data-vi="Đăng ký trước">事前申込制</span>
+                            </span>
+                            <span class="text-[10px] text-stone-500 block mt-1">
+                                <span class="lang-text" data-ja="市役所窓口へ" data-en="Contact City Office" data-zh="向市役所窗口申请" data-vi="Đăng ký tại cơ quan TP">市役所窓口へ</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 外国籍住民に向けたマナー喚起 -->
+                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 space-y-2 mt-4 text-xs">
+                        <h5 class="font-bold text-emerald-800 flex items-center gap-1.5 text-sm">
+                            <i data-lucide="globe" class="w-4 h-4"></i>
+                            <span class="lang-text" data-ja="生活上の重要マナー（ゴミ出しと騒音について）" data-en="Essential Living Manners (Trash & Noise)" data-zh="生活重要守则（垃圾分类与噪音）" data-vi="Quy tắc sinh hoạt quan trọng (Xả rác & Tiếng ồn)">生活上の重要マナー（ゴミ出しと騒音について）</span>
+                        </h5>
+                        <ul class="list-decimal list-inside space-y-1.5 text-stone-700 leading-relaxed">
+                            <li>
+                                <strong><span class="lang-text" data-ja="ごみ集積所の利用時間：" data-en="Trash Area Hours:" data-zh="垃圾投放时间：" data-vi="Giờ giấc tại khu gom rác:">ごみ集積所の利用時間：</span></strong>
+                                <span class="lang-text" data-ja="必ず回収日の【朝6:00〜8:30】の間に指定の場所に出してください。前日の夜に出すと猫やカラスに荒らされ悪臭の原因になります。" data-en="Place trash ONLY between 6:00 AM - 8:30 AM on recovery day. Avoid night-before disposal due to crows/strays." data-zh="请务必在回收日【早上6:00〜8:30】之间送至指定收集点。前天晚上投放会被猫和乌鸦咬碎，并产生异味。" data-vi="Chỉ để rác vào đúng khung giờ [6:00 - 8:30 sáng] của ngày thu gom. Không bỏ từ tối hôm trước để tránh động vật lục lọi gây mùi.">必ず回収日の【朝6:00〜8:30】の間に指定の場所に出してください。前日の夜に出すと猫やカラスに荒らされ悪臭の原因になります。</span>
+                            </li>
+                            <li>
+                                <strong><span class="lang-text" data-ja="夜間の騒音への配慮：" data-en="Nighttime Noise Control:" data-zh="减少夜间噪音：" data-vi="Chú ý tiếng ồn ban đêm:">夜間の騒音への配慮：</span></strong>
+                                <span class="lang-text" data-ja="集合住宅では、夜21時以降の洗濯機・掃除機の使用、大きな声での会話、大音量のテレビ視聴は近隣の迷惑となります。" data-en="After 9 PM, please avoid loud TV/music, vacuuming, laundry, and loud conversations in apartments." data-zh="在集合住宅中，晚上21点以后使用洗衣机和吸尘器、大声交谈以及大音量看电视，会给邻居带来困扰。" data-vi="Tại căn hộ tập thể, sau 21h tối vui lòng không sử dụng máy giặt/máy hút bụi, nói chuyện lớn tiếng hay mở tivi quá to.">集合住宅では、夜21時以降の洗濯機・掃除機の使用、大きな声での会話、大音量のテレビ視聴は近隣の迷惑となります。</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= STREAMING_CHUNK: Setting up emergency contacts for sewage and disasters... ================= -->
+        <!-- ================= EMERGENCY PAGE ================= -->
+        <div id="page-emergency" class="page-content fade-in space-y-6 hidden">
+            <div class="bg-red-50/50 border border-red-200 p-5 md:p-6 rounded-xl max-w-4xl mx-auto shadow-sm">
+                <div class="flex items-center gap-3 text-red-800 mb-4 pb-2 border-b border-red-200">
+                    <i data-lucide="shield-alert" class="w-8 h-8 text-red-600 animate-pulse"></i>
+                    <div>
+                        <h3 class="text-base md:text-lg font-bold">
+                            <span class="lang-text" data-ja="緊急連絡先・インフラ緊急ダイヤル" data-en="Emergency Contacts & Infrastructure Dial" data-zh="紧急联络与基础设施求助热线" data-vi="Đầu số khẩn cấp & Cơ sở hạ tầng">緊急連絡先・インフラ緊急ダイヤル</span>
+                        </h3>
+                        <p class="text-[11px] text-red-600">
+                            <span class="lang-text" data-ja="※特に集合住宅の下水逆流、断水、ガス漏れの際は即座に発信してください。" data-en="Please dial immediately for sewage backflow, water cuts, or gas leaks." data-zh="※特别是当发生下水倒灌、断水、燃气泄漏时，请立即致电。" data-vi="*Gọi ngay khi xảy ra tràn ngược nước thải, mất nước hoặc rò rỉ gas.">※特に集合住宅の下水逆流、断水、ガス漏れの際は即座に発信してください。</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <!-- 下水・排水トラブル相談窓口 -->
+                    <div class="bg-white p-4 rounded-lg border border-stone-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <span class="bg-red-100 text-red-800 text-[9px] font-bold px-1.5 py-0.5 rounded">
+                                <span class="lang-text" data-ja="最重要（下水関係）" data-en="Critical Sewage" data-zh="最重要（排水故障）" data-vi="Khẩn cấp nước thải">最重要（下水関係）</span>
+                            </span>
+                            <h4 class="font-bold text-stone-800 text-sm mt-1">
+                                <span class="lang-text" data-ja="管理事務室 または 巡回スタッフ" data-en="Admin Office / On-site Patrol" data-zh="管理事务室 / 巡回工作人员" data-vi="Văn phòng quản lý / Đội tuần tra">管理事務室 または 巡回スタッフ</span>
+                            </h4>
+                            <p class="text-[11px] text-stone-500 mt-1">
+                                <span class="lang-text" data-ja="団地内の下水配管詰まり、台所・浴室の排水トラブル、および共用配管から異臭がする場合はこちらへ。" data-en="For pipe blocks, drain overflows, or bad smells from public lines." data-zh="团地内下水管堵塞、厨房/浴室排水故障以及公共管道异味问题，请联络此处。" data-vi="Liên hệ khi nghẹt đường ống nước thải, trào nước bếp/tắm, hoặc mùi hôi từ ống chung.">団地内の下水配管詰まり、台所・浴室の排水トラブル、および共用配管から異臭がする場合はこちらへ。</span>
+                            </p>
+                        </div>
+                        <a href="tel:047-111-1111" class="mt-3 flex items-center justify-center gap-1.5 bg-[#1f3a3a] hover:bg-[#132424] text-white py-2 rounded-lg font-bold text-xs transition">
+                            <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                            047-111-1111（秋津事務室）
+                        </a>
+                    </div>
+
+                    <!-- ガス・都市ガス -->
+                    <div class="bg-white p-4 rounded-lg border border-stone-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <span class="bg-amber-100 text-amber-800 text-[9px] font-bold px-1.5 py-0.5 rounded">
+                                <span class="lang-text" data-ja="ガス漏れ通報" data-en="Gas Leak" data-zh="燃气泄漏通报" data-vi="Báo rò rỉ gas">ガス漏れ通報</span>
+                            </span>
+                            <h4 class="font-bold text-stone-800 text-sm mt-1">東京ガス（京葉地区窓口）</h4>
+                            <p class="text-[11px] text-stone-500 mt-1">
+                                <span class="lang-text" data-ja="「ガス臭い」と感じた場合、火を一切使わずに窓を開け、こちらの緊急窓口へ速やかにご連絡ください。" data-en="If you smell gas, open windows, do NOT use fire, and call immediately." data-zh="如闻到燃气味，切勿使用明火，打开窗户，并迅速与此紧急窗口联络。" data-vi="Nếu ngửi thấy mùi gas, không dùng lửa, mở cửa sổ và lập tức gọi điện báo.">「ガス臭い」と感じた場合、火を一切使わずに窓を開け、こちらの緊急窓口へ速やかにご連絡ください。</span>
+                            </p>
+                        </div>
+                        <a href="tel:0570-00-0000" class="mt-3 flex items-center justify-center gap-1.5 bg-[#1f3a3a] hover:bg-[#132424] text-white py-2 rounded-lg font-bold text-xs transition">
+                            <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                            0570-000-000（ガス緊急）
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 避難場所案内 -->
+                <div class="mt-6 bg-white p-4 rounded-lg border border-stone-200 text-xs text-stone-600">
+                    <h4 class="font-bold text-stone-800 text-sm mb-2 flex items-center gap-1.5">
+                        <i data-lucide="map" class="w-4 h-4 text-[#1f3a3a]"></i>
+                        <span class="lang-text" data-ja="団地指定の一次避難所・広域避難場所" data-en="Designated Evacuation Areas" data-zh="团地指定临时与广域避难所" data-vi="Địa điểm lánh nạn quy định của khu">団地指定の一次避難所・広域避難場所</span>
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 leading-relaxed">
+                        <div class="bg-stone-50 p-2.5 rounded">
+                            <span class="font-bold text-[#1f3a3a] block">
+                                <span class="lang-text" data-ja="一次避難所（徒歩3分）" data-en="Temporary Refuge (3 min walk)" data-zh="临时避难所（步行3分钟）" data-vi="Điểm lánh nạn tạm thời (3 phút đi bộ)">一次避難所（徒歩3分）</span>
+                            </span>
+                            習志野市立秋津小学校 体育館 / 校庭
+                        </div>
+                        <div class="bg-stone-50 p-2.5 rounded">
+                            <span class="font-bold text-[#1f3a3a] block">
+                                <span class="lang-text" data-ja="広域避難場所（徒歩8分）" data-en="Wide Evacuation Area (8 min walk)" data-zh="广域避难场所（步行8分钟）" data-vi="Địa điểm lánh nạn rộng (8 phút đi bộ)">広域避難場所（徒歩8分）</span>
+                            </span>
+                            秋津総合運動公園
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= STREAMING_CHUNK: Building portal login and paperless documents access... ================= -->
+        <!-- ================= PORTAL (LOGGED IN ONLY) ================= -->
+        <div id="page-portal" class="page-content fade-in space-y-6 hidden">
+            <!-- ログイン前制限画面 -->
+            <div id="portal-logged-out" class="max-w-md mx-auto text-center py-10 px-5 bg-white rounded-xl shadow-sm border border-stone-200 space-y-4">
+                <div class="w-12 h-12 bg-amber-100 text-[#1f3a3a] rounded-full flex items-center justify-center mx-auto">
+                    <i data-lucide="lock" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-base md:text-lg font-bold text-stone-800">
+                        <span class="lang-text" data-ja="居住者専用ポータル" data-en="Residents Only Portal" data-zh="住户专用门户" data-vi="Cổng thông tin cư dân">居住者専用ポータル</span>
+                    </h3>
+                    <p class="text-[11px] text-stone-500 leading-relaxed">
+                        <span class="lang-text" data-ja="このページは習志野市秋津第2団地の区分所有者・居住者専用です。毎月の「理事会議事録」のデジタル閲覧、および「広報紙」のペーパーレスPDF、各種申請書の取得が可能です。" data-en="This portal is for Akitsu No.2 residents only. Access monthly minutes, paperless newsletters, and applications." data-zh="本页面仅供习志野市秋津第2团地产权人・居住者访问。支持线上查看每月《管委会会议纪要》、无纸化宣传报及下载各类申请表。" data-vi="Trang này dành riêng cho cư dân Khu tập thể số 2 Akitsu. Bạn có thể xem biên bản họp BQT hằng tháng, bản tin dạng PDF và tải các mẫu đơn.">このページは習志野市秋津第2団地の区分所有者・居住者専用です。毎月の「理事会議事録」のデジタル閲覧、および「広報紙」のペーパーレスPDF、各種申請書の取得が可能です。</span>
+                    </p>
+                </div>
+                
+                <div class="space-y-3 pt-2 text-left">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-stone-600 mb-1">
+                            <span class="lang-text" data-ja="居住者用ログインパスワード" data-en="Resident Password" data-zh="住户专用登录密码" data-vi="Mật khẩu đăng nhập">居住者用ログインパスワード</span>
+                        </label>
+                        <input type="password" id="portal-password-input" value="1234" class="w-full px-3 py-1.5 border border-stone-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#1f3a3a]" placeholder="パスワードを入力">
+                        <p class="text-[10px] text-amber-700 mt-1">※デモ用パスワードは「1234」に設定されています（入力済）。そのまま認証ボタンを押してください。</p>
+                    </div>
+                    <button onclick="handlePortalLogin()" class="w-full bg-[#1f3a3a] hover:bg-[#132424] text-white font-bold py-2 rounded-lg text-xs transition">
+                        <span class="lang-text" data-ja="認証してログイン" data-en="Login" data-zh="验证并登录" data-vi="Xác thực & Đăng nhập">認証してログイン</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ログイン済マイページ -->
+            <div id="portal-logged-in" class="hidden space-y-6 max-w-5xl mx-auto">
+                <div class="bg-gradient-to-r from-emerald-50 to-emerald-100/30 p-4 rounded-xl border border-emerald-500/20 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                                <span class="lang-text" data-ja="ログイン済" data-en="Authorized" data-zh="已登录" data-vi="Đã đăng nhập">ログイン済</span>
+                            </span>
+                            <span class="text-[11px] text-stone-500">
+                                <span class="lang-text" data-ja="秋津第2団地 居住者ポータル" data-en="Akitsu No.2 Residents Portal" data-zh="秋津第2团地 住户门户" data-vi="Cổng thông tin cư dân Akitsu số 2">秋津第2団地 居住者ポータル</span>
+                            </span>
+                        </div>
+                        <h3 class="text-base md:text-lg font-bold text-stone-800 mt-1">
+                            <span class="lang-text" data-ja="デジタル回覧板 ＆ ペーパーレスライブラリ" data-en="Digital Bulletin & Paperless Library" data-zh="数字公告板与无纸化资料库" data-vi="Bản tin kỹ thuật số & Thư viện giảm giấy tờ">デジタル回覧板 ＆ ペーパーレスライブラリ</span>
+                        </h3>
+                    </div>
+                    <button onclick="toggleLogin()" class="bg-stone-200 hover:bg-stone-300 text-stone-700 text-xs px-3 py-1.5 rounded-lg transition font-semibold">
+                        <span class="lang-text" data-ja="ログアウト" data-en="Logout" data-zh="退出登录" data-vi="Đăng xuất">ログアウト</span>
+                    </button>
+                </div>
+
+                <!-- 居住者ドキュメント -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- 理事会議事録 (毎月) -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-stone-800 flex items-center gap-1.5 mb-3 pb-1 border-b border-stone-100 text-xs md:text-sm">
+                                <i data-lucide="file-text" class="text-emerald-700 w-4 h-4"></i>
+                                <span class="lang-text" data-ja="毎月：理事会議事録 (デジタル回覧)" data-en="Monthly Minutes (Digital)" data-zh="每月：管委会会议纪要（线上公示）" data-vi="Hằng tháng: Biên bản họp BQT (Mạng nội bộ)">毎月：理事会議事録 (デジタル回覧)</span>
+                            </h4>
+                            <p class="text-[10px] text-stone-500 mb-2">※階段下掲示板や回覧板と同じ内容が、自宅でいつでも閲覧できます。</p>
+                            <ul class="space-y-2 text-xs">
+                                <li>
+                                    <a href="#" onclick="mockDownload('第46期-第3回理事会議事録_202606.pdf')" class="flex items-center justify-between text-[#1f3a3a] hover:underline font-medium">
+                                        <span>第46期 第3回理事会議事録 (最新)</span>
+                                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                    </a>
+                                    <span class="text-[9px] text-stone-400">PDF (210KB) | 2026.06.25 公開</span>
+                                </li>
+                                <hr class="border-stone-50">
+                                <li>
+                                    <a href="#" onclick="mockDownload('第46期-第2回理事会議事録_202605.pdf')" class="flex items-center justify-between text-[#1f3a3a] hover:underline font-medium">
+                                        <span>第46期 第2回理事会議事録</span>
+                                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                    </a>
+                                    <span class="text-[9px] text-stone-400">PDF (180KB) | 2026.05.28 公開</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 広報紙たより (年4回) -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-stone-800 flex items-center gap-1.5 mb-3 pb-1 border-b border-stone-100 text-xs md:text-sm">
+                                <i data-lucide="newspaper" class="text-blue-700 w-4 h-4"></i>
+                                <span class="lang-text" data-ja="年4回：広報紙「秋津第2団地たより」" data-en="Quarterly Newsletters" data-zh="年4次：宣传报《秋津第2团地通讯》" data-vi="4 lần/năm: Bản tin 'Bản tin số 2 Akitsu'">年4回：広報紙「秋津第2団地たより」</span>
+                            </h4>
+                            <p class="text-[10px] text-stone-500 mb-2">※印刷配付コスト削減と、ポスティング作業スリム化を推進中。</p>
+                            <ul class="space-y-2 text-xs">
+                                <li>
+                                    <a href="#" onclick="mockDownload('秋津第2団地たより_7月号_2026.pdf')" class="flex items-center justify-between text-[#1f3a3a] hover:underline font-medium font-bold text-amber-900">
+                                        <span>【電子版】たより7月号 (最新先行)</span>
+                                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                    </a>
+                                    <span class="text-[9px] text-stone-400">PDF (1.2MB) | 2026.06.20 先行公開</span>
+                                </li>
+                                <hr class="border-stone-50">
+                                <li>
+                                    <a href="#" onclick="mockDownload('秋津第2団地たより_3月号_2026.pdf')" class="flex items-center justify-between text-[#1f3a3a] hover:underline font-medium">
+                                        <span>たより 3月号</span>
+                                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                    </a>
+                                    <span class="text-[9px] text-stone-400">PDF (890KB) | 2026.03.15 公開</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 管理規約・ルール -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-stone-800 flex items-center gap-1.5 mb-3 pb-1 border-b border-stone-100 text-xs md:text-sm">
+                                <i data-lucide="book" class="text-amber-800 w-4 h-4"></i>
+                                <span class="lang-text" data-ja="管理規約 ＆ ペット・駐車場細則" data-en="Covenants & Pet / Parking Rules" data-zh="管理规约与宠物/车位细则" data-vi="Quy ước quản lý & quy định nuôi pet/đỗ xe">管理規約 ＆ ペット・駐車場細則</span>
+                            </h4>
+                            <p class="text-[10px] text-stone-500 mb-2">※なくしやすい紙の冊子をいつでもお手元で確認できます。</p>
+                            <ul class="space-y-2 text-xs">
+                                <li>
+                                    <a href="#" onclick="mockDownload('秋津第2団地_管理規約集.pdf')" class="flex items-center justify-between text-[#1f3a3a] hover:underline font-semibold">
+                                        <span>【重要】管理規約・使用細則集</span>
+                                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                    </a>
+                                    <span class="text-[9px] text-stone-400">PDF (3.5MB) | 永続保存</span>
+                                </li>
+                                <hr class="border-stone-50">
+                                <li>
+                                    <a href="#" onclick="mockDownload('ペット飼育に関する細則.pdf')" class="flex items-center justify-between text-[#1f3a3a] hover:underline font-medium">
+                                        <span>ペット飼育に関する細則・申請書</span>
+                                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                    </a>
+                                    <span class="text-[9px] text-stone-400">PDF (250KB)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-stone-800 text-stone-400 text-xs py-8 border-t border-stone-700">
+        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <p class="font-bold text-stone-200 mb-2">習志野市秋津第2団地 管理組合</p>
+                <p>〒275-0024 千葉県習志野市秋津○丁目</p>
+                <p>管理事務室：047-111-1111 (受付：9:00〜17:00)</p>
+            </div>
+            <div>
+                <p class="font-bold text-stone-200 mb-2">ペーパーレスへの取り組み</p>
+                <p>当ホームページは、広報紙・回覧板の電子化を推進し、紙資源の削減、印刷費用カット、役員および管理スタッフの配布負担削減を目指しています。</p>
+            </div>
+            <div>
+                <p class="font-bold text-stone-200 mb-2">HPの引き継ぎ・編集</p>
+                <p>本HPは、役員任期が2年交代となってもスムーズに引き継げるよう、Googleサイト（またはそれに類する簡単ツール）を想定し、専門技術不要で更新できる仕組みとして提案されています。</p>
+            </div>
+        </div>
+        <div class="max-w-6xl mx-auto px-4 mt-8 pt-4 border-t border-stone-700 text-center">
+            <p>&copy; 2026 Narashino City Akitsu No.2 Estate Management Association. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ================= STREAMING_CHUNK: Implementing admin controller panel for demo scenarios... ================= -->
+    <!-- ================= SIMULATOR CONTROLLER PANEL (ADMIN DEMO) ================= -->
+    <!-- 画面右下に固定配置し、Googleサイトでの簡単編集、緊急お知らせ、ログインなどの実演をデモできるようにする -->
+    <div class="fixed bottom-4 right-4 z-50 max-w-xs md:max-w-sm w-full">
+        <!-- 開閉トグルボタン -->
+        <button onclick="toggleAdminPanel()" class="w-full bg-[#132424] hover:bg-[#0f1b1b] text-white p-3 rounded-t-xl shadow-2xl flex justify-between items-center transition border-t border-r border-l border-stone-600">
+            <span class="flex items-center gap-1.5 text-xs font-bold tracking-wider text-amber-300">
+                <i data-lucide="sliders" class="w-4 h-4 text-emerald-400"></i>
+                秋津第2団地 デモ操作・検証パネル
+            </span>
+            <i data-lucide="chevron-up" id="panel-toggle-icon" class="w-4 h-4 transition-transform duration-300"></i>
+        </button>
+        
+        <!-- 管理パネル中身（初期状態：折りたたみ） -->
+        <div id="admin-panel-body" class="bg-slate-900 text-stone-200 p-4 rounded-b-xl shadow-2xl space-y-4 text-xs transition-all duration-300 hidden border-r border-l border-b border-slate-700 max-h-[350px] overflow-y-auto">
+            
+            <p class="text-[10px] text-slate-400 leading-relaxed">
+                総会での提案や理事会での説明用に、団地HPが解決する4大目的（多言語、ペーパーレス、緊急、ブランディング）のテストが可能です。
+            </p>
+
+            <hr class="border-slate-800">
+
+            <!-- 設定：緊急お知らせアラート切り替え -->
+            <div>
+                <span class="font-bold text-amber-400 block mb-1.5">① 下水/災害等「緊急警報ON/OFF」テスト</span>
+                <div class="flex gap-2">
+                    <button id="demo-alert-on-btn" onclick="triggerEmergencyAlert(true)" class="flex-1 bg-red-700 hover:bg-red-800 text-white py-1.5 px-2 rounded font-bold transition flex items-center justify-center gap-1">
+                        <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
+                        下水警告表示
+                    </button>
+                    <button id="demo-alert-off-btn" onclick="triggerEmergencyAlert(false)" class="flex-1 bg-slate-700 hover:bg-slate-600 text-stone-300 py-1.5 px-2 rounded transition flex items-center justify-center gap-1">
+                        <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                        警報なし（通常）
+                    </button>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- 設定：多言語一括テスト -->
+            <div>
+                <span class="font-bold text-amber-400 block mb-1.5">② 翻訳機能テスト（外国籍の生活ルール対策）</span>
+                <p class="text-[10px] text-slate-400 mb-1.5">選択すると、HP内の主要テキスト（ゴミ出し、緊急警告等）が一挙に指定言語に切り替わります。</p>
+                <div class="grid grid-cols-4 gap-1">
+                    <button onclick="changeLanguage('ja')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded text-[10px] font-bold">日本語</button>
+                    <button onclick="changeLanguage('en')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded text-[10px] font-bold">English</button>
+                    <button onclick="changeLanguage('zh')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded text-[10px] font-bold">中文</button>
+                    <button onclick="changeLanguage('vi')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded text-[10px] font-bold">Việt</button>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- 設定：簡単更新（新規お知らせ追加） -->
+            <div>
+                <span class="font-bold text-amber-400 block mb-1.5">③ Googleサイト想定「簡単投稿・お知らせ反映」</span>
+                <p class="text-[10px] text-slate-400 mb-1.5">新しい回覧物やお知らせを、専門知識なしで追加できる体験デモです。</p>
+                <div class="space-y-1.5">
+                    <input type="text" id="new-notice-title" placeholder="タイトル（例：集会所での防災訓練実施）" class="w-full p-2 rounded bg-slate-800 border border-slate-700 text-white text-[11px] focus:outline-none focus:ring-1 focus:ring-amber-500">
+                    <textarea id="new-notice-desc" rows="2" placeholder="詳細説明をここに入力..." class="w-full p-2 rounded bg-slate-800 border border-slate-700 text-white text-[11px] focus:outline-none focus:ring-1 focus:ring-amber-500"></textarea>
+                    
+                    <div class="flex gap-2">
+                        <select id="new-notice-badge" class="bg-slate-800 border border-slate-700 rounded text-[10px] p-1 text-stone-300">
+                            <option value="広報">広報</option>
+                            <option value="重要">重要</option>
+                            <option value="生活">生活</option>
+                        </select>
+                        <button onclick="publishNewNotice()" class="flex-grow bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-2 rounded transition flex items-center justify-center gap-1 text-[11px]">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                            HPに即座に反映
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- 設定：居住者限定のワンタップ切り替え -->
+            <div>
+                <span class="font-bold text-amber-400 block mb-1.5">④ 居住者ログイン状態の強制切替</span>
+                <div class="flex gap-2">
+                    <button onclick="setLoginState(true)" class="flex-1 bg-stone-700 hover:bg-stone-600 text-stone-100 py-1.5 rounded transition font-bold">
+                        ログイン
+                    </button>
+                    <button onclick="setLoginState(false)" class="flex-1 bg-stone-800 hover:bg-stone-700 text-stone-400 py-1.5 rounded transition">
+                        ログアウト
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= CUSTOM TOAST (通知用) ================= -->
+    <div id="toast-message" class="fixed top-20 right-4 z-50 bg-[#1f3a3a] text-white py-3 px-5 rounded-xl shadow-2xl flex items-center gap-2 transform translate-x-96 opacity-0 transition-all duration-300 pointer-events-none border border-amber-600/30">
+        <i data-lucide="info" class="w-5 h-5 text-amber-300"></i>
+        <span id="toast-text" class="text-xs font-bold">通知メッセージ</span>
+    </div>
+
+    <!-- ================= STREAMING_CHUNK: Writing javascript logic for dynamic contents, language switching, and local notifications... ================= -->
+    <script>
+        // ---------------- GLOBALS & INITIALIZATION ----------------
+        let isLoggedIn = false;
+        let currentPage = 'home';
+        let isAdminPanelOpen = false;
+        let currentLang = 'ja';
+
+        // 翻訳辞書（簡易的な言語切り替え用）
+        const translations = {
+            ja: {
+                "ホーム": "ホーム",
+                "団地概要・体制": "団地概要・体制",
+                "生活ルール": "生活ルール",
+                "居住者専用": "居住者専用",
+                "居住者ログイン": "居住者ログイン",
+                "居住者ログイン中": "居住者ログイン中",
+                "ログイン": "ログイン",
+                "ログアウト": "ログアウト"
+            },
+            en: {
+                "ホーム": "Home",
+                "団地概要・体制": "About Association",
+                "生活ルール": "Living Rules",
+                "居住者専用": "Residents Portal",
+                "居住者ログイン": "Resident Login",
+                "居住者ログイン中": "Logged in",
+                "ログイン": "Login",
+                "ログアウト": "Logout"
+            },
+            zh: {
+                "ホーム": "主页",
+                "団地概要・体制": "关于管委会",
+                "生活ルール": "生活规则",
+                "居住者専用": "住户专用",
+                "居住者ログイン": "住户登录",
+                "居住者ログイン中": "已登录",
+                "ログイン": "登录",
+                "ログアウト": "退出"
+            },
+            vi: {
+                "ホーム": "Trang chủ",
+                "団地概要・体制": "Giới thiệu BQT",
+                "生活ルール": "Quy định",
+                "居住者専用": "Cư dân",
+                "居住者ログイン": "Đăng nhập",
+                "居住者ログイン中": "Đã đăng nhập",
+                "ログイン": "Đăng nhập",
+                "ログアウト": "Đăng xuất"
+            }
+        };
+
+        window.onload = function () {
+            lucide.createIcons();
+            navigateTo('home');
+        }
+
+        // ---------------- LANGUAGE SWITCHER ----------------
+        function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // 言語選択ボタンのハイライト更新
+            ['ja', 'en', 'zh', 'vi'].forEach(l => {
+                const btn = document.getElementById(`lang-btn-${l}`);
+                if (btn) {
+                    if (l === lang) {
+                        btn.className = "px-2 py-1 text-xs rounded font-bold bg-amber-600 text-white";
+                    } else {
+                        btn.className = "px-2 py-1 text-xs rounded text-stone-300 hover:text-white";
+                    }
+                }
+            });
+
+            // 文言の一括置換 (data-ja, data-en, data-zh, data-vi 属性を持つ要素)
+            const textElements = document.querySelectorAll('.lang-text');
+            textElements.forEach(el => {
+                if (el.hasAttribute(`data-${lang}`)) {
+                    el.textContent = el.getAttribute(`data-${lang}`);
+                }
+            });
+
+            // 特定の共通ナビゲーション等
+            const navHome = document.getElementById('nav-home');
+            const navAbout = document.getElementById('nav-about');
+            const navRules = document.getElementById('nav-rules');
+            const navPortal = document.getElementById('nav-portal');
+            const logBtnText = document.getElementById('login-btn-text');
+
+            if (navHome) navHome.querySelector('.lang-text').textContent = translations[lang]["ホーム"];
+            if (navAbout) navAbout.querySelector('.lang-text').textContent = translations[lang]["団地概要・体制"];
+            if (navRules) navRules.querySelector('.lang-text').textContent = translations[lang]["生活ルール"];
+            if (navPortal) navPortal.querySelector('.lang-text').textContent = translations[lang]["居住者専用"];
+            
+            if (logBtnText) {
+                logBtnText.textContent = isLoggedIn ? translations[lang]["居住者ログイン中"] : translations[lang]["居住者ログイン"];
+            }
+
+            // 緊急通知の翻訳
+            const emergencyText = document.getElementById('emergency-text');
+            if (emergencyText && emergencyText.hasAttribute(`data-${lang}`)) {
+                emergencyText.textContent = emergencyText.getAttribute(`data-${lang}`);
+            }
+
+            showToast(`Language switched to: ${lang.toUpperCase()}`);
+        }
+
+        // ---------------- NAVIGATION ----------------
+        function navigateTo(pageId) {
+            currentPage = pageId;
+
+            document.querySelectorAll('.page-content').forEach(element => {
+                element.classList.add('hidden');
+            });
+
+            const activePage = document.getElementById(`page-${pageId}`);
+            if (activePage) {
+                activePage.classList.remove('hidden');
+            }
+
+            // ヒーローセクションはトップ（home）のみ表示
+            const hero = document.getElementById('hero-section');
+            if (pageId === 'home') {
+                hero.classList.remove('hidden');
+            } else {
+                hero.classList.add('hidden');
+            }
+
+            // ナビゲーションのボーダー位置更新
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('border-amber-300', 'text-white');
+                link.classList.add('border-transparent');
+            });
+            const activeLink = document.getElementById(`nav-${pageId}`);
+            if (activeLink) {
+                activeLink.classList.add('border-amber-300', 'text-white');
+                activeLink.classList.remove('border-transparent');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ---------------- LOGIN SYSTEM ----------------
+        function toggleLogin() {
+            setLoginState(!isLoggedIn);
+        }
+
+        function setLoginState(state) {
+            isLoggedIn = state;
+
+            const icon = document.getElementById('login-icon');
+            const text = document.getElementById('login-btn-text');
+            const portalLoggedOut = document.getElementById('portal-logged-out');
+            const portalLoggedIn = document.getElementById('portal-logged-in');
+
+            if (isLoggedIn) {
+                icon.setAttribute('data-lucide', 'unlock');
+                text.textContent = translations[currentLang]["居住者ログイン中"];
+                
+                portalLoggedOut.classList.add('hidden');
+                portalLoggedIn.classList.remove('hidden');
+                
+                showToast("秋津第2団地 居住者ポータルにログインしました。");
+            } else {
+                icon.setAttribute('data-lucide', 'lock');
+                text.textContent = translations[currentLang]["居住者ログイン"];
+                
+                portalLoggedOut.classList.remove('hidden');
+                portalLoggedIn.classList.add('hidden');
+                
+                document.getElementById('portal-password-input').value = '1234';
+                
+                showToast("ログアウトしました。回覧板・限定PDF等は非表示になります。");
+            }
+            lucide.createIcons();
+        }
+
+        function handlePortalLogin() {
+            const password = document.getElementById('portal-password-input').value;
+            if (password === '1234') {
+                setLoginState(true);
+            } else {
+                showToast("パスワードが違います。(デモ用は 1234 です)");
+            }
+        }
+
+        // ---------------- ADMIN PANEL DEMO FUNCTIONS ----------------
+        function toggleAdminPanel() {
+            isAdminPanelOpen = !isAdminPanelOpen;
+            const body = document.getElementById('admin-panel-body');
+            const icon = document.getElementById('panel-toggle-icon');
+
+            if (isAdminPanelOpen) {
+                body.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                body.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function triggerEmergencyAlert(state) {
+            const banner = document.getElementById('emergency-banner');
+            if (state) {
+                banner.classList.remove('hidden');
+                showToast("【緊急警報】下水配管トラブルに関する告知をHP最上部へ緊急表示しました。");
+            } else {
+                banner.classList.add('hidden');
+                showToast("緊急警報を解除しました。通常モードに戻ります。");
+            }
+        }
+
+        function publishNewNotice() {
+            const titleInput = document.getElementById('new-notice-title');
+            const descInput = document.getElementById('new-notice-desc');
+            const badgeSelect = document.getElementById('new-notice-badge');
+
+            if (!titleInput.value.trim()) {
+                showToast("タイトルを入力してください。");
+                return;
+            }
+
+            const list = document.getElementById('announcement-list');
+            const item = document.createElement('div');
+            
+            let badgeBg = "bg-[#1f3a3a]";
+            if (badgeSelect.value === '重要') badgeBg = "bg-red-600";
+            if (badgeSelect.value === '生活') badgeBg = "bg-emerald-700";
+
+            // 本日日付
+            const today = "2026.06.28";
+
+            item.className = "p-3.5 rounded-lg bg-emerald-50/50 border border-emerald-100 flex gap-3 items-start fade-in";
+            item.innerHTML = `
+                <div class="${badgeBg} text-white text-[9px] px-1.5 py-0.5 rounded font-bold mt-0.5 whitespace-nowrap">
+                    ${badgeSelect.value}
+                </div>
+                <div class="flex-grow">
+                    <span class="text-[10px] text-stone-500 font-mono">${today} (新規投稿)</span>
+                    <h4 class="font-bold text-stone-800 text-xs md:text-sm mt-0.5">${escapeHTML(titleInput.value)}</h4>
+                    <p class="text-[11px] text-stone-600 mt-1">${escapeHTML(descInput.value || '詳細テキストがここに入ります。')}</p>
+                </div>
+            `;
+
+            list.insertBefore(item, list.firstChild);
+
+            titleInput.value = "";
+            descInput.value = "";
+
+            showToast("Googleサイトの想定で新しいお知らせをHPに追加しました！");
+            navigateTo('home');
+        }
+
+        // ---------------- UTILITIES ----------------
+        function showToast(message) {
+            const toast = document.getElementById('toast-message');
+            const text = document.getElementById('toast-text');
+            
+            text.textContent = message;
+            toast.classList.remove('translate-x-96', 'opacity-0');
+            toast.classList.add('translate-x-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-x-0', 'opacity-100');
+                toast.classList.add('translate-x-96', 'opacity-0');
+            }, 3000);
+        }
+
+        function mockDownload(filename) {
+            showToast(`ファイル「${filename}」をダウンロードしました（シミュレート）`);
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+    </script>
+</body>
+</html>
