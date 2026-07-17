@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>村谷さん応援ひろば 〜パークゴルフと健やかな毎日のために〜</title>
+    <!-- Tailwind CSS for modern and premium styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for professional Japanese typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Kiwi+Maru:wght@400;500&family=Murecho:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons for visual enhancements -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tone.js for high-quality synthetic sound effects without external file dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <style>
+        body {
+            font-family: 'Murecho', 'Inter', sans-serif;
+            background-color: #f7fafc;
+        }
+        .kiwi-font {
+            font-family: 'Kiwi Maru', serif;
+        }
+        /* Custom scrollbar for better visual experience */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-emerald-50 via-amber-50/30 to-blue-50/50 min-h-screen text-slate-800">
+
+<header class="bg-white/80 backdrop-blur-md border-b border-emerald-100 sticky top-0 z-50 transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+            <div class="bg-emerald-500 text-white p-3 rounded-2xl shadow-lg shadow-emerald-500/20 flex items-center justify-center">
+                <i class="fa-solid fa-golf-ball-heading text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl sm:text-2xl font-bold text-emerald-800 kiwi-font tracking-wide">村谷さん 応援ひろば</h1>
+                <p class="text-xs text-slate-500 font-semibold tracking-wider">FOR MR. MURATANI • GENTLE PARK GOLF & CARE</p>
+            </div>
+        </div>
+        
+        <!-- Tab Controls with modern design tokens -->
+        <nav class="flex bg-slate-100 p-1 rounded-2xl shadow-inner w-full sm:w-auto overflow-x-auto">
+            <button onclick="switchTab('golf')" id="btn-golf" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 bg-white text-emerald-700 shadow-md">
+                <i class="fa-solid fa-flag"></i> パークゴルフ
+            </button>
+            <button onclick="switchTab('stretch')" id="btn-stretch" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-hand-holding-heart"></i> 手首ケア
+            </button>
+            <button onclick="switchTab('cheer')" id="btn-cheer" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-heart-circle-check text-rose-500"></i> 皆の寄せ書き
+            </button>
+            <button onclick="switchTab('roadmap')" id="btn-roadmap" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-map-location-dot"></i> 近況報告図
+            </button>
+        </nav>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Top Encouragement Card -->
+    <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-emerald-950/10 mb-8 relative overflow-hidden">
+        <div class="absolute right-0 bottom-0 opacity-10 transform translate-x-12 translate-y-12">
+            <i class="fa-solid fa-golf-ball-heading text-[15rem]"></i>
+        </div>
+        <div class="relative z-10">
+            <span class="bg-white/25 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-widest">お見舞いと応援</span>
+            <h2 class="text-2xl sm:text-3.5xl font-bold mt-3 mb-2 kiwi-font leading-snug">
+                村谷さん、いつも応援しています！
+            </h2>
+            <p class="text-emerald-50 text-sm sm:text-base max-w-2xl leading-relaxed">
+                6月からの突然の手首の痛み、大変でしたね。セコメディック病院での治療が始まり、少し痛みが和らいだと聞いてほっとしています。大好きなパークゴルフも、無理のないペースで毎週続けられますように。理事会で元気なお姿を見られるのを一同楽しみにしています！
+            </p>
+            <div class="mt-6 flex flex-wrap gap-3">
+                <span class="bg-white/10 hover:bg-white/20 transition backdrop-blur-sm px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 border border-white/10">
+                    <i class="fa-solid fa-clipboard-check"></i> 治療開始：一歩ずつ回復へ
+                </span>
+                <span class="bg-white/10 hover:bg-white/20 transition backdrop-blur-sm px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 border border-white/10">
+                    <i class="fa-solid fa-golf-ball-heading"></i> パークゴルフ：週1回・36ホール
+                </span>
+                <span class="bg-white/10 hover:bg-white/20 transition backdrop-blur-sm px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 border border-white/10">
+                    <i class="fa-solid fa-users"></i> 理事会出席を目標に！
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 1: Virtual Park Golf -->
+    <section id="tab-content-golf" class="tab-pane block">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-white rounded-3xl p-6 shadow-md border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2 kiwi-font">
+                            <span class="text-emerald-500"><i class="fa-solid fa-flag"></i></span> 
+                            バーチャル・パークゴルフ練習場
+                        </h3>
+                        <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full">
+                            指やマウスで簡単ショット！
+                        </span>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-6 leading-relaxed">
+                        画面上でボールをドラッグして引っ張り、力を調整して指を離してください。大自然のパークゴルフコースのように、なめらかにボールが転がります。カップインを目指して優しくショットしてみましょう！
+                    </p>
+                </div>
+
+                <!-- Park Golf Canvas Game Container -->
+                <div class="relative bg-gradient-to-b from-sky-200 via-emerald-100 to-emerald-800 rounded-2xl overflow-hidden shadow-inner border border-slate-200" style="height: 380px;">
+                    <canvas id="golfCanvas" class="absolute inset-0 w-full h-full cursor-crosshair"></canvas>
+                    
+                    <!-- Sound Toggle Button -->
+                    <button id="soundToggleBtn" onclick="toggleSound()" class="absolute top-4 right-4 bg-white/90 hover:bg-white text-slate-700 p-2.5 rounded-full shadow-md transition-all flex items-center justify-center border border-slate-200/50 z-10" title="音声をオンにする">
+                        <i id="soundIcon" class="fa-solid fa-volume-xmark"></i>
+                    </button>
+
+                    <!-- Score Overlay -->
+                    <div class="absolute top-4 left-4 bg-black/40 backdrop-blur-md text-white px-3 py-2 rounded-xl text-xs font-semibold flex flex-col gap-1 z-10 pointer-events-none">
+                        <div>打数 (Strokes): <span id="strokeCount" class="font-bold text-amber-400 text-sm">0</span></div>
+                        <div>ベストスコア: <span id="bestScore" class="font-bold text-emerald-300">--</span></div>
+                    </div>
+
+                    <!-- Guidance Message Box -->
+                    <div id="gameMessage" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-md text-slate-800 px-5 py-2.5 rounded-full shadow-lg text-xs font-semibold border border-emerald-100/50 flex items-center gap-2 whitespace-nowrap transition-all duration-300 z-10 scale-100">
+                        <span class="text-emerald-500 animate-bounce"><i class="fa-solid fa-circle-arrow-up"></i></span>
+                        <span>ボールをドラッグして、カップ（星印）を狙いましょう！</span>
+                    </div>
+
+                    <!-- Celebration Animation Overlay -->
+                    <div id="celebrationOverlay" class="absolute inset-0 bg-emerald-950/80 backdrop-blur-sm flex flex-col items-center justify-center text-white p-6 opacity-0 pointer-events-none transition-all duration-500 z-20">
+                        <div class="bg-gradient-to-br from-amber-400 to-yellow-500 p-5 rounded-full shadow-xl mb-4 text-slate-950 animate-bounce">
+                            <i class="fa-solid fa-trophy text-4xl"></i>
+                        </div>
+                        <h4 class="text-2xl font-black text-yellow-300 kiwi-font mb-2">ナイスカップイン！</h4>
+                        <p id="congratsSub" class="text-sm text-center max-w-xs text-slate-200 leading-relaxed mb-6">
+                            素晴らしいショットです！週一回のリアルなパークゴルフも無理せず楽しんでくださいね。
+                        </p>
+                        <button onclick="resetGame()" class="bg-white hover:bg-slate-100 text-emerald-900 font-bold px-6 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2 transform active:scale-95 text-sm">
+                            <i class="fa-solid fa-rotate-right"></i> もう一度プレーする
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-4">
+                    <span class="text-xs text-slate-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-info"></i> ※ 音声をONにすると優しい打球音と歓声が流れます
+                    </span>
+                    <button onclick="resetGame()" class="text-xs font-bold text-slate-500 hover:text-slate-800 transition flex items-center gap-1">
+                        <i class="fa-solid fa-arrow-rotate-left"></i> リセット
+                    </button>
+                </div>
+            </div>
+
+            <!-- Side Card: Virtual Scoreboard & Encouragement -->
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-3 kiwi-font border-b border-slate-100 pb-2">
+                        パークゴルフへの思い
+                    </h4>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                        村谷さんが週に一回、36ホールもパークゴルフを再開できていることは、本当に素晴らしい回復のサインです！<br><br>
+                        痛みがある中でも自分のペースを崩さず、自然の中で汗を流すことは、心の健康やリハビリにとっても何よりのお薬になりますね。
+                    </p>
+
+                    <!-- Cheering Checklist -->
+                    <div class="space-y-3.5 mb-6">
+                        <div class="flex items-start gap-3 p-3 rounded-2xl bg-emerald-50 border border-emerald-100">
+                            <span class="text-emerald-500 mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span class="text-xs font-semibold text-emerald-800 leading-relaxed">
+                                <strong>焦らずマイペースに：</strong> 少しでも違和感を感じたら無理せず休憩を挟みましょう。
+                            </span>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 rounded-2xl bg-amber-50 border border-amber-100">
+                            <span class="text-amber-500 mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span class="text-xs font-semibold text-amber-800 leading-relaxed">
+                                <strong>サポーターを活用：</strong> プレー中は手首を優しく固定するサポーターを使うと安心です。
+                            </span>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 rounded-2xl bg-blue-50 border border-blue-100">
+                            <span class="text-blue-500 mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span class="text-xs font-semibold text-blue-800 leading-relaxed">
+                                <strong>プレー後のケア：</strong> 楽しんだ後は、しっかりと手首をいたわり、温めたり冷やしたりしてケアしましょう。
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Callout -->
+                <div class="bg-gradient-to-br from-slate-50 to-slate-100 p-4 rounded-2xl border border-slate-200/50 text-center">
+                    <span class="text-[1.6rem]">🏌️‍♂️</span>
+                    <h5 class="text-xs font-bold text-slate-700 mt-1">「ナイスイン！」で心をリフレッシュ</h5>
+                    <p class="text-[10px] text-slate-400 mt-0.5">バーチャルでも、ホールインワンの爽快感を体験してください。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tab 2: Wrist Care & Stretch Guide -->
+    <section id="tab-content-stretch" class="tab-pane hidden">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-md border border-slate-100">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b border-slate-100 pb-6">
+                <div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2 kiwi-font">
+                        <span class="text-emerald-500"><i class="fa-solid fa-hand-holding-heart"></i></span>
+                        手首にやさしいリハビリ・ストレッチ
+                    </h3>
+                    <p class="text-sm text-slate-500 mt-1">
+                        関節リウマチや関節炎の症状を和らげる、痛みのない範囲で行うマイルドなストレッチです。
+                    </p>
+                </div>
+                <!-- Status badge -->
+                <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap">
+                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+                    無理のない範囲で行いましょう
+                </span>
+            </div>
+
+            <!-- Stretches grid layout -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Stretch 1 -->
+                <div class="border border-slate-100 rounded-2xl p-5 bg-gradient-to-b from-slate-50/50 to-white flex flex-col justify-between hover:shadow-lg transition-all duration-300">
+                    <div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="bg-emerald-100 text-emerald-800 font-extrabold w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                            <h4 class="font-bold text-slate-800 text-base">指のグーパー運動</h4>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                            指先の血流を促し、朝のこわばりを取りやすくする最も基本的な運動です。
+                        </p>
+                        <!-- Interactive CSS Hand Animation -->
+                        <div class="h-32 bg-slate-100 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
+                            <div class="text-5xl animate-bounce" id="stretchAnim1">✊</div>
+                            <div class="absolute bottom-2 right-2 text-[10px] bg-slate-200/60 px-2 py-0.5 rounded-md text-slate-500">交互に開閉</div>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-1.5 mb-6 list-disc list-inside">
+                            <li>軽くこぶしを握ります（✊）</li>
+                            <li>一呼吸置いてから、パーに（🖐）</li>
+                            <li>呼吸に合わせてゆっくり行います</li>
+                        </ul>
+                    </div>
+                    <button onclick="startTimer(1, 15)" class="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-stopwatch"></i> <span id="timer-text-1">15秒測定をスタート</span>
+                    </button>
+                </div>
+
+                <!-- Stretch 2 -->
+                <div class="border border-slate-100 rounded-2xl p-5 bg-gradient-to-b from-slate-50/50 to-white flex flex-col justify-between hover:shadow-lg transition-all duration-300">
+                    <div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="bg-emerald-100 text-emerald-800 font-extrabold w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                            <h4 class="font-bold text-slate-800 text-base">手首のなめらか曲げ</h4>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                            手首の柔軟性を保ち、関節の稼働領域をやさしく広げるための運動です。
+                        </p>
+                        <!-- Interactive Hand Animation -->
+                        <div class="h-32 bg-slate-100 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
+                            <div class="text-5xl transform origin-bottom transition-all duration-500 rotate-12" id="stretchAnim2">🙏</div>
+                            <div class="absolute bottom-2 right-2 text-[10px] bg-slate-200/60 px-2 py-0.5 rounded-md text-slate-500">ゆっくり曲げ伸ばし</div>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-1.5 mb-6 list-disc list-inside">
+                            <li>もう片方の手でやさしく支えます</li>
+                            <li>手首を前後に少しずつ傾けます</li>
+                            <li>痛みが出たら、すぐにストップ</li>
+                        </ul>
+                    </div>
+                    <button onclick="startTimer(2, 20)" class="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-stopwatch"></i> <span id="timer-text-2">20秒測定をスタート</span>
+                    </button>
+                </div>
+
+                <!-- Stretch 3 -->
+                <div class="border border-slate-100 rounded-2xl p-5 bg-gradient-to-b from-slate-50/50 to-white flex flex-col justify-between hover:shadow-lg transition-all duration-300">
+                    <div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="bg-emerald-100 text-emerald-800 font-extrabold w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
+                            <h4 class="font-bold text-slate-800 text-base">腕・手指の脱力リラックス</h4>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                            余計な筋肉の緊張を取り、関節への負荷を軽減するための休息運動です。
+                        </p>
+                        <!-- Interactive Hand Animation -->
+                        <div class="h-32 bg-slate-100 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
+                            <div class="text-5xl animate-pulse" id="stretchAnim3">✨🫲✨</div>
+                            <div class="absolute bottom-2 right-2 text-[10px] bg-slate-200/60 px-2 py-0.5 rounded-md text-slate-500">リラックス</div>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-1.5 mb-6 list-disc list-inside">
+                            <li>腕全体をぶらぶらと軽く揺らします</li>
+                            <li>全身の力を抜いて深呼吸します</li>
+                            <li>血液の巡りを感じて休ませます</li>
+                        </ul>
+                    </div>
+                    <button onclick="startTimer(3, 10)" class="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-stopwatch"></i> <span id="timer-text-3">10秒リフレッシュをスタート</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Timer Notification Box -->
+            <div id="stretchAlert" class="mt-8 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center justify-between text-slate-700 text-sm hidden">
+                <span class="flex items-center gap-2 font-semibold">
+                    <i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>
+                    <span id="stretchAlertText">タイマー完了！心地よい程度で繰り返しましょう。</span>
+                </span>
+                <button onclick="closeStretchAlert()" class="text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tab 3: Cheering Bulletin Board (寄せ書き) -->
+    <section id="tab-content-cheer" class="tab-pane hidden">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-md border border-slate-100">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b border-slate-100 pb-6">
+                <div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2 kiwi-font">
+                        <span class="text-rose-500"><i class="fa-solid fa-heart-circle-check"></i></span>
+                        理事会・伊藤さん一同からの寄せ書きひろば
+                    </h3>
+                    <p class="text-sm text-slate-500 mt-1">
+                        村谷さんの回復を祈る皆からの温かいコメントです。新しいお見舞いメッセージを書き残すこともできます。
+                    </p>
+                </div>
+                
+                <button onclick="openMessageModal()" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold px-5 py-2.5 rounded-2xl shadow-lg hover:shadow-emerald-500/10 transition-all flex items-center gap-2 transform active:scale-95 text-sm">
+                    <i class="fa-solid fa-pen-nib"></i> メッセージを届ける
+                </button>
+            </div>
+
+            <!-- Sticky Notes Container -->
+            <div id="stickyNotesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Message 4 (Yuko Otsubo-san) -->
+                <div class="bg-gradient-to-br from-amber-500/5 to-yellow-500/10 border-l-4 border-amber-500 rounded-r-3xl rounded-l-lg p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[180px]">
+                    <p class="text-sm text-slate-700 leading-relaxed kiwi-font">
+                        「村谷さん、原因が分からないのは心配ですね。急に発症したのでしょうね。前会長の石川さんが足の甲が腫れて痛くて、同じような症状で、その時は色々な検査をしても原因が分からないと言っていましたが、しばらくかかって良くなりました。そしてまた2ヶ月くらい前、同じ箇所に発症、病名が分かったみたいです。聞いたけど忘れました。医療センターです。今回も良くなるのに時間がかかっていました。原因が分からないのは不安ですね。理事会で元気なお顔をみたいです。」
+                    </p>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t border-amber-100">
+                        <span class="text-xs font-extrabold text-amber-800 flex items-center gap-1">
+                            <i class="fa-solid fa-signature"></i> 大坪裕子さんより
+                        </span>
+                        <span class="text-[10px] text-amber-600 font-semibold bg-white px-2 py-0.5 rounded-md">
+                            理事会
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Message 5 (Tanaka-san) -->
+                <div class="bg-gradient-to-br from-sky-50 to-indigo-50/50 border-l-4 border-indigo-400 rounded-r-3xl rounded-l-lg p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[180px]">
+                    <p class="text-sm text-slate-700 leading-relaxed kiwi-font">
+                        「村谷さん無理なさらず、お大事になさってください。しばらく、ゆっくり静養してください。」
+                    </p>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t border-indigo-100">
+                        <span class="text-xs font-extrabold text-indigo-800 flex items-center gap-1">
+                            <i class="fa-solid fa-signature"></i> 田中さんより
+                        </span>
+                        <span class="text-[10px] text-indigo-600 font-semibold bg-white px-2 py-0.5 rounded-md">
+                            理事会
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Message 1 (Ito-san) -->
+                <div class="bg-gradient-to-br from-amber-50 to-yellow-50/50 border-l-4 border-amber-400 rounded-r-3xl rounded-l-lg p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[180px]">
+                    <p class="text-sm text-slate-700 leading-relaxed kiwi-font">
+                        「村谷さん、大変な中いつもご丁寧な近況報告をありがとうございます。少しずつでも手首の痛みが引いて、パークゴルフを楽しめていると聞いて安堵しました。総務部一同、村谷さんのお顔が見られる日を心から楽しみにお待ちしています。決して焦らずに完治に向けて進んでくださいね！」
+                    </p>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t border-amber-100">
+                        <span class="text-xs font-extrabold text-amber-800 flex items-center gap-1">
+                            <i class="fa-solid fa-signature"></i> 伊藤さんより
+                        </span>
+                        <span class="text-[10px] text-amber-600 font-semibold bg-white px-2 py-0.5 rounded-md">
+                            発起人
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Message 2 (Board Member 1) -->
+                <div class="bg-gradient-to-br from-emerald-50 to-teal-50/50 border-l-4 border-emerald-400 rounded-r-3xl rounded-l-lg p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[180px]">
+                    <p class="text-sm text-slate-700 leading-relaxed kiwi-font">
+                        「いつも全力で理事会を引っ張ってくださる村谷さん。手首がお辛い中、週 1回でも大好きなゴルフで汗を流されている姿勢に、逆にこちらがパワーを貰ってしまいました！ご出席いただけるだけで皆が喜びますので、どうか体調に合わせてリラックスしてご参加ください。」
+                    </p>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t border-emerald-100">
+                        <span class="text-xs font-extrabold text-emerald-800 flex items-center gap-1">
+                            <i class="fa-solid fa-signature"></i> さいとうさんより
+                        </span>
+                        <span class="text-[10px] text-emerald-600 font-semibold bg-white px-2 py-0.5 rounded-md">
+                            理事
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Message 3 (Board Member 2) -->
+                <div class="bg-gradient-to-br from-sky-50 to-blue-50/50 border-l-4 border-sky-400 rounded-r-3xl rounded-l-lg p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[180px]">
+                    <p class="text-sm text-slate-700 leading-relaxed kiwi-font">
+                        「セコメディックでの原因不明の時期はどんなに不安だったことかと思います。それでもリウマチの治療とステロイドで痛みが和らいだと聞いて本当に安心しました。治療は長丁場になるかもしれませんが、僕たちがいつもそばで支えています！一緒に乗り越えましょう。」
+                    </p>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t border-sky-100">
+                        <span class="text-xs font-extrabold text-sky-800 flex items-center gap-1">
+                            <i class="fa-solid fa-signature"></i> 総務部仲間より
+                        </span>
+                        <span class="text-[10px] text-sky-600 font-semibold bg-white px-2 py-0.5 rounded-md">
+                            事務局
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tab 4: Interactive Roadmap based on Muratani-san's update -->
+    <section id="tab-content-roadmap" class="tab-pane hidden">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-md border border-slate-100">
+            <div class="mb-6 border-b border-slate-100 pb-6">
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2 kiwi-font">
+                    <span class="text-indigo-500"><i class="fa-solid fa-map-location-dot"></i></span>
+                    村谷さんの「近況報告とリハビリ歩みマップ」
+                </h3>
+                <p class="text-sm text-slate-500 mt-1">
+                    いただいた「近況報告とパークゴルフ」のイラスト図面と、さわやかな海辺のお散歩シーンをオリジナルイラストで再現しました。
+                </p>
+            </div>
+
+            <!-- Two Columns layout: left is timeline, right is illustrations container -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                
+                <!-- Interactive Timeline Roadmap Display (Left Column) -->
+                <div class="space-y-6">
+                    <h4 class="text-lg font-bold text-slate-800 mb-4 kiwi-font flex items-center gap-2">
+                        <i class="fa-solid fa-circle-nodes text-emerald-500"></i> 各ステップの歩みとこれからのアドバイス
+                    </h4>
+                    
+                    <!-- Roadmap Nodes -->
+                    <div class="relative pl-8 border-l-2 border-emerald-100 space-y-6">
+                        <!-- Step 1 -->
+                        <div class="relative group cursor-pointer" onclick="showRoadmapDetail('step1')">
+                            <div class="absolute -left-[41px] top-1 bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-md shadow-amber-500/20 group-hover:scale-110 transition-transform">1</div>
+                            <div class="bg-slate-50 hover:bg-slate-100/80 p-4 rounded-2xl border border-slate-200/50 transition-all">
+                                <h5 class="text-sm font-bold text-slate-800 flex items-center justify-between">
+                                    <span>初期症状（6月初め頃〜）</span>
+                                    <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded">両手首・手の甲の腫れ</span>
+                                </h5>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                                    近くの整形外科を受診し、痛み止めと湿布薬を使用するも退かない腫れと戦われた不安な日々でした。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="relative group cursor-pointer" onclick="showRoadmapDetail('step2')">
+                            <div class="absolute -left-[41px] top-1 bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-md shadow-blue-500/20 group-hover:scale-110 transition-transform">2</div>
+                            <div class="bg-slate-50 hover:bg-slate-100/80 p-4 rounded-2xl border border-slate-200/50 transition-all">
+                                <h5 class="text-sm font-bold text-slate-800 flex items-center justify-between">
+                                    <span>内科と整形での検査（腎・肝・リウマチ）</span>
+                                    <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded">検査結果は全て正常（白）</span>
+                                </h5>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                                    臓器機能の安心は確認できたものの、「原因不明」という新たな疑問に突き当たった局面でした。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="relative group cursor-pointer" onclick="showRoadmapDetail('step3')">
+                            <div class="absolute -left-[41px] top-1 bg-purple-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-md shadow-purple-500/20 group-hover:scale-110 transition-transform">3</div>
+                            <div class="bg-slate-50 hover:bg-slate-100/80 p-4 rounded-2xl border border-slate-200/50 transition-all">
+                                <h5 class="text-sm font-bold text-slate-800 flex items-center justify-between">
+                                    <span>専門医受診と治療開始（セコメディック）</span>
+                                    <span class="text-[10px] bg-purple-100 text-purple-800 px-2 py-0.5 rounded">リウマチ・ステロイド治療</span>
+                                </h5>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                                    紹介状を手に精密検査を受け、暫定でのリウマチ治療とステロイドの服用によって手首の痛みが改善へと向かい始めました！
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="relative group cursor-pointer" onclick="showRoadmapDetail('step4')">
+                            <div class="absolute -left-[41px] top-1 bg-emerald-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform">4</div>
+                            <div class="bg-emerald-50/50 hover:bg-emerald-50 p-4 rounded-2xl border border-emerald-100 transition-all">
+                                <h5 class="text-sm font-bold text-emerald-900 flex items-center justify-between">
+                                    <span>現在：週一回のパークゴルフ（36ホール）</span>
+                                    <span class="text-[10px] bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded">最高の回復リハビリ</span>
+                                </h5>
+                                <p class="text-xs text-emerald-700 mt-1 leading-relaxed">
+                                    手首の負担をコントロールしながら、36ホールのパークゴルフを楽しんでいらっしゃいます。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reference Images and Photos Column (Right Column) -->
+                <div class="space-y-6">
+                    
+                    <!-- SVG Illustration 1: Muratani-san Walking on Beach (Original image_2ce51e.jpg equivalent) -->
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-500 tracking-wider flex items-center gap-1.5 mb-3">
+                            <i class="fa-solid fa-image text-emerald-500"></i> 海辺をお散歩する村谷さん（イメージイラスト）
+                        </h4>
+                        <div class="bg-white rounded-3xl p-3 border border-slate-100 shadow-md group overflow-hidden relative">
+                            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-b from-sky-100 via-blue-50 to-amber-50 flex justify-center items-center">
+                                <!-- High-quality responsive vector SVG representation of image_2ce51e.jpg -->
+                                <svg class="w-full h-auto max-h-[350px] rounded-2xl" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Sky and Horizon Gradient -->
+                                    <rect width="400" height="300" fill="url(#skyGradient)" />
+                                    <!-- Sea and Waves -->
+                                    <path d="M0 240 Q100 230 200 240 T400 240 L400 320 L0 320 Z" fill="#4fa8d1" opacity="0.8"/>
+                                    <path d="M0 255 Q120 245 240 255 T400 255 L400 330 L0 330 Z" fill="#2d82b7" />
+                                    <!-- Sandy Beach -->
+                                    <path d="M0 320 Q200 280 400 320 L400 500 L0 500 Z" fill="#eadeca" />
+                                    <!-- Ocean Port Details in Background -->
+                                    <rect x="280" y="220" width="30" height="20" fill="#94a3b8" opacity="0.5"/>
+                                    <line x1="295" y1="200" x2="295" y2="220" stroke="#64748b" stroke-width="2" opacity="0.5"/>
+                                    
+                                    <!-- Sun and Clouds -->
+                                    <circle cx="80" cy="80" r="30" fill="#fef08a" opacity="0.6"/>
+                                    <path d="M300 100 C320 100 330 90 340 95 C350 100 365 105 350 115 L290 115 Z" fill="#ffffff" opacity="0.8"/>
+                                    
+                                    <!-- Walking Figure - Mr. Muratani (Stylized Representation) -->
+                                    <g id="walking-figure" transform="translate(140, 100)">
+                                        <!-- Legs & Pants (Beige) -->
+                                        <path d="M40 230 L25 320 L45 320 Z" fill="#c2b090" />
+                                        <path d="M55 230 L75 315 L90 315 Z" fill="#b09e7e" />
+                                        
+                                        <!-- Shoes (Dark Brown/Black) -->
+                                        <path d="M15 320 Q25 315 45 320 L45 327 L15 327 Z" fill="#334155" />
+                                        <path d="M75 315 Q85 310 95 315 L95 322 L70 322 Z" fill="#1e293b" />
+                                        
+                                        <!-- Red Inner Shirt -->
+                                        <path d="M32 125 L68 125 L65 240 L35 240 Z" fill="#ef4444" />
+                                        
+                                        <!-- Navy Puffer Jacket -->
+                                        <path d="M25 120 C25 100 75 100 75 120 L72 230 C72 238 28 238 28 230 Z" fill="#1e293b" />
+                                        <!-- Jacket details (horizontal puff lines) -->
+                                        <path d="M27 140 Q50 145 73 140" stroke="#334155" stroke-width="4" />
+                                        <path d="M27 165 Q50 170 73 165" stroke="#334155" stroke-width="4" />
+                                        <path d="M28 190 Q50 195 72 190" stroke="#334155" stroke-width="4" />
+                                        <path d="M29 215 Q50 220 71 215" stroke="#334155" stroke-width="4" />
+                                        
+                                        <!-- Left Arm (Walking forward) -->
+                                        <path d="M25 125 C5 150 10 200 20 220" stroke="#1e293b" stroke-width="15" stroke-linecap="round" />
+                                        <path d="M20 220 Q18 225 25 228" stroke="#fbcfe8" stroke-width="10" stroke-linecap="round" />
+                                        
+                                        <!-- Backpack (Dark Navy with Red detail) -->
+                                        <path d="M68 135 C78 135 85 150 85 180 C85 210 75 220 65 220 Z" fill="#475569" />
+                                        <path d="M78 150 L84 150 L84 185 L78 185 Z" fill="#dc2626" />
+                                        
+                                        <!-- Head & Neck -->
+                                        <rect x="42" y="90" width="16" height="20" fill="#fbcfe8" />
+                                        <circle cx="50" cy="80" r="22" fill="#fbcfe8" />
+                                        <!-- Glasses (Golden wire) -->
+                                        <circle cx="44" cy="78" r="7" stroke="#fbbf24" stroke-width="1.5" fill="none" />
+                                        <circle cx="56" cy="78" r="7" stroke="#fbbf24" stroke-width="1.5" fill="none" />
+                                        <line x1="49" y1="78" x2="51" y2="78" stroke="#fbbf24" stroke-width="1.5" />
+                                        <line x1="38" y1="78" x2="42" y2="78" stroke="#fbbf24" stroke-width="1.5" />
+                                        <!-- Smile -->
+                                        <path d="M43 88 Q50 95 57 88" stroke="#e11d48" stroke-width="2" fill="none" />
+                                        
+                                        <!-- Cap (Khaki/Tan Golf Cap) -->
+                                        <path d="M26 70 Q50 40 74 70 Z" fill="#85754e" />
+                                        <!-- Cap visor/bill -->
+                                        <path d="M22 68 Q10 72 15 78 C25 78 30 72 32 68 Z" fill="#6d5e39" />
+                                    </g>
+
+                                    <!-- Seagulls in the sky -->
+                                    <path d="M60 140 Q70 130 80 140 Q90 130 100 140" stroke="#64748b" stroke-width="1.5" fill="none"/>
+                                    <path d="M210 80 Q215 73 220 80 Q225 73 230 80" stroke="#64748b" stroke-width="1.5" fill="none"/>
+
+                                    <!-- Gradients definitions -->
+                                    <defs>
+                                        <linearGradient id="skyGradient" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#38bdf8" />
+                                            <stop offset="60%" stop-color="#bae6fd" />
+                                            <stop offset="100%" stop-color="#f0f9ff" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white">
+                                    <span class="text-xs bg-emerald-500/90 text-white font-bold px-2 py-0.5 rounded-full mb-1 inline-block">さわやかな笑顔</span>
+                                    <p class="text-xs font-semibold leading-relaxed kiwi-font">
+                                        海辺を颯爽とお散歩されるお元気な村谷さん！この力強い足取りと前向きな笑顔こそが、最高の回復への一歩です。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SVG Illustration 2: Hand-drawn Style Infographic (Original image_2c1e84.jpg equivalent) -->
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-500 tracking-wider flex items-center gap-1.5 mb-3">
+                            <i class="fa-solid fa-file-invoice text-indigo-500"></i> 近況報告の歩み（手書きインフォグラフィック図面）
+                        </h4>
+                        <div class="bg-white rounded-3xl p-3 border border-slate-100 shadow-md group overflow-hidden relative">
+                            <div class="relative overflow-hidden rounded-2xl">
+                                <!-- High-quality responsive vector SVG representation of image_2c1e84.jpg -->
+                                <svg class="w-full h-auto max-h-[300px] bg-[#fdfbf7] rounded-2xl border border-amber-100" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Cute Notebook paper background texture -->
+                                    <rect width="800" height="450" fill="#fefdfa"/>
+                                    <!-- Grid lines (Horizontal) -->
+                                    <line x1="0" y1="50" x2="800" y2="50" stroke="#fef08a" stroke-width="1"/>
+                                    <line x1="0" y1="100" x2="800" y2="100" stroke="#fef08a" stroke-width="1"/>
+                                    <line x1="0" y1="150" x2="800" y2="150" stroke="#fef08a" stroke-width="1"/>
+                                    <line x1="0" y1="200" x2="800" y2="200" stroke="#fef08a" stroke-width="1"/>
+                                    <line x1="0" y1="250" x2="800" y2="250" stroke="#fef08a" stroke-width="1"/>
+                                    <line x1="0" y1="300" x2="800" y2="300" stroke="#fef08a" stroke-width="1"/>
+                                    <line x1="0" y1="350" x2="800" y2="350" stroke="#fef08a" stroke-width="1"/>
+                                    <line x1="0" y1="400" x2="800" y2="400" stroke="#fef08a" stroke-width="1"/>
+                                    
+                                    <!-- Title Area -->
+                                    <rect x="20" y="20" width="760" height="60" rx="15" fill="#f0fdf4" stroke="#86efac" stroke-width="2" stroke-dasharray="6 4"/>
+                                    <text x="50" y="58" font-family="'Kiwi Maru', serif" font-size="24" font-weight="bold" fill="#14532d">伊藤さんへ 近況報告とパークゴルフ</text>
+                                    
+                                    <!-- Step 1 Layout: 初期症状 -->
+                                    <g transform="translate(30, 100)">
+                                        <rect width="220" height="150" rx="15" fill="#ecfeff" stroke="#a5f3fc" stroke-width="2"/>
+                                        <rect x="15" y="-12" width="90" height="24" rx="8" fill="#06b6d4"/>
+                                        <text x="25" y="4" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff">初期症状</text>
+                                        <text x="15" y="45" font-family="sans-serif" font-size="14" font-weight="bold" fill="#164e63">両手首と手の甲の腫れ</text>
+                                        <text x="15" y="70" font-family="sans-serif" font-size="12" fill="#0891b2">・6月初め頃から急に発症</text>
+                                        <text x="15" y="90" font-family="sans-serif" font-size="12" fill="#0891b2">・近くの整形外科で薬と湿布</text>
+                                        <text x="15" y="110" font-family="sans-serif" font-size="12" fill="#0891b2">・痛みと腫れが退かない不安</text>
+                                        <text x="170" y="130" font-size="30">😫</text>
+                                    </g>
+
+                                    <!-- Step 2 Layout: 検査 -->
+                                    <g transform="translate(290, 100)">
+                                        <rect width="220" height="150" rx="15" fill="#fffbeb" stroke="#fde68a" stroke-width="2"/>
+                                        <rect x="15" y="-12" width="70" height="24" rx="8" fill="#d97706"/>
+                                        <text x="30" y="4" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff">検査</text>
+                                        <text x="15" y="45" font-family="sans-serif" font-size="14" font-weight="bold" fill="#78350f">内科＆整形外科での血液検査</text>
+                                        <text x="15" y="70" font-family="sans-serif" font-size="12" fill="#b45309">✅ 腎臓：正常（白）</text>
+                                        <text x="15" y="90" font-family="sans-serif" font-size="12" fill="#b45309">✅ 肝臓：正常（白）</text>
+                                        <text x="15" y="110" font-family="sans-serif" font-size="12" fill="#b45309">✅ リウマチ因子：正常（白）</text>
+                                        <text x="15" y="130" font-family="sans-serif" font-size="11" font-weight="bold" fill="#ef4444">→ 内臓健康も、原因不明</text>
+                                        <text x="175" y="130" font-size="30">❓</text>
+                                    </g>
+
+                                    <!-- Step 3 Layout: 専門医受診 -->
+                                    <g transform="translate(550, 100)">
+                                        <rect width="220" height="150" rx="15" fill="#faf5ff" stroke="#e9d5ff" stroke-width="2"/>
+                                        <rect x="15" y="-12" width="90" height="24" rx="8" fill="#9333ea"/>
+                                        <text x="25" y="4" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff">専門医受診</text>
+                                        <text x="15" y="45" font-family="sans-serif" font-size="14" font-weight="bold" fill="#581c87">セコメディック病院</text>
+                                        <text x="15" y="70" font-family="sans-serif" font-size="12" fill="#7e22ce">・リウマチ膠原病科</text>
+                                        <text x="15" y="90" font-family="sans-serif" font-size="12" fill="#7e22ce">・精密検査とレントゲンでも不明</text>
+                                        <text x="15" y="115" font-family="sans-serif" font-size="12" font-weight="bold" fill="#22c55e">💊 取り合えずリウマチ治療開始！</text>
+                                        <text x="175" y="130" font-size="30">🏥</text>
+                                    </g>
+
+                                    <!-- Arrow paths between steps -->
+                                    <path d="M255 175 L285 175" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow)" />
+                                    <path d="M515 175 L545 175" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow)" />
+                                    
+                                    <!-- Flow down arrow -->
+                                    <path d="M660 255 L660 270 L400 270 L400 285" stroke="#94a3b8" stroke-width="3" fill="none" marker-end="url(#arrow)" />
+
+                                    <!-- Step 4 Layout: パークゴルフ -->
+                                    <g transform="translate(30, 290)">
+                                        <rect width="340" height="130" rx="15" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="2"/>
+                                        <rect x="15" y="-12" width="100" height="24" rx="8" fill="#22c55e"/>
+                                        <text x="25" y="4" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff">パークゴルフ</text>
+                                        <text x="15" y="40" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14532d">週一回、36ホールを再開！</text>
+                                        <text x="15" y="65" font-family="sans-serif" font-size="12" fill="#15803d">・ステロイドとリウマチ薬で少し改善</text>
+                                        <text x="15" y="85" font-family="sans-serif" font-size="12" fill="#15803d">・手首の痛みが和らぎお元気にプレー</text>
+                                        <text x="15" y="105" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ef4444">⛳ 無理せず自分のペースで！</text>
+                                        <text x="290" y="110" font-size="35">🏌️‍♂️</text>
+                                    </g>
+
+                                    <!-- Step 5 Layout: 今後 -->
+                                    <g transform="translate(430, 290)">
+                                        <rect width="340" height="130" rx="15" fill="#fef2f2" stroke="#fecaca" stroke-width="2"/>
+                                        <rect x="15" y="-12" width="70" height="24" rx="8" fill="#ef4444"/>
+                                        <text x="32" y="4" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff">今後</text>
+                                        <text x="15" y="40" font-family="sans-serif" font-size="15" font-weight="bold" fill="#7f1d1d">完治に向けた歩み</text>
+                                        <text x="15" y="65" font-family="sans-serif" font-size="12" fill="#b91c1c">・完治までは少し時間がかかりそう</text>
+                                        <text x="15" y="85" font-family="sans-serif" font-size="13" font-weight="bold" fill="#047857">🌟「理事会にはぜひ出席したい」</text>
+                                        <text x="15" y="105" font-family="sans-serif" font-size="11" fill="#475569">伊藤さんや仲間たち全員で心から待っています！</text>
+                                        <text x="290" y="110" font-size="35">🤝</text>
+                                    </g>
+
+                                    <!-- Markers for arrows -->
+                                    <defs>
+                                        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                                        </marker>
+                                    </defs>
+                                </svg>
+                                <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-2xl p-6 text-white text-center">
+                                    <div>
+                                        <h5 class="font-bold text-lg mb-2 kiwi-font text-yellow-300">「近況報告」手書きデザインの再現</h5>
+                                        <p class="text-xs leading-relaxed text-slate-200 max-w-sm">
+                                            村谷さんが整理してくださった治療と回復のロードマップです。クリックするといつでも各ステップの健康アドバイスが見られます。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Interactive Modal for Adding a Cheering Message -->
+<div id="messageModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform scale-95 transition-transform duration-300" id="modalContainer">
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="text-lg font-bold text-slate-800 kiwi-font flex items-center gap-2">
+                <i class="fa-solid fa-pen-fancy text-emerald-500"></i> 村谷さんへ応援のメッセージ
+            </h4>
+            <button onclick="closeMessageModal()" class="text-slate-400 hover:text-slate-600 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <form id="cheerForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-slate-500 mb-1">お名前</label>
+                <input type="text" id="senderName" required placeholder="伊藤さん、総務一同、など" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 mb-1">ご関係（肩書き等）</label>
+                <input type="text" id="senderRole" placeholder="理事、事務局、お茶飲み仲間など" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 mb-1">温かいメッセージ内容</label>
+                <textarea id="senderMsg" rows="4" required placeholder="村谷さんを温かく励ます一言を入力してください。" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"></textarea>
+            </div>
+            
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="closeMessageModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl text-sm transition">
+                    キャンセル
+                </button>
+                <button type="submit" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-2.5 rounded-xl text-sm shadow-lg shadow-emerald-500/20 transition-all">
+                    届ける！
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal for Roadmap Node Details -->
+<div id="roadmapModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform scale-95 transition-transform duration-300" id="roadmapModalContainer">
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="text-base font-bold text-slate-500 tracking-wider uppercase" id="roadmapDetailStep">STEP 1</h4>
+            <button onclick="closeRoadmapModal()" class="text-slate-400 hover:text-slate-600 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+        <div class="space-y-4">
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 p-4 rounded-2xl text-white">
+                <h3 class="text-lg font-bold kiwi-font" id="roadmapDetailTitle">ロードマップタイトル</h3>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed" id="roadmapDetailDesc">
+                ここに進捗状況の詳しい解説や、温かいアドバイスが掲載されます。
+            </p>
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">健康・ケアポイント</h5>
+                <p class="text-xs text-slate-700 leading-relaxed" id="roadmapDetailCare">
+                    手首への適切なケアに関する情報がここに表示されます。
+                </p>
+            </div>
+            <button onclick="closeRoadmapModal()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 rounded-xl transition-all shadow-md">
+                閉じる
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Footer with gentle attribution and support -->
+<footer class="max-w-6xl mx-auto px-4 py-8 mt-12 border-t border-emerald-100 text-center">
+    <p class="text-xs text-slate-400">
+        村谷さん応援アプリケーション &copy; 2026. 理事会メンバー・伊藤さん一同より心を込めて。
+    </p>
+    <p class="text-[10px] text-slate-300 mt-1">
+        村谷さんの大好きなパークゴルフがいつでも笑顔でプレーできますように。
+    </p>
+</footer>
+
+<script>
+/* Audio synth engine variables using Tone.js */
+let audioCtxInitialized = false;
+let isSoundOn = false;
+let synth, hitSound, goalSound;
+
+/* Initialize Tone.js synthesizers for beautiful web audio */
+function initAudio() {
+    if (audioCtxInitialized) return;
+    
+    try {
+        // High quality synth for hits
+        hitSound = new Tone.MembraneSynth({
+            envelope: {
+                attack: 0.001,
+                decay: 0.2,
+                sustain: 0.1
+            }
+        }).toDestination();
+        
+        // Gentle polyphonic synth for success fanfare
+        goalSound = new Tone.PolySynth(Tone.Synth).toDestination();
+        goalSound.set({
+            oscillator: { type: "triangle" },
+            envelope: { attack: 0.05, decay: 0.1, sustain: 0.3, release: 0.8 }
+        });
+        
+        audioCtxInitialized = true;
+    } catch (e) {
+        console.warn("Audio initialization failed: ", e);
+    }
+}
+
+/* Play satisfying hit audio with physical frequency based on shot power */
+function playHitSound(power) {
+    if (!isSoundOn) return;
+    initAudio();
+    try {
+        // Higher power = slightly higher and shorter pop
+        let freq = 120 + (power * 30);
+        hitSound.triggerAttackRelease(freq, "8n", undefined, Math.min(1, power / 10));
+    } catch (e) {}
+}
+
+/* Play pleasant victory fanfare when scoring a putt */
+function playGoalSound() {
+    if (!isSoundOn) return;
+    initAudio();
+    try {
+        const now = Tone.now();
+        goalSound.triggerAttackRelease("C5", "8n", now);
+        goalSound.triggerAttackRelease("E5", "8n", now + 0.12);
+        goalSound.triggerAttackRelease("G5", "8n", now + 0.24);
+        goalSound.triggerAttackRelease("C6", "4n", now + 0.36);
+    } catch (e) {}
+}
+
+/* Audio control toggle */
+function toggleSound() {
+    isSoundOn = !isSoundOn;
+    const soundIcon = document.getElementById('soundIcon');
+    const soundBtn = document.getElementById('soundToggleBtn');
+    
+    if (isSoundOn) {
+        soundIcon.className = "fa-solid fa-volume-high text-emerald-500 animate-pulse";
+        soundBtn.classList.add('bg-emerald-50', 'border-emerald-200');
+        // Initialize on user gesture
+        if (typeof Tone !== "undefined") {
+            Tone.start();
+            initAudio();
+        }
+    } else {
+        soundIcon.className = "fa-solid fa-volume-xmark";
+        soundBtn.classList.remove('bg-emerald-50', 'border-emerald-200');
+    }
+}
+
+/* Navigation System */
+function switchTab(tabId) {
+    // Hide all contents
+    document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+    document.getElementById(`tab-content-${tabId}`).classList.remove('hidden');
+    
+    // Update button states
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 text-slate-600 hover:text-slate-900";
+    });
+    
+    const activeBtn = document.getElementById(`btn-${tabId}`);
+    activeBtn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 bg-white text-emerald-700 shadow-md";
+    
+    // Specially handle canvas redraw when switching back to golf
+    if (tabId === 'golf') {
+        setTimeout(resizeCanvas, 50);
+    }
+}
+
+/* Interactive Park Golf Engine */
+const canvas = document.getElementById('golfCanvas');
+const ctx = canvas.getContext('2d');
+
+let ball = { x: 100, y: 150, vx: 0, vy: 0, r: 8, color: '#ffffff' };
+let hole = { x: 450, y: 150, r: 16 };
+let dragStart = { x: 0, y: 0 };
+let isDragging = false;
+let currentMouse = { x: 0, y: 0 };
+let strokeCount = 0;
+let bestScore = localStorage.getItem('bestScore') ? parseInt(localStorage.getItem('bestScore')) : null;
+let gameWon = false;
+
+if (bestScore) {
+    document.getElementById('bestScore').innerText = bestScore;
+}
+
+function resizeCanvas() {
+    const parent = canvas.parentElement;
+    canvas.width = parent.clientWidth;
+    canvas.height = parent.clientHeight;
+    
+    // Reposition ball and hole relative to responsive screen size
+    if (!isDragging && ball.vx === 0 && ball.vy === 0 && !gameWon) {
+        ball.x = canvas.width * 0.15;
+        ball.y = canvas.height * 0.6;
+        hole.x = canvas.width * 0.85;
+        hole.y = canvas.height * 0.4;
+    }
+}
+
+window.addEventListener('resize', resizeCanvas);
+setTimeout(resizeCanvas, 100);
+
+/* Touch & Mouse Event Listeners for Easy Stroke Controls */
+canvas.addEventListener('mousedown', startDrag);
+canvas.addEventListener('mousemove', drag);
+canvas.addEventListener('mouseup', releaseDrag);
+
+canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+function getMousePos(evt) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+        x: (evt.clientX - rect.left) * (canvas.width / rect.width),
+        y: (evt.clientY - rect.top) * (canvas.height / rect.height)
+    };
+}
+
+function handleTouchStart(e) {
+    e.preventDefault();
+    if (e.touches.length === 1) {
+        const mousePos = getMousePos(e.touches[0]);
+        simulateStartDrag(mousePos);
+    }
+}
+
+function handleTouchMove(e) {
+    e.preventDefault();
+    if (e.touches.length === 1 && isDragging) {
+        const mousePos = getMousePos(e.touches[0]);
+        currentMouse = mousePos;
+    }
+}
+
+function handleTouchEnd(e) {
+    e.preventDefault();
+    if (isDragging) {
+        simulateReleaseDrag();
+    }
+}
+
+function startDrag(e) {
+    const mousePos = getMousePos(e);
+    simulateStartDrag(mousePos);
+}
+
+function drag(e) {
+    if (isDragging) {
+        currentMouse = getMousePos(e);
+    }
+}
+
+function releaseDrag() {
+    if (isDragging) {
+        simulateReleaseDrag();
+    }
+}
+
+function simulateStartDrag(pos) {
+    if (gameWon) return;
+    
+    // Check if dragging near the ball
+    const dist = Math.hypot(pos.x - ball.x, pos.y - ball.y);
+    if (dist < 40) { // Generous touch targeting for wrist care ease
+        isDragging = true;
+        dragStart = { x: ball.x, y: ball.y };
+        currentMouse = pos;
+        
+        // Hide initial guidance message
+        const gameMsg = document.getElementById('gameMessage');
+        gameMsg.classList.add('opacity-0', 'scale-90');
+    }
+}
+
+function simulateReleaseDrag() {
+    isDragging = false;
+    
+    // Physics stroke math
+    const dx = dragStart.x - currentMouse.x;
+    const dy = dragStart.y - currentMouse.y;
+    
+    // Cap stroke force to a healthy limit
+    const power = Math.min(Math.hypot(dx, dy) * 0.08, 12);
+    const angle = Math.atan2(dy, dx);
+    
+    ball.vx = Math.cos(angle) * power;
+    ball.vy = Math.sin(angle) * power;
+    
+    if (power > 0.5) {
+        strokeCount++;
+        document.getElementById('strokeCount').innerText = strokeCount;
+        playHitSound(power);
+    }
+}
+
+/* Animation Game Loop */
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw grassy background colors
+    const grassGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    grassGradient.addColorStop(0, '#10b981'); // Emerald 500
+    grassGradient.addColorStop(1, '#047857'); // Emerald 700
+    ctx.fillStyle = grassGradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw Course Fairway Outline/Detail
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, canvas.height * 0.35, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Draw Flagstick and Green target ring
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    ctx.beginPath();
+    ctx.ellipse(hole.x, hole.y + 4, hole.r, hole.r * 0.4, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Drawing the hole (shadow)
+    ctx.fillStyle = '#022c22';
+    ctx.beginPath();
+    ctx.arc(hole.x, hole.y, hole.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Red flag SVG replacement inside canvas
+    ctx.fillStyle = '#ef4444'; // Red flag
+    ctx.beginPath();
+    ctx.moveTo(hole.x, hole.y - 45);
+    ctx.lineTo(hole.x + 20, hole.y - 35);
+    ctx.lineTo(hole.x, hole.y - 25);
+    ctx.fill();
+    
+    // Flag pole
+    ctx.strokeStyle = '#f8fafc';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(hole.x, hole.y - 45);
+    ctx.lineTo(hole.x, hole.y - 2);
+    ctx.stroke();
+
+    // Drawing Goal Star (to attract attention)
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = "14px FontAwesome";
+    ctx.fillText("⭐", hole.x - 7, hole.y - 50);
+
+    // Ball movement physics update
+    if (!isDragging) {
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+        
+        // Friction dampening
+        ball.vx *= 0.975;
+        ball.vy *= 0.975;
+        
+        // Stop ball if going super slow
+        if (Math.hypot(ball.vx, ball.vy) < 0.05) {
+            ball.vx = 0;
+            ball.vy = 0;
+        }
+        
+        // Collision detection on walls (bounce gently)
+        if (ball.x - ball.r < 0 || ball.x + ball.r > canvas.width) {
+            ball.vx = -ball.vx * 0.8;
+            ball.x = ball.x - ball.r < 0 ? ball.r : canvas.width - ball.r;
+        }
+        if (ball.y - ball.r < 0 || ball.y + ball.r > canvas.height) {
+            ball.vy = -ball.vy * 0.8;
+            ball.y = ball.y - ball.r < 0 ? ball.r : canvas.height - ball.r;
+        }
+        
+        // Check for Goal/Cup-in
+        const distToHole = Math.hypot(ball.x - hole.x, ball.y - hole.y);
+        if (distToHole < hole.r - 2 && !gameWon) {
+            // Speed must be low enough to enter cup
+            if (Math.hypot(ball.vx, ball.vy) < 2.5) {
+                gameWon = true;
+                ball.vx = 0;
+                ball.vy = 0;
+                ball.x = hole.x;
+                ball.y = hole.y;
+                
+                // Save and display score achievements
+                if (!bestScore || strokeCount < bestScore) {
+                    bestScore = strokeCount;
+                    localStorage.setItem('bestScore', bestScore);
+                    document.getElementById('bestScore').innerText = bestScore;
+                }
+                
+                triggerCelebration();
+            }
+        }
+    }
+    
+    // Draw Shot Aim Guidance Indicator Line
+    if (isDragging) {
+        const dx = dragStart.x - currentMouse.x;
+        const dy = dragStart.y - currentMouse.y;
+        const dist = Math.hypot(dx, dy);
+        
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.8)'; // amber 400
+        ctx.lineWidth = Math.min(dist * 0.05 + 1, 5);
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(ball.x, ball.y);
+        // Extension guide vector lines
+        ctx.lineTo(ball.x + dx * 0.8, ball.y + dy * 0.8);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        // Target indicator circle
+        ctx.fillStyle = 'rgba(251, 191, 36, 0.4)';
+        ctx.beginPath();
+        ctx.arc(ball.x + dx * 0.8, ball.y + dy * 0.8, 6, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    
+    // Draw player's golf ball
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetY = 2;
+    ctx.fillStyle = ball.color;
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0; // reset shadow parameters
+    
+    requestAnimationFrame(draw);
+}
+
+// Start visual frame loops
+requestAnimationFrame(draw);
+
+function triggerCelebration() {
+    playGoalSound();
+    
+    // Customize encouragement dynamic messages based on performance
+    const congratsSub = document.getElementById('congratsSub');
+    if (strokeCount === 1) {
+        congratsSub.innerText = `ホールインワンです！超人的なアプローチ！本物のパークゴルフでも、このナイスアプローチのようにスムーズにいきたいですね！`;
+    } else if (strokeCount <= 3) {
+        congratsSub.innerText = `${strokeCount}打でカップイン！素晴らしい技術です！この調子で手首の調子も一歩ずつ上り坂を登っていきましょう！`;
+    } else {
+        congratsSub.innerText = `${strokeCount}打で見事にカップイン！楽しんで挑戦することが一番のリハビリです。また挑戦してベストを目指しましょう！`;
+    }
+
+    const overlay = document.getElementById('celebrationOverlay');
+    overlay.classList.remove('pointer-events-none');
+    overlay.classList.add('opacity-100');
+}
+
+function resetGame() {
+    gameWon = false;
+    strokeCount = 0;
+    document.getElementById('strokeCount').innerText = strokeCount;
+    
+    // Reset ball/cup location securely with randomized height offset to make it replayable
+    ball.x = canvas.width * 0.15;
+    ball.y = canvas.height * (0.4 + Math.random() * 0.4);
+    ball.vx = 0;
+    ball.vy = 0;
+    
+    hole.x = canvas.width * 0.85;
+    hole.y = canvas.height * (0.3 + Math.random() * 0.4);
+    
+    const overlay = document.getElementById('celebrationOverlay');
+    overlay.classList.add('pointer-events-none');
+    overlay.classList.remove('opacity-100');
+    
+    const gameMsg = document.getElementById('gameMessage');
+    gameMsg.classList.remove('opacity-0', 'scale-90');
+}
+
+/* Interactive Physical Therapy Stretches Timer Controls */
+let activeTimer = null;
+let activeTimerId = null;
+
+function startTimer(id, seconds) {
+    if (activeTimer) {
+        clearInterval(activeTimer);
+    }
+    
+    // Active style effects
+    document.querySelectorAll('[id^="stretchAnim"]').forEach(el => el.className = "text-5xl animate-spin");
+    const targetAnim = document.getElementById(`stretchAnim${id}`);
+    
+    if (id === 1) targetAnim.className = "text-5xl animate-bounce";
+    if (id === 2) targetAnim.className = "text-5xl transform origin-bottom rotate-45 transition-all duration-300";
+    if (id === 3) targetAnim.className = "text-5xl animate-spin";
+
+    let timeLeft = seconds;
+    const buttonText = document.getElementById(`timer-text-${id}`);
+    buttonText.innerText = `${timeLeft}秒測定中...`;
+    
+    activeTimerId = id;
+    activeTimer = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+            clearInterval(activeTimer);
+            buttonText.innerText = "測定が完了しました！";
+            
+            // Revert animation styles
+            if (id === 1) targetAnim.className = "text-5xl animate-bounce";
+            if (id === 2) targetAnim.className = "text-5xl transform origin-bottom transition-all duration-500 rotate-12";
+            if (id === 3) targetAnim.className = "text-5xl animate-pulse";
+            
+            // Pop the custom alert
+            const alertBox = document.getElementById('stretchAlert');
+            const alertText = document.getElementById('stretchAlertText');
+            
+            alertText.innerText = `「運動${id}」を完了しました！無理のないペースで、心地よい血流を感じながら続けましょう！`;
+            alertBox.classList.remove('hidden');
+            
+            // Gentle success beep sound if enabled
+            if (isSoundOn && audioCtxInitialized) {
+                try {
+                    const now = Tone.now();
+                    goalSound.triggerAttackRelease("E5", "16n", now);
+                    goalSound.triggerAttackRelease("A5", "8n", now + 0.1);
+                } catch(e){}
+            }
+        } else {
+            buttonText.innerText = `${timeLeft}秒測定中...`;
+        }
+    }, 1000);
+}
+
+function closeStretchAlert() {
+    document.getElementById('stretchAlert').classList.add('hidden');
+}
+
+/* Virtual Sticky Bulletin Cheering Board Controls */
+function openMessageModal() {
+    const modal = document.getElementById('messageModal');
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        modal.classList.add('opacity-100');
+        document.getElementById('modalContainer').classList.remove('scale-95');
+    }, 10);
+}
+
+function closeMessageModal() {
+    const modal = document.getElementById('messageModal');
+    document.getElementById('modalContainer').classList.add('scale-95');
+    modal.classList.remove('opacity-100');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
+}
+
+function handleFormSubmit(event) {
+    event.preventDefault();
+    
+    const sender = document.getElementById('senderName').value;
+    const role = document.getElementById('senderRole').value || '応援団';
+    const msg = document.getElementById('senderMsg').value;
+    
+    // Add new custom stylized sticky note to Grid
+    const grid = document.getElementById('stickyNotesGrid');
+    const newNote = document.createElement('div');
+    
+    // Pick soft styling randomly to diversify visual notes
+    const designs = [
+        { bg: 'from-pink-50 to-rose-50/50', border: 'border-rose-400', text: 'text-rose-800' },
+        { bg: 'from-violet-50 to-indigo-50/50', border: 'border-indigo-400', text: 'text-indigo-800' },
+        { bg: 'from-emerald-50 to-teal-50/50', border: 'border-emerald-400', text: 'text-emerald-800' }
+    ];
+    const style = designs[Math.floor(Math.random() * designs.length)];
+    
+    newNote.className = `bg-gradient-to-br ${style.bg} border-l-4 ${style.border} rounded-r-3xl rounded-l-lg p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[180px] opacity-0 transform translate-y-4 duration-500`;
+    
+    newNote.innerHTML = `
+        <p class="text-sm text-slate-700 leading-relaxed kiwi-font">
+            「${msg}」
+        </p>
+        <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-200/40">
+            <span class="text-xs font-extrabold ${style.text} flex items-center gap-1">
+                <i class="fa-solid fa-signature"></i> ${sender}さんより
+            </span>
+            <span class="text-[10px] text-slate-500 font-semibold bg-white px-2 py-0.5 rounded-md">
+                ${role}
+            </span>
+        </div>
+    `;
+    
+    grid.prepend(newNote);
+    
+    // Animate item insertion gracefully
+    setTimeout(() => {
+        newNote.classList.remove('opacity-0', 'translate-y-4');
+    }, 50);
+    
+    // Close form modal & clear variables
+    closeMessageModal();
+    document.getElementById('cheerForm').reset();
+    
+    // Play celebratory drop audio if sound is active
+    if (isSoundOn && audioCtxInitialized) {
+        try {
+            const now = Tone.now();
+            goalSound.triggerAttackRelease("C5", "8n", now);
+        } catch (e) {}
+    }
+}
+
+/* Interactive Roadmap Nodes Popups */
+const stepDetails = {
+    step1: {
+        title: "6月初めの初期症状について",
+        desc: "両手首と手の甲の急な腫れや激しい痛みは、日常生活や家事、大好きなパークゴルフに多大なるご不便を強いたと思います。整形外科の薬でも腫れが退かなかった時期は本当に不安だったとお察しします。",
+        care: "初期の急な腫れや痛みの時期は、まずは冷却（アイシング）を行い、なるべく関節の安静を保つことが大切とされています。お薬の服用ルールを守り、炎症を最小限に抑えましょう。"
+    },
+    step2: {
+        title: "安心のための全身血液検査",
+        desc: "内科と整形外科で行った精密血液検査にて、肝臓・腎臓の値が正常であったこと、またリウマチ検査でも陰性（白）であったことは、非常に心強い健康サインです！内臓の健康維持は今後の長期治療の基盤となります。",
+        care: "リウマチ因子が陰性であっても、関節炎や血清陰性リウマチと呼ばれる症状の可能性もあります。血液データが綺麗であることは治療を進める上で強い味方です。"
+    },
+    step3: {
+        title: "セコメディック病院での治療開始",
+        desc: "紹介状によって、手首の膠原病・リウマチの専門分野での精密レントゲンを受けられたことは最善の判断でした。原因が完全には特定できずとも、リウマチ治療薬とステロイドの開始により手首の痛みが改善へと向かったのは素晴らしい朗報です！",
+        care: "ステロイド薬は関節の腫れや強い痛みを素早く和らげる効果があります。医師の指示に従い、勝手に飲む量を増減せず、ゆっくりと体を薬に慣れさせ、調子を戻していきましょう。"
+    },
+    step4: {
+        title: "週1回、36ホールのパークゴルフ再開！",
+        desc: "少しでも手首の痛みが引いた隙を見逃さず、大好きな『パークゴルフ（週一・36ホール）』を再開された村谷さんのアクティブな姿勢、本当に尊敬します！精神的にも最高の特効薬になります。",
+        care: "プレー前後は手首をよく回してストレッチを行い、サポーターや冷湿布等をうまく活用して手首にかかる振動を軽減しましょう。無理のない『完治へのステップ』をゴルフと共に楽しみましょう！"
+    }
+};
+
+function showRoadmapDetail(stepKey) {
+    const detail = stepDetails[stepKey];
+    if (!detail) return;
+    
+    document.getElementById('roadmapDetailStep').innerText = stepKey.toUpperCase();
+    document.getElementById('roadmapDetailTitle').innerText = detail.title;
+    document.getElementById('roadmapDetailDesc').innerText = detail.desc;
+    document.getElementById('roadmapDetailCare').innerText = detail.care;
+    
+    const modal = document.getElementById('roadmapModal');
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        modal.classList.add('opacity-100');
+        document.getElementById('roadmapModalContainer').classList.remove('scale-95');
+    }, 10);
+}
+
+function closeRoadmapModal() {
+    const modal = document.getElementById('roadmapModal');
+    document.getElementById('roadmapModalContainer').classList.add('scale-95');
+    modal.classList.remove('opacity-100');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
+}
+</script>
+</body>
+</html>
