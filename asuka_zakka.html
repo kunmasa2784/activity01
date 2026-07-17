@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コトリの森のちいさな雑貨店 | 夢が詰まった可愛い雑貨屋さん</title>
+    <!-- Google Fonts: Kiwi Maru (手書き風で温かみのあるかわいいフォント) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 全体に可愛いフォントを適用 */
+        body {
+            font-family: 'Kiwi Maru', serif;
+            background-color: #fdfbf7;
+            color: #5c4e46;
+        }
+
+        /* ふわふわ浮かぶアニメーション */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .float-anim {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float-delayed {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(-3deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .float-anim-delayed {
+            animation: float-delayed 5s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+
+        /* 雲が横に流れるアニメーション */
+        @keyframes drift {
+            0% { transform: translateX(-10%); }
+            50% { transform: translateX(10%); }
+            100% { transform: translateX(-10%); }
+        }
+        .drift-anim {
+            animation: drift 20s ease-in-out infinite;
+        }
+
+        /* カスタムスクロールバー */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdfbf7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e6ccb2;
+            border-radius: 9999px;
+        }
+
+        /* 手書き風の破線ボーダー */
+        .sketch-border {
+            border: 3px dashed #ddb892;
+        }
+
+        /* パステルグラデーション */
+        .pastel-bg {
+            background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+        }
+        .card-bg {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        forest: '#7f9f7f',
+                        sky: '#a8dadc',
+                        peach: '#ffcad4',
+                        butter: '#f4f1de',
+                        wood: '#7f5539',
+                        warmSand: '#ede0d4',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- ヘッダー / ナビゲーション -->
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b-2 border-dashed border-warmSand/60 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-2 group">
+                <span class="text-3xl float-anim">🐦</span>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold text-wood group-hover:text-forest transition-colors duration-300">コトリの森</h1>
+                    <p class="text-xs text-stone-400">ちいさな可愛い雑貨屋さん</p>
+                </div>
+            </a>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#concept" class="text-wood hover:text-forest font-medium transition-colors duration-300 flex items-center gap-1"><i class="fa-solid fa-feather"></i>おはなし</a>
+                <a href="#items" class="text-wood hover:text-forest font-medium transition-colors duration-300 flex items-center gap-1"><i class="fa-solid fa-gift"></i>たからもの</a>
+                <a href="#fortune" class="text-wood hover:text-forest font-medium transition-colors duration-300 flex items-center gap-1"><i class="fa-solid fa-wand-magic-sparkles"></i>おみくじ</a>
+                <a href="#board" class="text-wood hover:text-forest font-medium transition-colors duration-300 flex items-center gap-1"><i class="fa-solid fa-comment-heart"></i>みんなの広場</a>
+                <a href="#access" class="text-wood hover:text-forest font-medium transition-colors duration-300 flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i>おいでよ</a>
+            </nav>
+            <div class="flex items-center space-x-2">
+                <a href="#board" class="bg-forest text-white px-4 py-2 rounded-full text-xs font-bold hover:bg-forest/90 shadow-md transition-all transform hover:scale-105 flex items-center gap-1">
+                    <i class="fa-solid fa-heart"></i> 応援を送る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ヒーローセクション -->
+    <section class="relative overflow-hidden pastel-bg py-16 md:py-24 px-4 border-b-4 border-dashed border-warmSand">
+        <!-- バックグラウンドの雲 -->
+        <div class="absolute top-10 left-10 text-white/40 text-6xl drift-anim opacity-60 pointer-events-none select-none"><i class="fa-solid fa-cloud"></i></div>
+        <div class="absolute bottom-16 right-10 text-white/30 text-8xl drift-anim opacity-50 pointer-events-none select-none" style="animation-duration: 28s;"><i class="fa-solid fa-cloud"></i></div>
+
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <!-- 森のリース風SVGアイコン -->
+            <div class="inline-block relative mb-6">
+                <span class="text-7xl md:text-8xl block float-anim">🏡</span>
+                <span class="absolute -top-2 -right-2 text-3xl float-anim-delayed">🌸</span>
+                <span class="absolute -bottom-2 -left-2 text-3xl float-anim">✨</span>
+            </div>
+            
+            <h2 class="text-3xl md:text-5xl font-bold text-wood leading-tight mb-4 tracking-wider">
+                ようこそ、コトリの森の<br class="md:hidden">ちいさな雑貨屋さんへ
+            </h2>
+            <p class="text-base md:text-lg text-wood/80 max-w-2xl mx-auto leading-relaxed mb-8 px-4">
+                扉をそっと開けると、そこは絵本のような優しい世界。<br>
+                ひとつひとつ、想いを込めて集めた可愛い「たからもの」たちが、あなたとの出会いを心待ちにしています。
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="#items" class="w-full sm:w-auto bg-wood text-white px-8 py-3 rounded-full font-bold text-sm hover:bg-wood/90 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-eye"></i> お店をのぞいてみる
+                </a>
+                <a href="#concept" class="w-full sm:w-auto bg-white border-2 border-wood/30 text-wood px-8 py-3 rounded-full font-bold text-sm hover:bg-stone-50 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-book-open"></i> お店のストーリーを読む
+                </a>
+            </div>
+        </div>
+
+        <!-- 下部の可愛い森風の草花仕切り -->
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+            <svg class="relative block w-full h-[30px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0 C150,90 350,120 600,60 C850,0 1050,90 1200,0 L1200,120 L0,120 Z" fill="#fdfbf7"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- コンセプトセクション -->
+    <section id="concept" class="py-16 px-4 max-w-5xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="relative order-2 md:order-1 flex justify-center">
+                <!-- 店主の机やお店のイメージ。可愛らしいSVGイラスト -->
+                <div class="relative w-80 h-80 rounded-full bg-peach/30 flex items-center justify-center sketch-border p-6 float-anim">
+                    <div class="text-center">
+                        <span class="text-8xl block mb-2">🎁</span>
+                        <span class="text-sm font-bold text-wood/80">小さな店に溢れる夢</span>
+                        <div class="mt-4 flex justify-center gap-2 text-wood/60 text-lg">
+                            <i class="fa-solid fa-heart"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                    </div>
+                    <!-- 周りに散りばめられた小さなアイコン -->
+                    <span class="absolute top-6 left-6 text-2xl float-anim-delayed">✨</span>
+                    <span class="absolute bottom-8 right-6 text-3xl float-anim">🐿️</span>
+                    <span class="absolute top-1/2 -right-4 text-2xl float-anim-delayed">🌼</span>
+                </div>
+            </div>
+            <div class="order-1 md:order-2 space-y-6">
+                <div class="inline-block bg-peach/20 text-wood border-2 border-dashed border-peach px-4 py-1 rounded-full text-xs font-bold">
+                    🌿 お店のおはなし
+                </div>
+                <h3 class="text-2xl md:text-3xl font-bold text-wood">
+                    ちいさな扉のむこうにある、<br>
+                    世界でいちばん温かい場所。
+                </h3>
+                <p class="text-stone-600 leading-relaxed text-sm md:text-base">
+                    「いつか、だれかの毎日をちょっとだけ輝かせる、ちいさな雑貨屋さんを開きたい」<br>
+                    そんな、ずっと大切に育ててきた夢からこの「コトリの森」は生まれました。
+                </p>
+                <p class="text-stone-600 leading-relaxed text-sm md:text-base">
+                    お店はとってもちいさくて、一度にたくさんのお客さまは入れないかもしれません。<br>
+                    けれど、そのちいさな空間には、世界中から集めた「とびきり可愛いもの」が棚のすみずみまでぎゅっと詰まっています。
+                </p>
+                <p class="text-stone-600 leading-relaxed text-sm md:text-base">
+                    手作りのぬくもり、ほっこりとする絵柄、なんだか目が合って連れて帰りたくなるぬいぐるみ…。<br>
+                    ただ眺めるだけで、あなたの心がぽっとあたたかくなるような、そんな場所でありたいと願っています。みんなに、この可愛い夢が届きますように。
+                </p>
+                <div class="pt-2 flex items-center gap-4 text-sm font-bold text-forest">
+                    <span>🏠 小さな森の片隅にて</span>
+                    <span>🌳 店主より愛を込めて</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- たからもの（商品一覧）セクション -->
+    <section id="items" class="py-16 bg-warmSand/30 border-y-4 border-dashed border-warmSand px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center max-w-xl mx-auto mb-12">
+                <span class="text-xs font-bold bg-forest/20 text-forest border border-forest px-3 py-1 rounded-full uppercase tracking-wider">Our Treasures</span>
+                <h3 class="text-3xl font-bold text-wood mt-3">森で見つけた可愛い仲間たち</h3>
+                <p class="text-stone-500 text-sm mt-2">お店に並ぶ予定のとっておきの商品たちをご紹介します。あなたのお気に入りを見つけて、ぜひハートをタップしてくださいね！</p>
+            </div>
+
+            <!-- カテゴリフィルター -->
+            <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8">
+                <button onclick="filterItems('all')" class="cat-btn active bg-wood text-white px-5 py-2 rounded-full text-xs font-bold shadow-sm hover:scale-105 transition-all">
+                    🌱 すべて
+                </button>
+                <button onclick="filterItems('accessory')" class="cat-btn bg-white text-wood border border-wood/20 hover:border-wood px-5 py-2 rounded-full text-xs font-bold shadow-sm hover:scale-105 transition-all">
+                    🌸 アクセサリー
+                </button>
+                <button onclick="filterItems('interior')" class="cat-btn bg-white text-wood border border-wood/20 hover:border-wood px-5 py-2 rounded-full text-xs font-bold shadow-sm hover:scale-105 transition-all">
+                    ☕ おうち雑貨
+                </button>
+                <button onclick="filterItems('stationery')" class="cat-btn bg-white text-wood border border-wood/20 hover:border-wood px-5 py-2 rounded-full text-xs font-bold shadow-sm hover:scale-105 transition-all">
+                    📝 ステーショナリー
+                </button>
+                <button onclick="filterItems('toy')" class="cat-btn bg-white text-wood border border-wood/20 hover:border-wood px-5 py-2 rounded-full text-xs font-bold shadow-sm hover:scale-105 transition-all">
+                    🧸 ぬいぐるみ・その他
+                </button>
+            </div>
+
+            <!-- 商品カードグリッド -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- アイテム1: 手作りマグ -->
+                <div class="item-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-warmSand/60" data-category="interior">
+                    <div class="relative h-48 bg-stone-100 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=500&q=80" 
+                             alt="コトリの手作りマグカップ" class="w-full h-full object-cover"
+                             onerror="this.onerror=null; this.src='https://placehold.co/500x500/fafedc/7f5539?text=MugCup';">
+                        <span class="absolute top-3 left-3 bg-forest text-white text-[10px] font-bold px-2.5 py-1 rounded-full">一番人気</span>
+                    </div>
+                    <div class="p-5 space-y-2">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-wood text-base">コトリのほっこり手作りマグ</h4>
+                            <!-- お気に入りボタン -->
+                            <button onclick="toggleLike(this, 'mug')" class="text-stone-300 hover:text-rose-400 transition-colors duration-200">
+                                <i class="fa-solid fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-stone-500 leading-relaxed">ひとつひとつ職人が丁寧に手描きした、愛らしいコトリ模様の陶器製マグカップ。毎日のコーヒータイムを幸せに。</p>
+                        <div class="pt-2 flex justify-between items-center border-t border-stone-100">
+                            <span class="text-xs bg-peach/20 text-wood px-2 py-0.5 rounded-full font-bold">おうち雑貨</span>
+                            <span class="text-sm font-bold text-wood">¥1,800 <span class="text-[10px] text-stone-400 font-normal">(税込)</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- アイテム2: うさぎのポシェット -->
+                <div class="item-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-warmSand/60" data-category="toy">
+                    <div class="relative h-48 bg-stone-100 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1559251606-c623743a6d76?auto=format&fit=crop&w=500&q=80" 
+                             alt="ロップイヤーのミニぬいぐるみ" class="w-full h-full object-cover"
+                             onerror="this.onerror=null; this.src='https://placehold.co/500x500/fafedc/7f5539?text=Rabbit';">
+                        <span class="absolute top-3 left-3 bg-peach text-wood text-[10px] font-bold px-2.5 py-1 rounded-full">新登場</span>
+                    </div>
+                    <div class="p-5 space-y-2">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-wood text-base">ロップイヤーの森のぬいぐるみ</h4>
+                            <button onclick="toggleLike(this, 'rabbit')" class="text-stone-300 hover:text-rose-400 transition-colors duration-200">
+                                <i class="fa-solid fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-stone-500 leading-relaxed">ふわふわのオーガニックコットンで作られた、耳がたれた愛らしいうさぎ。あなたの小さな相棒になります。</p>
+                        <div class="pt-2 flex justify-between items-center border-t border-stone-100">
+                            <span class="text-xs bg-peach/20 text-wood px-2 py-0.5 rounded-full font-bold">ぬいぐるみ</span>
+                            <span class="text-sm font-bold text-wood">¥2,400 <span class="text-[10px] text-stone-400 font-normal">(税込)</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- アイテム3: ドライフラワーのヘアピン -->
+                <div class="item-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-warmSand/60" data-category="accessory">
+                    <div class="relative h-48 bg-stone-100 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=500&q=80" 
+                             alt="本物の花のヘアクリップ" class="w-full h-full object-cover"
+                             onerror="this.onerror=null; this.src='https://placehold.co/500x500/fafedc/7f5539?text=Accessory';">
+                    </div>
+                    <div class="p-5 space-y-2">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-wood text-base">実り花びらのレジンヘアピン</h4>
+                            <button onclick="toggleLike(this, 'flowerpin')" class="text-stone-300 hover:text-rose-400 transition-colors duration-200">
+                                <i class="fa-solid fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-stone-500 leading-relaxed">摘みたての野の花をそっとレジンに閉じ込めました。身につけるだけで、ふんわり春をまとうことができます。</p>
+                        <div class="pt-2 flex justify-between items-center border-t border-stone-100">
+                            <span class="text-xs bg-peach/20 text-wood px-2 py-0.5 rounded-full font-bold">アクセサリー</span>
+                            <span class="text-sm font-bold text-wood">¥1,200 <span class="text-[10px] text-stone-400 font-normal">(税込)</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- アイテム4: きのこイラストのメモ帳 -->
+                <div class="item-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-warmSand/60" data-category="stationery">
+                    <div class="relative h-48 bg-stone-100 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=500&q=80" 
+                             alt="きのことりイラストノート" class="w-full h-full object-cover"
+                             onerror="this.onerror=null; this.src='https://placehold.co/500x500/fafedc/7f5539?text=Note';">
+                    </div>
+                    <div class="p-5 space-y-2">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-wood text-base">森のきのことり レターセット</h4>
+                            <button onclick="toggleLike(this, 'letter')" class="text-stone-300 hover:text-rose-400 transition-colors duration-200">
+                                <i class="fa-solid fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-stone-500 leading-relaxed">絵本作家による描き下ろし。温かみのあるクラフト紙を使った、大切な人にお手紙を送りたくなる特別な便箋です。</p>
+                        <div class="pt-2 flex justify-between items-center border-t border-stone-100">
+                            <span class="text-xs bg-peach/20 text-wood px-2 py-0.5 rounded-full font-bold">文房具</span>
+                            <span class="text-sm font-bold text-wood">¥680 <span class="text-[10px] text-stone-400 font-normal">(税込)</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <p class="text-stone-500 text-sm">その他にも、刺繍ポーチ、ブローチ、手作りジャム、ドライフラワーのミニブーケなど…<br>お店いっぱいにちいさな可愛いものをたくさん並べます。</p>
+                <div class="mt-4 inline-block bg-white/70 border border-wood/10 rounded-2xl p-4 text-xs">
+                    <span class="text-rose-500 font-bold">♥</span> ボタンをタップした商品は、あなたのお気に入りリスト（ブラウザに保存）にこっそり記録されます。
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- コトリのハッピーアイテム占い -->
+    <section id="fortune" class="py-16 px-4 max-w-4xl mx-auto">
+        <div class="bg-[#fefae0]/80 rounded-3xl p-8 md:p-12 sketch-border relative overflow-hidden">
+            <span class="absolute top-4 right-4 text-4xl float-anim opacity-40">✨</span>
+            <span class="absolute bottom-4 left-4 text-4xl float-anim-delayed opacity-40">🔮</span>
+
+            <div class="text-center max-w-lg mx-auto space-y-6">
+                <span class="text-5xl block float-anim">🔮🐦</span>
+                <h3 class="text-2xl md:text-3xl font-bold text-wood">コトリの森のハッピーおみくじ</h3>
+                <p class="text-stone-600 text-sm md:text-base leading-relaxed">
+                    今日のあなたの運勢にぴったりの「ハッピー雑貨」を、森のコトリがこっそり教えます。クリックしてコトリにたずねてみてね！
+                </p>
+
+                <!-- 占い画面切替 -->
+                <div id="fortune-initial" class="py-4">
+                    <button onclick="drawFortune()" class="bg-forest hover:bg-forest/90 text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all transform hover:scale-105 inline-flex items-center gap-2">
+                        <i class="fa-solid fa-feather"></i> おみくじを引いてみる
+                    </button>
+                </div>
+
+                <div id="fortune-result" class="hidden py-6 space-y-6 animate-fade-in">
+                    <div class="border-t border-dashed border-wood/20 pt-6">
+                        <span class="text-xs bg-wood/10 text-wood px-3 py-1 rounded-full font-bold">今日のおすすめ雑貨</span>
+                        <h4 id="fortune-item-name" class="text-2xl font-bold text-wood mt-3">フラワーブローチ</h4>
+                        <p id="fortune-desc" class="text-stone-600 text-sm mt-2 max-w-md mx-auto">心ときめく黄色いお花のブローチ。お気に入りの服につければ、何気ない毎日が特別な一日に変わるかも。</p>
+                    </div>
+                    
+                    <div class="bg-white/80 rounded-2xl p-4 shadow-inner max-w-md mx-auto">
+                        <span class="text-xs text-forest font-bold">💌 コトリからのメッセージ</span>
+                        <p id="fortune-message" class="text-wood font-medium text-sm mt-1">「深呼吸をして、空を見上げてみて。小さな嬉しいことが見つかるよ。」</p>
+                    </div>
+
+                    <button onclick="resetFortune()" class="text-wood/60 hover:text-wood text-xs underline font-bold mt-4 block mx-auto">
+                        もう一回ひく
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- メッセージボードセクション -->
+    <section id="board" class="py-16 bg-gradient-to-b from-[#fdfbf7] to-[#ede0d4] px-4">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center max-w-xl mx-auto mb-10">
+                <span class="text-xs font-bold bg-peach/20 text-wood border border-peach px-3 py-1 rounded-full">Message Corkboard</span>
+                <h3 class="text-3xl font-bold text-wood mt-3">みんなとつなぐ 夢の掲示板</h3>
+                <p class="text-stone-600 text-sm mt-2">
+                    「こんな可愛いものが欲しい！」「応援しています！」など、あなたのメッセージをコルクボードにピン留めしてください。店主の大きなエネルギーになります！
+                </p>
+            </div>
+
+            <!-- フォームとボードのグリッド -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- 送信フォーム -->
+                <div class="bg-white rounded-3xl p-6 shadow-md border border-warmSand/60 flex flex-col justify-between h-full">
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-lg text-wood flex items-center gap-2">
+                            <span>✍️</span> メッセージを書く
+                        </h4>
+                        <div>
+                            <label class="block text-xs text-stone-500 mb-1">おなまえ（ニックネーム可）</label>
+                            <input type="text" id="board-name" placeholder="例：もりっこ" class="w-full text-sm p-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-forest bg-stone-50">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-stone-500 mb-1">ふせんの色</label>
+                            <div class="flex gap-2">
+                                <button onclick="selectColor(this, 'bg-rose-100 border-rose-300 text-rose-800')" class="color-btn w-8 h-8 rounded-full bg-rose-100 border-2 border-rose-400 focus:outline-none transition-transform transform scale-110" data-color="rose"></button>
+                                <button onclick="selectColor(this, 'bg-amber-100 border-amber-300 text-amber-800')" class="color-btn w-8 h-8 rounded-full bg-amber-100 border-2 border-transparent focus:outline-none transition-transform" data-color="amber"></button>
+                                <button onclick="selectColor(this, 'bg-emerald-100 border-emerald-300 text-emerald-800')" class="color-btn w-8 h-8 rounded-full bg-emerald-100 border-2 border-transparent focus:outline-none transition-transform" data-color="emerald"></button>
+                                <button onclick="selectColor(this, 'bg-sky-100 border-sky-300 text-sky-800')" class="color-btn w-8 h-8 rounded-full bg-sky-100 border-2 border-transparent focus:outline-none transition-transform" data-color="sky"></button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-stone-500 mb-1">メッセージ（50文字まで）</label>
+                            <textarea id="board-msg" rows="3" maxlength="50" placeholder="例：オープンの日、絶対行きます！かわいい食器がもっとほしいな〜🌸" class="w-full text-sm p-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-forest bg-stone-50 resize-none"></textarea>
+                        </div>
+                    </div>
+                    <button onclick="postMessage()" class="w-full bg-forest text-white py-3 rounded-xl font-bold text-sm mt-4 hover:bg-forest/90 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-thumbtack"></i> コルクボードにピン留めする
+                    </button>
+                </div>
+
+                <!-- コルクボード -->
+                <div class="lg:col-span-2 bg-[#d4a373]/30 rounded-3xl p-6 shadow-inner border-[6px] border-wood min-h-[350px] relative">
+                    <!-- コルク模様の代替 -->
+                    <div class="absolute inset-0 bg-[radial-gradient(#ddb892_1px,transparent_1px)] [background-size:16px_16px] opacity-40 rounded-2xl pointer-events-none"></div>
+                    
+                    <div class="flex items-center justify-between border-b border-wood/20 pb-3 mb-4 relative z-10">
+                        <span class="text-xs font-bold text-wood flex items-center gap-1">📌 みんなのメッセージ壁面</span>
+                        <button onclick="clearBoard()" class="text-[10px] text-wood/60 hover:text-red-500 font-bold">リセット</button>
+                    </div>
+
+                    <!-- メッセージ表示エリア -->
+                    <div id="corkboard-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
+                        <!-- ここにダイナミックにメッセージが入る -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- お店情報・アクセス -->
+    <section id="access" class="py-16 px-4 max-w-5xl mx-auto">
+        <div class="text-center max-w-xl mx-auto mb-12">
+            <span class="text-xs font-bold bg-forest/20 text-forest border border-forest px-3 py-1 rounded-full">Shop Info</span>
+            <h3 class="text-3xl font-bold text-wood mt-3">コトリの森でお待ちしています</h3>
+            <p class="text-stone-500 text-sm mt-2">お店は小さな森の小道の奥。ぜひ、ちいさな扉を見つけて入ってみてくださいね。</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            <!-- 店舗データ -->
+            <div class="bg-white rounded-3xl p-8 border border-warmSand/60 flex flex-col justify-between space-y-6 shadow-md">
+                <div class="space-y-4">
+                    <h4 class="text-xl font-bold text-wood flex items-center gap-2">
+                        <span>🏡</span> コトリの森のちいさな雑貨店
+                    </h4>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        【住所】<br>
+                        〒273-0005 千葉県船橋市 コトリの森 1-2-3 (架空の可愛い森)<br>
+                        ※船橋駅より、心がほっこりする方向に徒歩5分 🐦
+                    </p>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        【営業時間・お休み】<br>
+                        11:00 〜 18:00 (土・日・祝のみひっそり営業)<br>
+                        ※平日は、森の中に可愛い雑貨を探しに旅をしています。
+                    </p>
+                </div>
+
+                <div class="border-t border-dashed border-stone-200 pt-6">
+                    <h5 class="font-bold text-wood text-sm mb-3">📅 今月のお休み予定</h5>
+                    <div class="grid grid-cols-7 gap-1 text-center text-xs text-stone-500 max-w-xs">
+                        <span class="font-bold text-red-400">日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span class="font-bold text-sky-400">土</span>
+                        <span class="bg-rose-100 text-rose-800 rounded-full w-6 h-6 flex items-center justify-center font-bold mx-auto">休</span>
+                        <span class="w-6 h-6 flex items-center justify-center mx-auto"></span>
+                        <span class="w-6 h-6 flex items-center justify-center mx-auto"></span>
+                        <span class="w-6 h-6 flex items-center justify-center mx-auto"></span>
+                        <span class="w-6 h-6 flex items-center justify-center mx-auto"></span>
+                        <span class="w-6 h-6 flex items-center justify-center mx-auto"></span>
+                        <span class="bg-rose-100 text-rose-800 rounded-full w-6 h-6 flex items-center justify-center font-bold mx-auto">休</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-[#1da1f2]/10 text-[#1da1f2] hover:bg-[#1da1f2] hover:text-white flex items-center justify-center transition-all duration-300">
+                        <i class="fa-brands fa-twitter"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-[#e1306c]/10 text-[#e1306c] hover:bg-[#e1306c] hover:text-white flex items-center justify-center transition-all duration-300">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- イラストマップ (SVGで可愛らしく描画) -->
+            <div class="bg-[#f0e6d2] rounded-3xl p-6 shadow-md border-4 border-white flex flex-col items-center justify-center relative overflow-hidden min-h-[350px]">
+                <div class="absolute inset-0 bg-[radial-gradient(#dfccaf_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none"></div>
+                
+                <span class="text-xs font-bold text-wood bg-white/80 border border-wood/20 px-3 py-1 rounded-full mb-4 z-10">🗺️ 手書き風おさんぽマップ</span>
+
+                <svg viewBox="0 0 400 300" class="w-full h-auto max-w-sm relative z-10" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 背景の森 -->
+                    <circle cx="50" cy="80" r="30" fill="#a7c957" opacity="0.6"/>
+                    <circle cx="340" cy="220" r="40" fill="#a7c957" opacity="0.6"/>
+                    <circle cx="100" cy="240" r="25" fill="#a7c957" opacity="0.4"/>
+
+                    <!-- 道路 (茶色のやわらかなパス) -->
+                    <path d="M 20 150 Q 150 150 200 100 T 380 100" fill="none" stroke="#ddb892" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M 200 100 Q 220 200 300 240" fill="none" stroke="#ddb892" stroke-width="12" stroke-linecap="round"/>
+
+                    <!-- 駅 -->
+                    <rect x="25" y="125" width="50" height="40" rx="8" fill="#e6ccb2" stroke="#7f5539" stroke-width="2"/>
+                    <text x="50" y="150" font-family="'Kiwi Maru', serif" font-size="10" fill="#7f5539" text-anchor="middle" font-weight="bold">ふなばし駅</text>
+                    <text x="50" y="115" font-family="'Kiwi Maru', serif" font-size="12" fill="#7f5539" text-anchor="middle">🚃</text>
+
+                    <!-- 森のシンボル -->
+                    <text x="250" y="240" font-family="'Kiwi Maru', serif" font-size="14" fill="#588157">🌳</text>
+                    <text x="320" y="210" font-family="'Kiwi Maru', serif" font-size="14" fill="#588157">🌳</text>
+
+                    <!-- 可愛いコトリの森のちいさな雑貨屋さん -->
+                    <rect x="230" y="50" width="80" height="45" rx="8" fill="#ffcad4" stroke="#7f5539" stroke-width="2" class="float-anim"/>
+                    <text x="270" y="70" font-family="'Kiwi Maru', serif" font-size="8" fill="#7f5539" text-anchor="middle" font-weight="bold">コトリの森</text>
+                    <text x="270" y="83" font-family="'Kiwi Maru', serif" font-size="8" fill="#7f5539" text-anchor="middle" font-weight="bold">雑貨店 (ココ)</text>
+                    <text x="270" y="38" font-family="'Kiwi Maru', serif" font-size="18" fill="#7f5539" text-anchor="middle" class="float-anim">🏡🐦</text>
+
+                    <!-- 看板 -->
+                    <text x="180" y="145" font-family="'Kiwi Maru', serif" font-size="8" fill="#5c4e46" text-anchor="middle">森のさんぽ道 🌸</text>
+                    <text x="310" y="140" font-family="'Kiwi Maru', serif" font-size="12" fill="#5c4e46" text-anchor="middle">🐿️</text>
+                    <path d="M 180 115 L 180 130" stroke="#7f5539" stroke-width="2"/>
+                </svg>
+
+                <p class="text-[10px] text-stone-500 mt-2">※駅からのんびり歩いて、鳥のさえずりが聞こえたらもうすぐです！</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="bg-wood text-white/90 py-12 px-4 border-t-4 border-dashed border-warmSand">
+        <div class="max-w-4xl mx-auto text-center space-y-6">
+            <span class="text-4xl block float-anim">🐦🏠✨</span>
+            <h4 class="text-xl font-bold tracking-wider">コトリの森のちいさな雑貨店</h4>
+            <p class="text-xs text-white/70 max-w-md mx-auto leading-relaxed">
+                あなたのまいにちに、小さな幸せが届きますように。<br>
+                ちいさな夢の第一歩を、一緒に歩んでくれてありがとうございます。
+            </p>
+            <div class="flex justify-center gap-6 text-xs text-white/60">
+                <a href="#concept" class="hover:text-white transition-colors">おはなし</a>
+                <a href="#items" class="hover:text-white transition-colors">たからもの</a>
+                <a href="#board" class="hover:text-white transition-colors">みんなの掲示板</a>
+            </div>
+            <div class="pt-6 border-t border-white/10 text-[10px] text-white/50">
+                &copy; 2026 Kotorino Mori. All dreams come true.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* グローバル変数・お気に入り管理・メッセージ管理 */
+        const STORAGE_KEY_LIKES = 'kotorino_mori_likes_2026';
+        const STORAGE_KEY_BOARD = 'kotorino_mori_board_2026';
+
+        // 占い用データ
+        const FORTUNE_ITEMS = [
+            {
+                name: 'コトリのほっこりマグカップ ☕',
+                desc: '丸みのあるシルエットが愛らしい、温かいスープを入れたくなる陶磁器です。',
+                msg: '温かい飲み物を用意して、たっぷり自分を甘やかしてあげてね。'
+            },
+            {
+                name: 'ロップイヤーうさぎのぬいぐるみ 🧸',
+                desc: 'ぎゅっと抱きしめるのにちょうどいい、ふわふわ素材の可愛い友達。',
+                msg: 'あなたのちいさな話を、この子はいつでも全部聞いてくれるよ。'
+            },
+            {
+                name: '野の花レジンのヘアクリップ 🌸',
+                desc: '本物のドライフラワーを宝石のように樹脂に閉じ込めた手作りのヘアクリップ。',
+                msg: '髪を留めてお出かけすれば、今日のあなたに春の風が吹きます。'
+            },
+            {
+                name: '森のきのことり レターセット 📝',
+                desc: '手触りの良いクラフト紙に、心が和むオリジナルイラストをあしらったセット。',
+                msg: 'スマホではなく、誰かを思い浮かべて手書きの文字を届けてみてはどうかな。'
+            },
+            {
+                name: 'コトリ刺繍のふわふわハンカチ 🐦',
+                desc: 'オーガニックコットンにワンポイントの刺繍が入った、使うたび癒される一品。',
+                msg: 'ポケットにこれを忍ばせて。それだけで一日がちょっとハッピーになるお守り。'
+            },
+            {
+                name: '森のりんごとナッツのミニジャム 🍎',
+                desc: '店主が丁寧に手作りした、クラッカーに乗せておいしいご馳走ジャム。',
+                msg: '美味しいものを少しずつ味わう時間が、今日の幸運を引き寄せます。'
+            }
+        ];
+
+        // ふせんのカラークラス
+        let selectedColorClass = 'bg-rose-100 border-rose-300 text-rose-800';
+
+        // 初期ロード
+        window.onload = function() {
+            loadLikes();
+            loadBoardMessages();
+        }
+
+        /* フィルター機能 */
+        function filterItems(category) {
+            // ボタンのアクティブ切り替え
+            const buttons = document.querySelectorAll('.cat-btn');
+            buttons.forEach(btn => btn.classList.remove('bg-wood', 'text-white'));
+            buttons.forEach(btn => btn.classList.add('bg-white', 'text-wood'));
+
+            event.target.classList.remove('bg-white', 'text-wood');
+            event.target.classList.add('bg-wood', 'text-white');
+
+            // カードの表示非表示
+            const cards = document.querySelectorAll('.item-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        /* お気に入り（ハート）ボタンのロジック */
+        function toggleLike(button, itemId) {
+            let likes = JSON.parse(localStorage.getItem(STORAGE_KEY_LIKES)) || {};
+            
+            if (likes[itemId]) {
+                delete likes[itemId];
+                button.classList.remove('text-rose-500');
+                button.classList.add('text-stone-300');
+                // ふわっと引っ込むアニメーション
+                button.style.transform = "scale(1)";
+            } else {
+                likes[itemId] = true;
+                button.classList.remove('text-stone-300');
+                button.classList.add('text-rose-500');
+                // ポンと弾けるアニメーション
+                button.style.transform = "scale(1.3)";
+                setTimeout(() => {
+                    button.style.transform = "scale(1)";
+                }, 200);
+            }
+            localStorage.setItem(STORAGE_KEY_LIKES, JSON.stringify(likes));
+        }
+
+        function loadLikes() {
+            let likes = JSON.parse(localStorage.getItem(STORAGE_KEY_LIKES)) || {};
+            // それぞれのボタンに反映
+            const items = ['mug', 'rabbit', 'flowerpin', 'letter'];
+            items.forEach(itemId => {
+                if (likes[itemId]) {
+                    // 適切なボタンを探してハートを赤くする
+                    const btn = document.querySelector(`button[onclick*="'${itemId}'"]`);
+                    if (btn) {
+                        btn.classList.remove('text-stone-300');
+                        btn.classList.add('text-rose-500');
+                    }
+                }
+            });
+        }
+
+        /* 占いロジック */
+        function drawFortune() {
+            const initialDiv = document.getElementById('fortune-initial');
+            const resultDiv = document.getElementById('fortune-result');
+
+            // ランダムにハッピーアイテムを選定
+            const randomIndex = Math.floor(Math.random() * FORTUNE_ITEMS.length);
+            const item = FORTUNE_ITEMS[randomIndex];
+
+            // 値を流し込む
+            document.getElementById('fortune-item-name').innerText = item.name;
+            document.getElementById('fortune-desc').innerText = item.desc;
+            document.getElementById('fortune-message').innerText = `「${item.msg}」`;
+
+            // 画面を切り替える
+            initialDiv.classList.add('hidden');
+            resultDiv.classList.remove('hidden');
+        }
+
+        function resetFortune() {
+            const initialDiv = document.getElementById('fortune-initial');
+            const resultDiv = document.getElementById('fortune-result');
+
+            initialDiv.classList.remove('hidden');
+            resultDiv.classList.add('hidden');
+        }
+
+        /* 掲示板ロジック */
+        function selectColor(btn, colorClass) {
+            // 他のボタンの枠線を消す
+            const btns = document.querySelectorAll('.color-btn');
+            btns.forEach(b => {
+                b.classList.remove('border-rose-400', 'border-amber-400', 'border-emerald-400', 'border-sky-400', 'scale-110');
+                b.classList.add('border-transparent');
+            });
+
+            // 選択されたボタンを強調
+            btn.classList.remove('border-transparent');
+            const colorName = btn.getAttribute('data-color');
+            btn.classList.add(`border-${colorName}-400`, 'scale-110');
+
+            selectedColorClass = colorClass;
+        }
+
+        function postMessage() {
+            const nameInput = document.getElementById('board-name');
+            const msgInput = document.getElementById('board-msg');
+
+            const name = nameInput.value.trim() || '名無しの妖精さん';
+            const msg = msgInput.value.trim();
+
+            if (!msg) {
+                alertBox('メッセージを書いてピン留めしてね！');
+                return;
+            }
+
+            const newMessage = {
+                id: Date.now(),
+                name: name,
+                message: msg,
+                colorClass: selectedColorClass,
+                date: new Date().toLocaleDateString('ja-JP')
+            };
+
+            let messages = JSON.parse(localStorage.getItem(STORAGE_KEY_BOARD)) || getSampleMessages();
+            messages.unshift(newMessage); // 新しいものを先頭に追加
+            
+            // 最大6個までボードに表示する
+            if (messages.length > 6) {
+                messages = messages.slice(0, 6);
+            }
+
+            localStorage.setItem(STORAGE_KEY_BOARD, JSON.stringify(messages));
+            renderBoard();
+
+            // フォームクリア
+            msgInput.value = '';
+            nameInput.value = '';
+            
+            alertBox('ボードに可愛いふせんをピン留めしました！📌');
+        }
+
+        function loadBoardMessages() {
+            let messages = JSON.parse(localStorage.getItem(STORAGE_KEY_BOARD));
+            if (!messages || messages.length === 0) {
+                messages = getSampleMessages();
+                localStorage.setItem(STORAGE_KEY_BOARD, JSON.stringify(messages));
+            }
+            renderBoard();
+        }
+
+        function renderBoard() {
+            const grid = document.getElementById('corkboard-grid');
+            grid.innerHTML = '';
+
+            let messages = JSON.parse(localStorage.getItem(STORAGE_KEY_BOARD)) || [];
+
+            messages.forEach((msg, index) => {
+                const rotation = (index % 2 === 0) ? 'rotate-1' : '-rotate-1';
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl shadow-md border-t-4 ${msg.colorClass} ${rotation} transform hover:rotate-0 hover:scale-105 transition-all duration-200 relative`;
+                card.innerHTML = `
+                    <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 text-lg text-red-500 drop-shadow">📌</div>
+                    <p class="text-xs font-semibold leading-relaxed mb-3">"${msg.message}"</p>
+                    <div class="flex justify-between items-center text-[10px] opacity-80 border-t border-dashed border-current/20 pt-2">
+                        <span class="font-bold">🍀 ${msg.name}</span>
+                        <span>${msg.date}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function clearBoard() {
+            if (confirm('ボードをきれいにお掃除しますか？（サンプルメッセージに戻ります）')) {
+                localStorage.removeItem(STORAGE_KEY_BOARD);
+                loadBoardMessages();
+            }
+        }
+
+        function getSampleMessages() {
+            return [
+                {
+                    id: 1,
+                    name: 'ゆきこ',
+                    message: '森のなかに本当に迷い込んだみたい！オープンしたら絶対伺います！',
+                    colorClass: 'bg-rose-100 border-rose-300 text-rose-800',
+                    date: '2026/07/15'
+                },
+                {
+                    id: 2,
+                    name: '雑貨スキー',
+                    message: '手作りのマグカップがめっちゃかわいい！お家にお迎えするのが夢です。',
+                    colorClass: 'bg-emerald-100 border-emerald-300 text-emerald-800',
+                    date: '2026/07/16'
+                },
+                {
+                    id: 3,
+                    name: 'コトリの友達',
+                    message: '小さいけれど夢がたくさん詰まったお部屋のようなお店ですね。応援しています！',
+                    colorClass: 'bg-sky-100 border-sky-300 text-sky-800',
+                    date: '2026/07/17'
+                },
+                {
+                    id: 4,
+                    name: 'はるママ',
+                    message: '子供と一緒に、ロップイヤーうさぎちゃんを連れて帰りにいきたいです🐰',
+                    colorClass: 'bg-amber-100 border-amber-300 text-amber-800',
+                    date: '2026/07/17'
+                }
+            ];
+        }
+
+        // カスタムメッセージボックス (alert()とconfirm()を極力避けつつ、使いやすさを考慮)
+        function alertBox(text) {
+            // 一時的に可愛いメッセージトーストを作る
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-wood text-white px-6 py-3 rounded-full text-xs font-bold shadow-2xl z-50 transition-all duration-300 opacity-0 translate-y-2';
+            toast.innerHTML = `🐦 ${text}`;
+            document.body.appendChild(toast);
+            
+            // アニメーション表示
+            setTimeout(() => {
+                toast.classList.remove('opacity-0', 'translate-y-2');
+            }, 10);
+
+            // 自動消去
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
