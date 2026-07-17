@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>平城宮跡 総合案内おもてなしガイドブック</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        vermilion: {
+                            50: '#fef3f2',
+                            100: '#fee5e2',
+                            500: '#d93829', // 朱雀門・大極殿の朱色
+                            600: '#c32f22',
+                            700: '#a32015',
+                        },
+                        gold: {
+                            500: '#c59b27', // 歴史を紡ぐ金色
+                            600: '#aa821d',
+                        },
+                        sand: {
+                            50: '#fcfbf7', // 優しい砂地背景色
+                            100: '#f7f4ea',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Shippori Mincho', 'Noto Serif JP', 'Georgia', 'serif'],
+                        sans: ['Inter', 'Noto Sans JP', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts for traditional Japanese styling -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .traditional-title {
+            font-family: 'Noto Serif JP', serif;
+        }
+        /* Custom scrollbar for beautiful dashboard feeling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f7f4ea;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d93829;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a32015;
+        }
+    </style>
+</head>
+<body class="bg-sand-50 text-gray-800 font-sans min-h-screen flex flex-col selection:bg-vermilion-100 selection:text-vermilion-700">
+
+    <!-- HEADER -->
+    <header class="bg-gradient-to-r from-vermilion-700 to-vermilion-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 md:py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="bg-white text-vermilion-600 p-2 rounded-full shadow-inner flex items-center justify-center">
+                    <!-- Historical Gate Icon (SVG) -->
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19,4H17V3H15V4H9V3H7V4H5V8H19V4M19,10H5V21H7V14H17V21H19V10M15,12H9V14H15V12Z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold tracking-wider traditional-title">平城宮跡 総合案内コンシェルジュ</h1>
+                    <p class="text-xs text-vermilion-100 font-light">〜「何もない広大さ」を「歴史のロマン」に導くおもてなし〜</p>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <span class="bg-vermilion-800/60 border border-vermilion-500 text-xs px-3 py-1 rounded-full text-vermilion-100">
+                    現在地：平城宮跡
+                </span>
+                <span class="bg-gold-500 text-white text-xs px-3 py-1 rounded-full font-semibold shadow-sm animate-pulse">
+                    応援：勉強の成果を力に！
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO/MESSAGE SECTION -->
+    <div class="bg-cover bg-center relative py-8 px-4 border-b border-sand-100 bg-sand-100" style="background-image: radial-gradient(circle, rgba(253,251,247,0.85) 0%, rgba(247,244,234,0.95) 100%);">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-block bg-vermilion-50 text-vermilion-600 text-xs px-4 py-1.5 rounded-full font-bold mb-3 border border-vermilion-200">
+                一生懸命勉強しているあなたへのエール
+            </div>
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3 traditional-title text-vermilion-700">
+                伝えるのは「事実」ではなく、「あの日の感動」
+            </h2>
+            <p class="text-sm md:text-base text-gray-600 leading-relaxed max-w-2xl mx-auto">
+                平城宮跡を初めて訪れる人の多くは、その「広大な原っぱ」に驚かれます。<br>
+                私たちの役割は、その広さに眠る、約1300年前の「10万人もの人々が歌い、働き、暮らした息づかい」を、お客様の目の前にそっと浮かび上がらせることです。<br>
+                自信を持って笑顔でご案内できるように、このガイドラインを役立ててくださいね！
+            </p>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- LEFT SIDEBAR: NAVIGATIONS & BASICS -->
+        <div class="lg:col-span-4 space-y-6">
+            
+            <!-- Quick navigation tabs (Mobile friendly list) -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-sand-100">
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-1">
+                    <svg class="w-4 h-4 text-vermilion-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    ガイドライン目次
+                </h3>
+                <nav class="space-y-1">
+                    <button onclick="scrollToSection('mindset-sec')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-colors hover:bg-vermilion-50 text-vermilion-700 bg-vermilion-50/50 border-l-4 border-vermilion-500 flex items-center gap-2">
+                        <span>💡</span> 1. おもてなし基本の3原則
+                    </button>
+                    <button onclick="scrollToSection('planner-sec')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-colors hover:bg-vermilion-50 text-gray-600 flex items-center gap-2">
+                        <span>🗺️</span> 2. インタラクティブ・ルート提案
+                    </button>
+                    <button onclick="scrollToSection('trivia-sec')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-colors hover:bg-vermilion-50 text-gray-600 flex items-center gap-2">
+                        <span>🏰</span> 3. エリア別・鉄板トリビア
+                    </button>
+                    <button onclick="scrollToSection('quiz-sec')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-colors hover:bg-vermilion-50 text-gray-600 flex items-center gap-2">
+                        <span>🎯</span> 4. おもてなし実践クイズ
+                    </button>
+                    <button onclick="scrollToSection('notepad-sec')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-colors hover:bg-vermilion-50 text-gray-600 flex items-center gap-2">
+                        <span>📝</span> 5. マイ・おもてなしメモ
+                    </button>
+                </nav>
+            </div>
+
+            <!-- SECTION 1: MINDSET -->
+            <div id="mindset-sec" class="bg-white p-5 rounded-2xl shadow-sm border border-sand-100 scroll-mt-20">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 traditional-title border-b pb-2 border-sand-100 flex items-center gap-2">
+                    <span class="text-vermilion-500">💡</span> 1. おもてなし基本の3原則
+                </h3>
+                <div class="space-y-4">
+                    <!-- Principle 1 -->
+                    <div class="group">
+                        <div class="flex items-start gap-3">
+                            <span class="bg-vermilion-100 text-vermilion-600 font-bold rounded-lg px-2 py-0.5 text-xs mt-0.5">01</span>
+                            <div>
+                                <h4 class="font-bold text-gray-900 group-hover:text-vermilion-600 transition-colors text-sm">まず「広さ・不便さ」を肯定する</h4>
+                                <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                                    「何もない、遠いね」と言われたらチャンス！「そうなんです。これだけ広大で、かつ真ん中を近鉄線が走る世界遺産は、日本でここだけです。1300年前にタイムスリップした広さを五感で体験していただいているんですよ」と前向きな魅力に変えましょう。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Principle 2 -->
+                    <div class="group">
+                        <div class="flex items-start gap-3">
+                            <span class="bg-vermilion-100 text-vermilion-600 font-bold rounded-lg px-2 py-0.5 text-xs mt-0.5">02</span>
+                            <div>
+                                <h4 class="font-bold text-gray-900 group-hover:text-vermilion-600 transition-colors text-sm">天候と体力を「最優先」で気遣う</h4>
+                                <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                                    平城宮跡は影が少なく、夏は猛暑、冬は吹きさらしになります。「現在〇〇度は非常に日差しが強いので、まずは涼しい『いざない館』で15分ほどVRシアターを見てから、歩きやすい復元エリアへ向かわれませんか？」などの気配りが最高のおもてなしです。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Principle 3 -->
+                    <div class="group">
+                        <div class="flex items-start gap-3">
+                            <span class="bg-vermilion-100 text-vermilion-600 font-bold rounded-lg px-2 py-0.5 text-xs mt-0.5">03</span>
+                            <div>
+                                <h4 class="font-bold text-gray-900 group-hover:text-vermilion-600 transition-colors text-sm">知識を詰め込まず「余白」を残す</h4>
+                                <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                                    勉強したての頃は全て説明したくなりますが、グッと抑えましょう。まずは「一つだけ面白いポイントがあるのですが、朱雀門をくぐる時はぜひ上を見てください…」など、クイズ形式や注目ポイントを絞ると、お客様の「へえ！」を引き出せます。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUICK STATS CHEAT SHEET -->
+            <div class="bg-gradient-to-br from-sand-100 to-sand-50 p-4 rounded-2xl border border-sand-100">
+                <h4 class="text-xs font-bold text-gray-500 tracking-wider uppercase mb-2">案内で使える基本数字・プチ暗記</h4>
+                <div class="grid grid-cols-2 gap-2 text-center">
+                    <div class="bg-white p-2 rounded-xl shadow-xs border border-sand-100/50">
+                        <div class="text-xs text-gray-400">広さ</div>
+                        <div class="text-sm font-bold text-vermilion-600">約 120 ヘクタール</div>
+                        <div class="text-[10px] text-gray-400">(甲子園球場約30個分)</div>
+                    </div>
+                    <div class="bg-white p-2 rounded-xl shadow-xs border border-sand-100/50">
+                        <div class="text-xs text-gray-400">遷都の年</div>
+                        <div class="text-sm font-bold text-vermilion-600">西暦 710 年</div>
+                        <div class="text-[10px] text-gray-400">(なんと立派な平城京)</div>
+                    </div>
+                    <div class="bg-white p-2 rounded-xl shadow-xs border border-sand-100/50">
+                        <div class="text-xs text-gray-400">住んでいた人</div>
+                        <div class="text-sm font-bold text-vermilion-600">約 10 万人</div>
+                        <div class="text-[10px] text-gray-400">(都の中心・超過密都市)</div>
+                    </div>
+                    <div class="bg-white p-2 rounded-xl shadow-xs border border-sand-100/50">
+                        <div class="text-xs text-gray-400">朱雀門〜大極殿</div>
+                        <div class="text-sm font-bold text-vermilion-600">徒歩 約 15 分</div>
+                        <div class="text-[10px] text-gray-400">(約 800 メートル)</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT MAIN AREA: DYNAMIC TOOLS -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- SECTION 2: INTERACTIVE ROUTE & TALK PLANNER -->
+            <section id="planner-sec" class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-sand-100 scroll-mt-20">
+                <div class="flex items-center justify-between border-b pb-3 border-sand-100 mb-4">
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900 traditional-title flex items-center gap-2">
+                        <span class="text-vermilion-500">🗺️</span> 2. インタラクティブ・ルート＆トークプランナー
+                    </h3>
+                    <span class="bg-gold-50 text-gold-600 border border-gold-200 text-xs px-2.5 py-1 rounded-full font-medium">シミュレーション機能</span>
+                </div>
+                
+                <p class="text-sm text-gray-500 mb-5 leading-relaxed">
+                    窓口にお越しになったお客様の条件（ターゲット・時間・天気）を選択してください。<br>
+                    最適な**「おすすめルートマップ」**と、すぐに使える**「おもてなし導入トーク・声かけのヒント」**を即座にシミュレート・作成します。
+                </p>
+
+                <!-- INPUT SELECTORS -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <!-- Target Customer -->
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">① お客様の層</label>
+                        <select id="select-target" onchange="generateRoute()" class="w-full bg-sand-50 border border-sand-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-vermilion-500 cursor-pointer">
+                            <option value="history">歴史好きのご夫婦 / 個人旅行</option>
+                            <option value="family">子連れファミリー (小学生・幼児)</option>
+                            <option value="quick">あまり時間のない・さらっと見たい観光客</option>
+                            <option value="senior">シニア・ゆっくりお散歩グループ</option>
+                        </select>
+                    </div>
+
+                    <!-- Available Time -->
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">② 所要時間</label>
+                        <select id="select-time" onchange="generateRoute()" class="w-full bg-sand-50 border border-sand-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-vermilion-500 cursor-pointer">
+                            <option value="30">約 30 分 (サクッと記念撮影)</option>
+                            <option value="60" selected>約 60 分 (定番スポットを巡る)</option>
+                            <option value="120">約 120 分 (じっくり歴史堪能)</option>
+                        </select>
+                    </div>
+
+                    <!-- Weather / Season -->
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">③ 今日の状況・天気</label>
+                        <select id="select-weather" onchange="generateRoute()" class="w-full bg-sand-50 border border-sand-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-vermilion-500 cursor-pointer">
+                            <option value="fine">気候の良い晴れ・曇りの日</option>
+                            <option value="summer">【猛暑・酷暑】夏場の日差しがきつい日</option>
+                            <option value="winter">【冬の寒風・突然の雨】屋外歩きが厳しい日</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- SIMULATION OUTPUT CARD -->
+                <div id="route-output-card" class="bg-gradient-to-br from-vermilion-50 to-white border border-vermilion-100 rounded-2xl p-4 md:p-5 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-3 border-b border-vermilion-100 pb-2">
+                        <h4 class="font-bold text-vermilion-700 text-sm flex items-center gap-1.5">
+                            <span class="inline-block w-2.5 h-2.5 rounded-full bg-vermilion-500"></span>
+                            生成されたご提案ルート & スクリプト
+                        </h4>
+                        <span id="output-badge" class="text-[11px] bg-vermilion-100 text-vermilion-600 px-2.5 py-0.5 rounded-full font-bold"></span>
+                    </div>
+
+                    <!-- Dynamic Route Itinerary -->
+                    <div class="space-y-4">
+                        <div class="bg-white/80 backdrop-blur-xs p-3.5 rounded-xl border border-vermilion-100/50 shadow-xs">
+                            <div class="text-[11px] uppercase tracking-wider text-gold-600 font-bold mb-1">💡 第一声のおもてなしトーク</div>
+                            <p id="output-welcome" class="text-sm text-gray-700 italic font-medium leading-relaxed">
+                                <!-- JS insertion -->
+                            </p>
+                        </div>
+
+                        <!-- Route visual blocks -->
+                        <div class="space-y-3">
+                            <div class="text-[11px] uppercase tracking-wider text-gray-400 font-bold">🗺️ 推薦タイムライン・コース</div>
+                            <div id="output-timeline-container" class="relative pl-6 space-y-4 before:absolute before:left-2 before:top-1.5 before:bottom-1.5 before:w-0.5 before:bg-vermilion-200">
+                                <!-- Timeline items injected by JS -->
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-50 border border-amber-100 p-3.5 rounded-xl">
+                            <div class="text-[11px] uppercase tracking-wider text-amber-800 font-bold mb-1 flex items-center gap-1">
+                                <span>⚠️</span> 天候・状況に合わせた「最高の気配りポイント」
+                            </div>
+                            <p id="output-weather-tip" class="text-xs text-amber-900 leading-relaxed">
+                                <!-- JS insertion -->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: AREA TRIVIA CARDS -->
+            <section id="trivia-sec" class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-sand-100 scroll-mt-20">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-3 border-sand-100 mb-5 gap-2">
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900 traditional-title flex items-center gap-2">
+                        <span class="text-vermilion-500">🏰</span> 3. エリア別・鉄板トリビアカード
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-400">フィルター:</span>
+                        <select id="trivia-filter" onchange="filterTrivia()" class="bg-sand-50 border border-sand-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-vermilion-500 cursor-pointer">
+                            <option value="all">すべて表示</option>
+                            <option value="gate">朱雀門ひろば側</option>
+                            <option value="palace">大極殿・中枢部側</option>
+                            <option value="garden">庭園・遺跡体験</option>
+                        </select>
+                    </div>
+                </div>
+
+                <p class="text-sm text-gray-500 mb-5 leading-relaxed">
+                    各復元施設の「これだけは覚えておきたい基本」と、お客様の印象に残る「厳選トリビア（こぼれ話）」です。<br>
+                    お客様との会話で沈黙が流れたときや、あと一つ質問が欲しい時のトリガーに使ってください。
+                </p>
+
+                <!-- Grid of trivia cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="trivia-cards-grid">
+                    
+                    <!-- CARD 1: 朱雀門 -->
+                    <div class="bg-sand-50 border border-sand-100 rounded-xl p-4 flex flex-col justify-between hover:shadow-md hover:border-vermilion-200 transition-all cursor-pointer" data-category="gate" onclick="toggleTriviaDetails(1)">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="bg-vermilion-500 text-white text-[10px] px-2 py-0.5 rounded-sm font-semibold">朱雀門 (すざくもん)</span>
+                                <span class="text-xs text-gold-500 font-bold">★王道</span>
+                            </div>
+                            <h4 class="font-bold text-gray-900 text-sm mb-1">平城宮の「正門」。都を護る圧倒的な守護門</h4>
+                            <p class="text-xs text-gray-500 line-clamp-2">幅約25メートル、高さ約22メートル。1998年に初めて復元された平城宮跡のシンボルです。</p>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-sand-100 flex justify-between items-center text-xs">
+                            <span class="text-vermilion-600 font-bold">💡 トリビアを見る</span>
+                            <span class="text-gray-400" id="chevron-1">▼</span>
+                        </div>
+                        <div id="trivia-detail-1" class="hidden mt-3 pt-3 border-t border-dashed border-vermilion-100 text-xs text-gray-600 space-y-2 bg-white p-3 rounded-lg">
+                            <p><strong>【解説ポイント】</strong></p>
+                            <p class="leading-relaxed">大路（朱雀大路）は幅がなんと74メートルもありました。現在の一般的な大通りの数倍あります。外国からの使節団は、ここから雄大な朱雀門を見上げ、日本の国力に圧倒されたと言われています。</p>
+                            <p><strong>【ささやきトーク】</strong></p>
+                            <p class="italic text-vermilion-700">「実は1300年前、ここで外国からの使者を歓迎したり、正月の歌垣（歌の掛け合い、合コンのようなもの）をして若者が賑やかに楽しんでいたそうですよ！」</p>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2: 第一次大極殿 -->
+                    <div class="bg-sand-50 border border-sand-100 rounded-xl p-4 flex flex-col justify-between hover:shadow-md hover:border-vermilion-200 transition-all cursor-pointer" data-category="palace" onclick="toggleTriviaDetails(2)">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="bg-vermilion-500 text-white text-[10px] px-2 py-0.5 rounded-sm font-semibold">第一次大極殿 (だいごくでん)</span>
+                                <span class="text-xs text-gold-500 font-bold">★最重要</span>
+                            </div>
+                            <h4 class="font-bold text-gray-900 text-sm mb-1">天皇が着座した、都の「心臓部」</h4>
+                            <p class="text-xs text-gray-500 line-clamp-2">2010年に復元。高さ約27メートルの超巨大な和風木造建築。中には天皇の玉座「高御座」があります。</p>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-sand-100 flex justify-between items-center text-xs">
+                            <span class="text-vermilion-600 font-bold">💡 トリビアを見る</span>
+                            <span class="text-gray-400" id="chevron-2">▼</span>
+                        </div>
+                        <div id="trivia-detail-2" class="hidden mt-3 pt-3 border-t border-dashed border-vermilion-100 text-xs text-gray-600 space-y-2 bg-white p-3 rounded-lg">
+                            <p><strong>【解説ポイント】</strong></p>
+                            <p class="leading-relaxed">中に入ると一番目を惹くのが、真ん中に置かれた「高御座（たかみくら）」の実物大模型です。また、高い天井の見上げ壁には、東西南北を守る「四神（青龍・白虎・朱雀・玄武）」と十二支が描かれています。</p>
+                            <p><strong>【ささやきトーク】</strong></p>
+                            <p class="italic text-vermilion-700">「天井に描かれた十二支は、有名な日本画家の上村淳之（うえむらあつし）先生が描かれました。ご自身の生まれ年の干支をぜひ探してみてくださいね！」</p>
+                        </div>
+                    </div>
+
+                    <!-- CARD 3: 東院庭園 -->
+                    <div class="bg-sand-50 border border-sand-100 rounded-xl p-4 flex flex-col justify-between hover:shadow-md hover:border-vermilion-200 transition-all cursor-pointer" data-category="garden" onclick="toggleTriviaDetails(3)">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="bg-vermilion-500 text-white text-[10px] px-2 py-0.5 rounded-sm font-semibold">東院庭園 (とういんていえん)</span>
+                                <span class="text-xs text-gray-400">中級者向け</span>
+                            </div>
+                            <h4 class="font-bold text-gray-900 text-sm mb-1">日本庭園の「ルーツ」とされる極上の池庭</h4>
+                            <p class="text-xs text-gray-500 line-clamp-2">皇太子が暮らし、宴会や儀式が行われた、非常に美しい復元庭園です。曲水が美しい。 </p>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-sand-100 flex justify-between items-center text-xs">
+                            <span class="text-vermilion-600 font-bold">💡 トリビアを見る</span>
+                            <span class="text-gray-400" id="chevron-3">▼</span>
+                        </div>
+                        <div id="trivia-detail-3" class="hidden mt-3 pt-3 border-t border-dashed border-vermilion-100 text-xs text-gray-600 space-y-2 bg-white p-3 rounded-lg">
+                            <p><strong>【解説ポイント】</strong></p>
+                            <p class="leading-relaxed">奈良時代の文献に「東院の池」として登場し、発掘調査によって池や建物の配置が完全に明らかになり、1998年に当時の姿のまま蘇りました。池の底には滑らかな小石が敷き詰められています。</p>
+                            <p><strong>【ささやきトーク】</strong></p>
+                            <p class="italic text-vermilion-700">「ここは言うなれば、奈良時代の“VIPゲストハウス”です。平城京の貴族たちは、ここで和歌を詠みながらお酒を飲んでいたんですよ。ロマンチックですよね」</p>
+                        </div>
+                    </div>
+
+                    <!-- CARD 4: 平城宮いざない館 -->
+                    <div class="bg-sand-50 border border-sand-100 rounded-xl p-4 flex flex-col justify-between hover:shadow-md hover:border-vermilion-200 transition-all cursor-pointer" data-category="gate" onclick="toggleTriviaDetails(4)">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="bg-vermilion-500 text-white text-[10px] px-2 py-0.5 rounded-sm font-semibold">平城宮いざない館 (無料)</span>
+                                <span class="text-xs text-gold-500 font-bold">★休憩に最適</span>
+                            </div>
+                            <h4 class="font-bold text-gray-900 text-sm mb-1">まずはここから！五感で学べるガイダンス施設</h4>
+                            <p class="text-xs text-gray-500 line-clamp-2">朱雀門ひろばにある大型屋内施設。エアコン完備、入場無料。VRシアターや模型で歴史を楽しく予習できます。</p>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-sand-100 flex justify-between items-center text-xs">
+                            <span class="text-vermilion-600 font-bold">💡 トリビアを見る</span>
+                            <span class="text-gray-400" id="chevron-4">▼</span>
+                        </div>
+                        <div id="trivia-detail-4" class="hidden mt-3 pt-3 border-t border-dashed border-vermilion-100 text-xs text-gray-600 space-y-2 bg-white p-3 rounded-lg">
+                            <p><strong>【解説ポイント】</strong></p>
+                            <p class="leading-relaxed">何もない平城宮跡を歩く前に、ここの大迫力シアターや1/200サイズの宮殿の模型（大極殿院の模型など）を見ておくのが一番オススメです。「今どこを歩いているのか」が脳内でイメージしやすくなります。</p>
+                            <p><strong>【ささやきトーク】</strong></p>
+                            <p class="italic text-vermilion-700">「中には古代の木組み技術を体験できる木製パズルや、当時の官僚の仕事体験コーナーもあります。特にお子様に大人気です！」</p>
+                        </div>
+                    </div>
+
+                    <!-- CARD 5: 遺構展示館 -->
+                    <div class="bg-sand-50 border border-sand-100 rounded-xl p-4 flex flex-col justify-between hover:shadow-md hover:border-vermilion-200 transition-all cursor-pointer" data-category="palace" onclick="toggleTriviaDetails(5)">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="bg-vermilion-500 text-white text-[10px] px-2 py-0.5 rounded-sm font-semibold">遺構展示館 (いこうてんじかん)</span>
+                                <span class="text-xs text-gray-400">ディープ</span>
+                            </div>
+                            <h4 class="font-bold text-gray-900 text-sm mb-1">掘り出された「生の本物」をそのまま保存</h4>
+                            <p class="text-xs text-gray-500 line-clamp-2">発掘された実際の柱の穴（土層）などをそのままの状態で屋根で囲んで保存。無料で見学できます。</p>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-sand-100 flex justify-between items-center text-xs">
+                            <span class="text-vermilion-600 font-bold">💡 トリビアを見る</span>
+                            <span class="text-gray-400" id="chevron-5">▼</span>
+                        </div>
+                        <div id="trivia-detail-5" class="hidden mt-3 pt-3 border-t border-dashed border-vermilion-100 text-xs text-gray-600 space-y-2 bg-white p-3 rounded-lg">
+                            <p><strong>【解説ポイント】</strong></p>
+                            <p class="leading-relaxed">他の復元施設はレプリカを地上に建てたものですが、ここは考古学的に「本物の奈良時代」を目で確認できる極めて貴重な場所。かつての大膳職（天皇のご飯を作る役所）や井戸跡があります。</p>
+                            <p><strong>【ささやきトーク】</strong></p>
+                            <p class="italic text-vermilion-700">「奈良時代の井戸には巨大な杉の木の樽が使われていたんです。それが発掘され、そのまま展示されています。ぜひ当時の大きさを体験してください！」</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- SECTION 4: HOSPITALITY SIMULATION QUIZ -->
+            <section id="quiz-sec" class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-sand-100 scroll-mt-20">
+                <div class="flex items-center justify-between border-b pb-3 border-sand-100 mb-5">
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900 traditional-title flex items-center gap-2">
+                        <span class="text-vermilion-500">🎯</span> 4. おもてなし実践トレーニング (セルフチェック)
+                    </h3>
+                    <span class="bg-vermilion-50 text-vermilion-600 text-xs px-2 py-0.5 rounded-full font-bold">クイズ全3問</span>
+                </div>
+                
+                <p class="text-sm text-gray-500 mb-5 leading-relaxed">
+                    あなたが総合案内に立っているときに想定される、実際の難しいシチュエーションです。最適な「おもてなし回答」を選択して解説と応援コメントを確認してみましょう。
+                </p>
+
+                <!-- Dynamic Quiz App Container -->
+                <div class="bg-sand-50 border border-sand-100 rounded-xl p-4 md:p-5">
+                    <!-- Progress and Score Bar -->
+                    <div class="flex justify-between items-center text-xs font-bold text-gray-400 mb-4">
+                        <span id="quiz-progress">問題 1 / 3</span>
+                        <span id="quiz-score">正解数: 0</span>
+                    </div>
+
+                    <!-- Question Container -->
+                    <div id="quiz-question-box">
+                        <h4 id="question-text" class="font-bold text-gray-900 text-sm md:text-base mb-4 leading-relaxed">
+                            <!-- Injected by JS -->
+                        </h4>
+
+                        <!-- Options Stack -->
+                        <div class="space-y-3" id="options-container">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- FeedBack Box (Hidden by default) -->
+                    <div id="feedback-box" class="hidden mt-4 p-4 rounded-xl border transition-all duration-300">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="feedback-icon" class="text-xl"></span>
+                            <span id="feedback-title" class="font-bold text-sm"></span>
+                        </div>
+                        <p id="feedback-text" class="text-xs md:text-sm text-gray-600 leading-relaxed mb-4"></p>
+                        <button onclick="nextQuestion()" id="next-btn" class="bg-vermilion-500 hover:bg-vermilion-600 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
+                            次の問題へ →
+                        </button>
+                    </div>
+
+                    <!-- Quiz Complete Banner (Hidden) -->
+                    <div id="quiz-complete-box" class="hidden text-center py-6 space-y-4">
+                        <div class="text-4xl">🎉</div>
+                        <h4 class="font-bold text-gray-900 text-base md:text-lg">実践トレーニング修了！</h4>
+                        <p class="text-xs md:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+                            おめでとうございます！実際の現場では正解は1つとは限りませんが、お客様を気遣う気持ちがあれば100点満点です。その温かい想いで案内を続けましょう！
+                        </p>
+                        <button onclick="resetQuiz()" class="bg-gold-500 hover:bg-gold-600 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors inline-block">
+                            もう一度挑戦する 🔄
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: MY GUIDE NOTES -->
+            <section id="notepad-sec" class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-sand-100 scroll-mt-20">
+                <div class="flex items-center justify-between border-b pb-3 border-sand-100 mb-5">
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900 traditional-title flex items-center gap-2">
+                        <span class="text-vermilion-500">📝</span> 5. マイ・おもてなしメモ
+                    </h3>
+                    <span class="text-xs text-gray-400">ブラウザに自動で一時保存されます</span>
+                </div>
+
+                <p class="text-sm text-gray-500 mb-4 leading-relaxed">
+                    日々の案内活動の中で「このお話をお客様が喜んでくれた！」「質問されたけれど答えられなかったこと」などをメモしておき、あなただけの最強のガイドラインを育てていきましょう。
+                </p>
+
+                <div class="space-y-3">
+                    <textarea id="guide-notes" rows="6" class="w-full bg-sand-50 border border-sand-100 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-vermilion-500 placeholder-gray-400" placeholder="例: &#10;・今日、シニアの方から『平城宮跡には何羽の野鳥が来るのか』と質問された。いざない館で確認したら多くの冬鳥が飛来するらしい！&#10;・『大極殿から見る朱雀門が遠い＝それだけ天皇が遠い存在だった』という話し方は非常にウケがよかった！"></textarea>
+                    
+                    <div class="flex justify-between items-center">
+                        <span id="save-status" class="text-xs text-gray-400 italic">変更を自動保存しました</span>
+                        <button onclick="clearNotes()" class="text-xs text-gray-400 hover:text-vermilion-600 transition-colors">
+                            メモをクリア
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-400 text-xs py-8 mt-12 border-t border-gray-800">
+        <div class="max-w-6xl mx-auto px-4 text-center space-y-3">
+            <p class="font-semibold text-gray-200">平城宮跡 総合案内おもてなしガイドシステム</p>
+            <p class="max-w-md mx-auto leading-relaxed text-gray-500">
+                このページは、毎日一生懸命に平城宮跡の素晴らしさを伝えるガイド・スタッフ様を応援するために作成されました。自信を持って、笑顔で奈良の歴史をご案内ください！
+            </p>
+            <div class="pt-4 border-t border-gray-800 text-[10px] text-gray-600">
+                &copy; 2026 平城宮跡おもてなしガイドシステム. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Smooth scrolling to section anchor
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // ==========================================
+        // 1. DYNAMIC ROUTE GENERATOR DATABASE
+        // ==========================================
+        const routesData = {
+            // TARGET: history
+            history: {
+                "30": {
+                    badge: "歴史好き向け 30分弾丸",
+                    welcome: "「本日はようこそ！歴史がお好きなのですね。30分でしたら、平城宮のシンボルであり、当時の政治の中心部である『大極殿』の復元をズバッと見るのがオススメです。天皇しか立ち入れなかった場所に立ってみましょう！」",
+                    timeline: [
+                        { time: "00分", spot: "総合案内所を出発", desc: "大極殿まで一直線の道を、当時の貴族の広大な朝庭（ちょうてい）を想像しながら歩きます。" },
+                        { time: "10分", spot: "第一次大極殿 入場", desc: "中に入り、最奥にある天皇の玉座『高御座（たかみくら）』を見学。天井絵の四神の日本画の荘厳さを堪能します。" },
+                        { time: "25分", spot: "大極殿の南庭から朱雀門を望む", desc: "高台から南方の朱雀門を遠く見下ろし、いかにここが広大で権力があったかを体験します。" }
+                    ],
+                    weatherTip: "日差しが強い日は大極殿の陰を利用して歩きましょう。寒風の強い日は、風よけになるものが屋外に少ないため、防寒着をしっかり留めていただくよう一言お声かけを。"
+                },
+                "60": {
+                    badge: "歴史好き向け 60分標準",
+                    welcome: "「お時間を1時間ほどいただけますと、最大の2大復元建造物である『朱雀門』から『第一次大極殿』までを線で結ぶ、まさに奈良時代のメインロードをなぞる王道ルートを体験できます！」",
+                    timeline: [
+                        { time: "00分", spot: "朱雀門よりスタート", desc: "平城京の表玄関。門の壮大さと、かつてここで外国使節が跪いた歴史の重みをご説明。" },
+                        { time: "15分", spot: "近鉄線踏切を横断・メインエリア歩き", desc: "大極殿へと至るメインロードを直進。途中で近鉄線が真ん中を横切るという不思議な世界遺産の現代の姿もおもしろ話としてご紹介。" },
+                        { time: "30分", spot: "第一次大極殿へ入場", desc: "高御座（たかみくら）の細かな装飾や、天井を彩る上村淳之先生の日本画を、お持ちの知識を活かして詳しく解説します。" },
+                        { time: "50分", spot: "復元南門・前庭散策", desc: "最近新たに復元が完了した南門エリアをまわり、当時の厳格な儀式の様子を語ります。" }
+                    ],
+                    weatherTip: "60分間ほぼ屋外を歩くため、水分補給が重要です。「途中に自動販売機が少ないため、朱雀門ひろばで事前にペットボトルをご用意することをおすすめしています」と必ずご案内を。"
+                },
+                "120": {
+                    badge: "歴史好き向け 120分じっくり",
+                    welcome: "「たっぷり2時間あるのですね！それなら王道のメインエリアだけでなく、日本庭園のルーツとなった幻の『東院庭園』や、リアルな考古学を学べる『遺構展示館』まで組み込んだ完全網羅ルートがイチオシです！」",
+                    timeline: [
+                        { time: "00分", spot: "朱雀門 ＆ いざない館で予習", desc: "まずは無料の『いざない館』で10分だけ巨大な都のジオラマを見て位置関係を確認。その後、朱雀門を歩きます。" },
+                        { time: "25分", spot: "第一次大極殿", desc: "メインエリアを深くじっくり解説。古代建築の木組みの話や免震工法など、歴史好きの知的好奇心を満たします。" },
+                        { time: "55分", spot: "遺構展示館（極上の掘り出し本物）", desc: "実際に発掘された当時の井戸や建物の跡をそのまま保存したディープな資料館。発掘のドラマを語ります。" },
+                        { time: "85分", spot: "東院庭園（美しき極楽世界）", desc: "貴族たちが宴会を行った、池と橋が調和する美しい復元庭園。ここで奈良時代の詩歌や、優雅な暮らしに思いを馳せます。" }
+                    ],
+                    weatherTip: "歩行距離が2km近くなります。「途中で疲れたら、遺構展示館内の休憩スペースが冷暖房完備でお勧めです」と、休憩スポットをあらかじめお伝えしておくと安心されます。"
+                }
+            },
+            // TARGET: family
+            family: {
+                "30": {
+                    badge: "ファミリー向け 30分お気軽",
+                    welcome: "「元気なお子さまと一緒ですね！30分でしたら、歩き回るよりも朱雀門ひろばにある『平城宮いざない館』が断然おすすめです！涼しくて、触って遊べるゲーム感覚の展示がたくさんあります！」",
+                    timeline: [
+                        { time: "00分", spot: "いざない館 入館（無料）", desc: "エアコン完備。中へ入ってすぐの巨大ジオラマは「あのお城どこ？！」と、クイズ感覚でお子様も食いつきます。" },
+                        { time: "10分", spot: "宮大工の木組み体験コーナー", desc: "ボンドや釘を使わずに木を組み立てる、木のパズルに挑戦！お父様お母様も夢中になれるアクティビティです。" },
+                        { time: "25分", spot: "朱雀門前で記念写真", desc: "いざない館をさっと出たら、目の前にあるド迫力の朱雀門をバックに、「はい、ポーズ！」で記念写真を撮影します。" }
+                    ],
+                    weatherTip: "雨の日や夏の酷暑でも、いざない館は100%楽しめます。小さなお子様連れの場合、「ベビーカーのままでもすべて見学可能です」とお伝えすると保護者様がホッとされます。"
+                },
+                "60": {
+                    badge: "ファミリー向け 60分満喫",
+                    welcome: "「1時間あれば、いざない館で楽しく遊んだあと、目の前にそびえる本物の『朱雀門』の下まで行って、その大きさを全身で体験してみましょう！広場でちょっと走り回るのも楽しいですよ」",
+                    timeline: [
+                        { time: "00分", spot: "いざない館で体験学習", desc: "奈良時代の役人の仕事体験スタンプやパズルなど、お子様が飽きない工夫を交えながら『昔の人たちの暮らし』を紹介します。" },
+                        { time: "25分", spot: "朱雀大路をダッシュ！(または歩く)", desc: "広大な芝生と砂利の道。昔の道路の広さを実感してもらい、車が通らない安全な場所でお散歩します。" },
+                        { time: "40分", spot: "朱雀門の大きな柱をタッチ", desc: "「この赤い柱、大人が何人で抱えられるかな？」とお子様に柱に触れてもらい、昔の宮殿のスケール感を体感してもらいます。" }
+                    ],
+                    weatherTip: "夏の日は、朱雀門を触った後すぐ、いざない館や隣の復原遣唐使船のあるショップ施設に避難して、かき氷や冷たいジュースで休憩するルートを提案してください。"
+                },
+                "120": {
+                    badge: "ファミリー向け 120分じっくり",
+                    welcome: "「2時間たっぷりですね！少し歩きますが、電車が好きな元気なお子さまでしたら、平城宮跡のど真ん中を走る『近鉄線』の横断スポットや、本物の発掘物が見えるエリアまでプチ探検してみましょう！」",
+                    timeline: [
+                        { time: "00分", spot: "朱雀門 ＆ いざない館", desc: "クイズや模型で古代について体感。ここで歴史をゲーム感覚でインプットします。" },
+                        { time: "30分", spot: "近鉄線が通り過ぎるポイントへ！", desc: "芝生の真ん中で特急ひのとりや様々な電車が間近を走り抜けるのを観賞。お子様は大興奮、歴史とのギャップを楽しみます。" },
+                        { time: "60分", spot: "第一次大極殿へプチ登城", desc: "広いスロープを登って、大きな赤い門をくぐります。大極殿の中のゴージャスな空間を体験。" },
+                        { time: "90分", spot: "遣唐使船に乗船体験！", desc: "朱雀門ひろばに戻り、屋外に浮かぶ『原寸大の復原遣唐使船』に実際に乗ってみます。マストの下で船長気分になれます。" }
+                    ],
+                    weatherTip: "かなりの距離をお子様が歩くことになります。事前に「大極殿を過ぎるとトイレの数が減るため、いざない館で事前に済ませておくと安心ですよ」とナビゲートしましょう。"
+                }
+            },
+            // TARGET: quick
+            quick: {
+                "30": {
+                    badge: "サクッと観光 30分最速",
+                    welcome: "「本日はお忙しいなかお越しいただき嬉しいです！30分なら、最大のハイライト『朱雀門』と、その横にある原寸大の『復原遣唐使船』を最短距離で制覇するのが決定版です！」",
+                    timeline: [
+                        { time: "00分", spot: "総合案内所（朱雀門ひろば）出発", desc: "一番映える写真を撮れるおすすめの角度をご案内。「まずは朱雀門をこのアングルで撮ってみてください！」" },
+                        { time: "10分", spot: "朱雀門の見学と解説", desc: "門の迫力を体感。最も重要な事実『ここは1300年前、今の日本の法律や暦の仕組みが作られた場所の入口です』を1行で伝えます。" },
+                        { time: "20分", spot: "復原遣唐使船の乗船", desc: "ショップ施設の横にある巨大な木造船。乗船無料なので、サッと乗り込んで大迫力の記念撮影！最高の思い出になります。" }
+                    ],
+                    weatherTip: "「時間のないなか、汗だく・ずぶ濡れになってしまうのは大変ですので、記念撮影が終わったらすぐ隣のカフェやお土産ショップで涼んで（暖まって）いってくださいね」と添えます。"
+                },
+                "60": {
+                    badge: "サクッと観光 60分定番",
+                    welcome: "「1時間ですね！それなら『朱雀門』を見たあと、やはり天皇がいたメインの大極殿まで歩き、戻りに『復原遣唐使船』に寄るのが、一番平城宮跡を制覇した満足感を味わえるゴールデンルートです！」",
+                    timeline: [
+                        { time: "00分", spot: "朱雀門で見つめ合う歴史", desc: "まずは表玄関の朱雀門で圧倒的な大きさを堪能します。目の前の遮るもののない景色は最高です。" },
+                        { time: "15分", spot: "大極殿へのショートカットお散歩", desc: "広大な草原の道を風を感じながら直進。歴史的な話を少しだけ交えながら歩きます。" },
+                        { time: "30分", spot: "第一次大極殿（大空間体験）", desc: "内部の天井画や『高御座』を視察。その大きさと豪華な彩色壁画に驚かされます。" },
+                        { time: "50分", spot: "復原遣唐使船（乗船＆お土産探し）", desc: "ひろばに戻って遣唐使船をパッと満喫、最後は奈良土産が並ぶショップで買い物を楽しめます。" }
+                    ],
+                    weatherTip: "「1時間あると意外と歩きますが、平城宮跡は影が全くありません。ぜひ、案内所で日傘をお貸ししますので持っていかれませんか？」というお声かけはお客様に深く刺さります。"
+                },
+                "120": {
+                    badge: "サクッと観光 120分充実",
+                    welcome: "「2時間でしたら、歩く時間は短縮しながらも、おいしいグルメやVRシアター鑑賞をギュッと凝縮した、もっとも満足度の高い欲張りプランで行きましょう！」",
+                    timeline: [
+                        { time: "00分", spot: "朱雀門 ＆ いざない館シアター", desc: "いざない館の超大画面VRシアターで、平城京の全盛期のCGを鑑賞。歴史がパッと脳内にインプットされます。" },
+                        { time: "30分", spot: "朱雀門 ＆ 遣唐使船で記念撮影", desc: "カメラロールが満たされる絶好の映えスポットを2点網羅。船の上に登る体験も込みです。" },
+                        { time: "60分", spot: "第一次大極殿へ散策", desc: "都の中心部へお散歩がてら歩きます。戻りは無理せず、のんびりした景観を楽しみながらのハイキング気分。" },
+                        { time: "95分", spot: "朱雀門ひろばでグルメ＆お土産タイム", desc: "カフェで大和茶ソフトクリームを食べたり、奈良の特産品をお買い求めになる優雅な締めくくりです。" }
+                    ],
+                    weatherTip: "「歩くだけでなく、いざない館やショップなど、エアコンの効いた屋内をバランス良く挟んでいるため、無理のない、快適な2時間をお過ごしいただけますよ」と安心を促します。"
+                }
+            },
+            // TARGET: senior
+            senior: {
+                "30": {
+                    badge: "シニア散歩 30分おだやか",
+                    welcome: "「お散歩に最適な季節ですね。30分でしたら、足への負担が少なく、座りながら当時の雰囲気を鑑賞できる『朱雀門ひろば周辺』でのおだやかなルートをお勧めいたします」",
+                    timeline: [
+                        { time: "00分", spot: "朱雀門前のベンチで観賞", desc: "無理に歩かず、門の手前にある美しい芝生のベンチへ。雄大な門を見ながら、当時の遷都に想いを馳せます。" },
+                        { time: "15分", spot: "復原遣唐使船（足元に気をつけながら）", desc: "船は下から見上げるだけでも迫力満点。乗船される場合はスロープがあり、手すりも完備されているのでゆっくり歩けます。" },
+                        { time: "25分", spot: "お茶処（休憩所）へご案内", desc: "お土産屋さんの横にある、綺麗な無料休憩スペースで美味しいお茶を楽しんで一休みしていただきます。" }
+                    ],
+                    weatherTip: "段差や玉砂利の道が多いため、「砂利道は足を取られやすいので、舗装された歩行路をゆっくり進んでくださいね」と安全優先の温かいアドバイスを添えましょう。"
+                },
+                "60": {
+                    badge: "シニア散歩 60分おだやか",
+                    welcome: "「1時間のんびりお散歩ですね。それなら『平城宮いざない館』で歴史情緒に触れつつ、舗装された平坦な道を歩いて、朱雀門を一番近くで体感する、安心安全なおもてなしルートです」",
+                    timeline: [
+                        { time: "00分", spot: "いざない館（冷暖房・車椅子対応）", desc: "段差のない美しい館内で、奈良時代の朝廷の様子や暮らしぶりのミニチュア模型をゆっくり鑑賞。疲れない椅子も各所にあります。" },
+                        { time: "30分", spot: "舗装道路を通って朱雀門へ", desc: "玉砂利を避け、コンクリート舗装されたなだらかな園路を通って朱雀門へ。門の影で涼みながら大きな木造建築を眺めます。" },
+                        { time: "50分", spot: "遣唐使船と交流館でひと休み", desc: "ひろばのシンボル、遣唐使船を見上げながら、お茶を飲んで旅行のお喋りを楽しんでいただきます。" }
+                    ],
+                    weatherTip: "シニアの方は急な体温変化に敏感です。「平城宮跡は季節の風が強く吹くことがありますので、お羽織りものを1枚お持ちになると安心ですよ」と声をかけます。"
+                },
+                "120": {
+                    badge: "シニア散歩 120分おだやか",
+                    welcome: "「2時間でしたら、歩行距離を最小限に抑えつつ、複数の資料館をベンチ休憩を挟みながらお茶をするようにゆっくり回る、究極のいたわりルートをご用意しました」",
+                    timeline: [
+                        { time: "00分", spot: "いざない館＆朱雀門", desc: "最も移動しやすい朱雀門ひろばの魅力を完全に網羅。まずはここでたっぷりと奈良を満喫します。" },
+                        { time: "40分", spot: "東院庭園へ（静寂と美の極地）", desc: "ちょっと奥まっていて団体観光客が少なく静かな東院庭園へ。美しい日本庭園をベンチに腰掛けて眺める優雅な時間。" },
+                        { time: "80分", spot: "平城宮跡資料館（または遺構展示館）", desc: "室内の涼しい展示室。国宝の瓦や当時の生活用品などの歴史展示を、座りながらゆっくり見学できます。" },
+                        { time: "110分", spot: "天平みつき館でお買い物", desc: "旅の最後はショップで奈良の銘菓を見学。お茶を飲んで、楽しかった案内を締めくくります。" }
+                    ],
+                    weatherTip: "120分の長い散歩は水分と体力が懸念されます。「案内所で無料の『車椅子』や『シルバーカー』、日傘の貸出を行っておりますので、無理せずぜひご利用くださいね」とおもてなしの一声を。"
+                }
+            }
+        };
+
+        // ==========================================
+        // 2. ROUTE GENERATION LOGIC
+        // ==========================================
+        function generateRoute() {
+            const target = document.getElementById('select-target').value;
+            const time = document.getElementById('select-time').value;
+            const weather = document.getElementById('select-weather').value;
+
+            // Get selected route data
+            const route = routesData[target][time];
+            
+            // UI effect: flash the card briefly
+            const card = document.getElementById('route-output-card');
+            card.classList.add('opacity-40');
+            
+            setTimeout(() => {
+                // Update Badge text
+                document.getElementById('output-badge').innerText = route.badge;
+                
+                // Update Welcome Script
+                document.getElementById('output-welcome').innerText = route.welcome;
+                
+                // Build Timeline HTML
+                const timelineContainer = document.getElementById('output-timeline-container');
+                timelineContainer.innerHTML = ''; // clear previous
+                
+                route.timeline.forEach((item, index) => {
+                    const block = document.createElement('div');
+                    block.className = 'relative group transition-transform duration-200 hover:translate-x-1';
+                    block.innerHTML = `
+                        <!-- dot -->
+                        <div class="absolute -left-7 top-1 bg-vermilion-500 text-white w-5.5 h-5.5 rounded-full flex items-center justify-center text-[9px] font-bold shadow-xs border border-white">
+                            ${index + 1}
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-sand-100 shadow-xs">
+                            <div class="flex justify-between items-center mb-1">
+                                <h5 class="font-bold text-gray-900 text-xs md:text-sm flex items-center gap-1">
+                                    <span class="text-vermilion-600">${item.spot}</span>
+                                </h5>
+                                <span class="bg-gold-50 text-gold-600 text-[10px] font-semibold px-2 py-0.5 rounded-sm">
+                                    開始から ${item.time}
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-500 leading-relaxed">${item.desc}</p>
+                        </div>
+                    `;
+                    timelineContainer.appendChild(block);
+                });
+
+                // Update Weather tips
+                let weatherText = route.weatherTip;
+                if (weather === 'summer') {
+                    weatherText = "🚨【夏の酷暑おもてなし】：" + weatherText + " さらに、平城宮跡には自動販売機や日除けがほとんどありません！「本当に熱中症になりやすいので、いざない館や大極殿で一度しっかりと10分休憩を挟んでくださいね」と真剣にお勧めしましょう。案内所の日傘貸出は神対応です。";
+                } else if (weather === 'winter') {
+                    weatherText = "❄️【冬の寒風・雨天おもてなし】：" + weatherText + " 平城宮跡は四方が開けており、奈良の盆地特有の『底冷えの風』が強く吹きます。「建物の中に入ると別世界のように温かい（涼しい）ので、外歩きは短縮して、いざない館や資料館の豊かな屋内展示を中心に回るのが今日一番の正解ルートですよ」と優しく導いてください。";
+                }
+                document.getElementById('output-weather-tip').innerText = weatherText;
+
+                card.classList.remove('opacity-40');
+            }, 150);
+        }
+
+        // ==========================================
+        // 3. TRIVIA FILTER & TOGGLE LOGIC
+        // ==========================================
+        function filterTrivia() {
+            const category = document.getElementById('trivia-filter').value;
+            const cards = document.querySelectorAll('#trivia-cards-grid > div');
+            
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function toggleTriviaDetails(id) {
+            const detail = document.getElementById(`trivia-detail-${id}`);
+            const chevron = document.getElementById(`chevron-${id}`);
+            
+            if (detail.classList.contains('hidden')) {
+                detail.classList.remove('hidden');
+                chevron.innerText = '▲';
+                chevron.classList.add('text-vermilion-500');
+            } else {
+                detail.classList.add('hidden');
+                chevron.innerText = '▼';
+                chevron.classList.remove('text-vermilion-500');
+            }
+        }
+
+        // ==========================================
+        // 4. INTERACTIVE QUIZ DATA & APP LOGIC
+        // ==========================================
+        const quizData = [
+            {
+                question: "【状況】7月の日曜日、午後2時のうだるような暑さの中、ベビーカーを押したご夫婦が案内窓口にやってきました。「何か見どころありますか？」と言われた時、最も最初に行うべき『気配りとお勧め』はどれでしょう？",
+                options: [
+                    {
+                        text: "A. 「ここから15分歩くと、最高に美しい第一次大極殿があります！今なら中に入って天井画が見られますよ！」と笑顔で解説し、屋外ルートを勧める。",
+                        correct: false,
+                        feedback: "惜しい！あなたの勉強の成果を伝えたい気持ちは素晴らしいですが、7月の午後2時の平城宮跡は35度を超える猛暑になりやすく、影がありません。ベビーカーの赤ちゃんや歩く親御さんの体力が心配です。"
+                    },
+                    {
+                        text: "B. 「本日は本当に日差しが厳しいですね！まずはベビーカーのまま涼しく過ごせて、歴史の迫力映像も見られる、すぐ隣の『平城宮いざない館』へ行き、冷房で体を冷やしながら回りませんか？」と体力を気遣う。",
+                        correct: true,
+                        feedback: "大正解！これぞ最高のおもてなしです。まずは相手の安全と体力を最優先にし、冷気のある屋内体験施設（いざない館）を勧めて段階的に案内することで、お客様に感動的な信頼感を与えられます。案内用の日傘もお貸しするとさらに完璧です！"
+                    },
+                    {
+                        text: "C. 「今日は暑すぎてお外を回るのは危険ですので、今日はどこにも行かずに朱雀門ひろばのショップでお土産を買って帰られるのがいいですよ」とツアーを断念させる。",
+                        correct: false,
+                        feedback: "ちょっと冷たすぎるかも！せっかく勉強をがんばってお越しになったお客様ですので、安全かつ平城宮跡の魅力を体感できる代替ルート（室内で楽しめるいざない館など）を提示してあげるのが、ガイドとしての最高の輝きどころです。"
+                    }
+                ]
+            },
+            {
+                question: "【状況】歴史の教科書が大好きだという中学生の男の子が一人で案内所を覗いています。「歴史がすごい好きなんですけど、一番おもしろい話を教えてください！」と目を輝かせています。どう対応しますか？",
+                options: [
+                    {
+                        text: "A. 平城京の政治形態、戸籍制度、難解な律令制度について、専門用語を交えて30分間一気に講義を行う。",
+                        correct: false,
+                        feedback: "勉強熱心な中学生とはいえ、一方的な専門講義は疲れてしまう可能性があります！「教える」のではなく、彼の「知的好奇心を刺激する」会話にしてみましょう。"
+                    },
+                    {
+                        text: "B. 「ごめんね、今忙しいから向こうの資料館のパネルを読んでね」とパンフレットを渡して終了する。",
+                        correct: false,
+                        feedback: "せっかく未来の歴史マニアが平城宮跡に来てくれたのですから、あなたの生の言葉で彼に感動をプレゼントして、歴史ガイドとしての楽しさを味あわせてください！"
+                    },
+                    {
+                        text: "C. 「素晴らしいね！それなら、第一次大極殿にある『高御座（玉座）』に描かれている四神、特にトカゲのような面白いデザインの『青龍』がどこにいるか、大極殿の天井を見上げて探してみてごらん。見つかったら戻って教えてね！」とミッションを与える。",
+                        correct: true,
+                        feedback: "大正解！歴史大好きな若者には、単に知識を与えるだけでなく、自ら発見する楽しさ（ミッションやトリビア）をパスするのが極上のおもてなしです。彼は喜んで探しに行き、帰ってきた時にさらに素晴らしい対話が生まれるはずです。"
+                    }
+                ]
+            },
+            {
+                question: "【状況】お客様から「平城宮跡って、建物が復元されている場所以外はただの広い原っぱで、何もないんですね…ちょっと退屈です」と言われてしまいました。笑顔を保ちつつ、どんな『ポジティブな言葉』をかけられますか？",
+                options: [
+                    {
+                        text: "A. 「何もないのが奈良の良いところなんです。京都とは違うので、諦めてただお散歩してくださいね」と自虐気味に返す。",
+                        correct: false,
+                        feedback: "自虐トークも親しみやすいですが、もう一歩！「何もない」ことを「ここにしかない壮大な価値」に変換してあげるのが、プロの総合案内の腕の見せどころです。"
+                    },
+                    {
+                        text: "B. 「そうなんです！でも、何もないからこそ、1300年前の当時の都の【本物の広さ】がそのまま残されている日本で唯一の場所なんですよ。もしここにビルや家が建っていたら、この広大さは味わえません。ぜひ当時の都のスケールを全身で浴びてください！」とロマンに変換する。",
+                        correct: true,
+                        feedback: "大正解！パーフェクトです。「何もない」という不満（デメリット）を、「何もないからこそ、当時のスケールが完全保存されている」という「ロマン（メリット）」に見事に翻訳しています。これを聞いたお客様は、ただの原っぱを見る目が一変し、深く感動するでしょう！"
+                    },
+                    {
+                        text: "C. 「そんなことはありません！地中には何万枚もの木簡（木のお札）が埋まっているんですよ！退屈ではありません！」と少しムキになって解説を始める。",
+                        correct: false,
+                        feedback: "歴史を守りたい気持ちは分かりますが、反論されるとお客様の気持ちが離れてしまいます。一度「そうですよね、確かに広くて何もないように見えますよね」と受け入れてから（Yes-But法）、ロマンに繋げるのがスマートです。"
+                    }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const currentQuiz = quizData[currentQuestionIndex];
+            
+            // Update progress & score
+            document.getElementById('quiz-progress').innerText = `問題 ${currentQuestionIndex + 1} / ${quizData.length}`;
+            document.getElementById('quiz-score').innerText = `正解数: ${score}`;
+
+            // Set question text
+            document.getElementById('question-text').innerText = currentQuiz.question;
+
+            // Render options
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            // Hide feedback box
+            document.getElementById('feedback-box').classList.add('hidden');
+
+            currentQuiz.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3.5 rounded-xl border border-sand-100 bg-white hover:bg-vermilion-50 hover:border-vermilion-200 transition-colors text-xs md:text-sm text-gray-700 font-medium leading-relaxed shadow-xs flex items-start gap-2 focus:outline-none";
+                btn.onclick = () => selectOption(idx);
+                btn.innerHTML = `<span class="bg-gray-100 text-gray-600 font-bold rounded-md px-2 py-0.5 text-xs">${idx === 0 ? 'A' : idx === 1 ? 'B' : 'C'}</span> <span>${opt.text}</span>`;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectOption(index) {
+            const currentQuiz = quizData[currentQuestionIndex];
+            const selectedOpt = currentQuiz.options[index];
+            const feedbackBox = document.getElementById('feedback-box');
+            
+            // Disable other buttons so they cannot click multiple times
+            const buttons = document.querySelectorAll('#options-container button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            // Show feedback box
+            feedbackBox.classList.remove('hidden');
+
+            if (selectedOpt.correct) {
+                // Correct answer
+                score++;
+                document.getElementById('quiz-score').innerText = `正解数: ${score}`;
+                feedbackBox.className = "mt-4 p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-900 transition-all duration-300";
+                document.getElementById('feedback-icon').innerText = "🌸";
+                document.getElementById('feedback-title').innerText = "大正解です！ 素晴らしいおもてなしの心です！";
+            } else {
+                // Incorrect answer
+                feedbackBox.className = "mt-4 p-4 rounded-xl border border-amber-200 bg-amber-50 text-amber-900 transition-all duration-300";
+                document.getElementById('feedback-icon').innerText = "✏️";
+                document.getElementById('feedback-title').innerText = "もう一息！ ガイドのスキルアップのチャンス！";
+            }
+
+            document.getElementById('feedback-text').innerText = selectedOpt.feedback;
+
+            // Change next button text on final question
+            if (currentQuestionIndex === quizData.length - 1) {
+                document.getElementById('next-btn').innerText = "結果を見る 🏁";
+            } else {
+                document.getElementById('next-btn').innerText = "次の問題へ →";
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                // Quiz completed
+                document.getElementById('quiz-question-box').classList.add('hidden');
+                document.getElementById('feedback-box').classList.add('hidden');
+                document.getElementById('quiz-complete-box').classList.remove('hidden');
+                
+                // Final evaluation score statement
+                document.getElementById('quiz-progress').innerText = `お疲れ様でした！`;
+            }
+        }
+
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById('quiz-question-box').classList.remove('hidden');
+            document.getElementById('quiz-complete-box').classList.add('hidden');
+            loadQuestion();
+        }
+
+        // ==========================================
+        // 5. LOCAL STORAGE FOR PERSONAL MEMO
+        // ==========================================
+        const memoArea = document.getElementById('guide-notes');
+        const saveStatus = document.getElementById('save-status');
+
+        // Load memo from storage
+        if (localStorage.getItem('heijo_guide_memo')) {
+            memoArea.value = localStorage.getItem('heijo_guide_memo');
+        }
+
+        // Auto save on keyup with debounce/visual cue
+        memoArea.addEventListener('input', () => {
+            saveStatus.innerText = "変更を保存中...";
+            saveStatus.className = "text-xs text-gold-500 italic font-medium";
+            
+            localStorage.setItem('heijo_guide_memo', memoArea.value);
+            
+            setTimeout(() => {
+                saveStatus.innerText = "変更を自動保存しました";
+                saveStatus.className = "text-xs text-gray-400 italic";
+            }, 800);
+        });
+
+        function clearNotes() {
+            if (confirm("メモをすべて削除しますか？")) {
+                memoArea.value = '';
+                localStorage.removeItem('heijo_guide_memo');
+                saveStatus.innerText = "メモをクリアしました";
+                setTimeout(() => {
+                    saveStatus.innerText = "変更を自動保存しました";
+                }, 1500);
+            }
+        }
+
+        // ==========================================
+        // WINDOW LOAD INITIALIZATION
+        // ==========================================
+        window.onload = function() {
+            // Generate initial route
+            generateRoute();
+            // Load first question of quiz
+            loadQuestion();
+        }
+    </script>
+</body>
+</html>
