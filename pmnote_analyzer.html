@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PM Task & Summary Analyzer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom subtle scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-600 text-white p-2.5 rounded-xl shadow-md">
+                    <i class="fa-solid font-bold fa-list-check text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">PM Note Analyzer</h1>
+                    <p class="text-xs text-slate-500">AI議事録要約 & タスク抽出アシスタント</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button id="historyBtn" onclick="toggleHistoryModal()" class="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors flex items-center space-x-1.5">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span class="hidden sm:inline">履歴</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left Column: Input Form (5 cols on lg) -->
+        <section class="lg:col-span-5 flex flex-col space-y-4">
+            
+            <!-- PM Prompt Callout -->
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 rounded-2xl p-4 shadow-sm flex items-start space-x-3">
+                <div class="bg-blue-600 text-white rounded-full p-2 mt-0.5 shrink-0 shadow">
+                    <i class="fa-solid fa-user-tie text-sm"></i>
+                </div>
+                <div class="text-sm text-slate-700">
+                    <span class="font-semibold text-slate-900 block mb-0.5">優秀なPMアシスタント</span>
+                    <p class="leading-relaxed">整理したい打ち合わせメモやアイデアのテキストをここに貼り付けてください。要点とタスク一覧を自動で作成します。</p>
+                </div>
+            </div>
+
+            <!-- Input Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex-1 flex flex-col p-4 sm:p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <label for="sourceText" class="text-sm font-bold text-slate-800 flex items-center space-x-2">
+                        <i class="fa-regular fa-file-lines text-brand-600"></i>
+                        <span>入力テキスト（議事録・メモ）</span>
+                    </label>
+                    <span id="charCount" class="text-xs text-slate-400 font-mono">0 文字</span>
+                </div>
+
+                <!-- Textarea -->
+                <div class="relative flex-1 min-h-[220px]">
+                    <textarea id="sourceText" 
+                        class="w-full h-full p-3.5 text-sm bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:bg-white resize-none transition-all outline-none leading-relaxed"
+                        placeholder="例：
+2026/09/01 中部ブロック会議メモ
+・25周年記念イベントの進行について議論。
+・全体仕切りは小川さん、竹俣さん、馬場さんにお願いする方針。
+・下準備や雑務は斎木と中原で進める。
+・次回会議（9月中部B会議）で最終決定する。..." oninput="updateCharCount()"></textarea>
+                </div>
+
+                <!-- Preset Samples & Submit Controls -->
+                <div class="mt-4 space-y-3">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-slate-500 font-medium">サンプルを試す:</span>
+                        <div class="space-x-1.5">
+                            <button onclick="loadSample(1)" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-xs transition">議事録</button>
+                            <button onclick="loadSample(2)" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-xs transition">アイデアメモ</button>
+                            <button onclick="clearText()" class="px-2 py-1 text-red-500 hover:bg-red-50 rounded text-xs transition">クリア</button>
+                        </div>
+                    </div>
+
+                    <button id="analyzeBtn" onclick="analyzeText()" 
+                        class="w-full bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-2 group">
+                        <i class="fa-solid fa-wand-magic-sparkles group-hover:rotate-12 transition-transform"></i>
+                        <span>要約＆タスク生成を実行</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Column: Output & Action Plan (7 cols on lg) -->
+        <section class="lg:col-span-7 flex flex-col space-y-4">
+            
+            <!-- Empty State / Placeholder -->
+            <div id="emptyState" class="bg-white border-2 border-dashed border-slate-200 rounded-2xl p-12 text-center flex flex-col items-center justify-center flex-1 min-h-[400px]">
+                <div class="w-16 h-16 bg-blue-50 text-brand-500 rounded-full flex items-center justify-center text-2xl mb-4 shadow-inner">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-800 mb-1">準備完了</h3>
+                <p class="text-sm text-slate-500 max-w-sm mb-4">左側のテキストエリアに打ち合わせメモやアイデアを入力し、「要約＆タスク生成」ボタンを押してください。</p>
+                <div class="grid grid-cols-3 gap-3 text-left w-full max-w-md bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs text-slate-600">
+                    <div class="flex flex-col items-center text-center p-2 bg-white rounded shadow-sm">
+                        <i class="fa-solid fa-compress text-brand-500 mb-1 text-sm"></i>
+                        <span class="font-bold">300字程度 要約</span>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-2 bg-white rounded shadow-sm">
+                        <i class="fa-solid fa-list-check text-brand-500 mb-1 text-sm"></i>
+                        <span class="font-bold">重要点 最大5選</span>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-2 bg-white rounded shadow-sm">
+                        <i class="fa-solid fa-table text-brand-500 mb-1 text-sm"></i>
+                        <span class="font-bold">アクションプラン</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="hidden bg-white rounded-2xl border border-slate-200 p-12 text-center flex-col items-center justify-center flex-1 min-h-[400px]">
+                <div class="relative w-16 h-16 mb-4">
+                    <div class="absolute inset-0 rounded-full border-4 border-slate-100"></div>
+                    <div class="absolute inset-0 rounded-full border-4 border-brand-600 border-t-transparent animate-spin"></div>
+                    <div class="absolute inset-0 flex items-center justify-center text-brand-600">
+                        <i class="fa-solid fa-brain text-lg"></i>
+                    </div>
+                </div>
+                <h3 class="text-base font-bold text-slate-800 mb-1">テキストを分析中...</h3>
+                <p class="text-sm text-slate-500 animate-pulse">要点の抽出、推測の排除、アクションプランの作成を行っています</p>
+            </div>
+
+            <!-- Result State (Hidden until generated) -->
+            <div id="resultState" class="hidden flex-col space-y-4">
+                
+                <!-- Action Bar -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-3 flex flex-wrap items-center justify-between gap-2 shadow-sm">
+                    <div class="flex items-center space-x-2">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                            <i class="fa-solid fa-check text-xs mr-1"></i> 分析完了
+                        </span>
+                        <span id="outputTimestamp" class="text-xs text-slate-400"></span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="copyAsMarkdown()" class="px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition flex items-center space-x-1">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>Markdownをコピー</span>
+                        </button>
+                        <button onclick="exportCSV()" class="px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition flex items-center space-x-1">
+                            <i class="fa-solid fa-file-csv"></i>
+                            <span>CSV保存</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1. 【要約】 Card -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+                        <h2 class="font-bold text-slate-800 flex items-center space-x-2 text-sm sm:text-base">
+                            <span class="w-6 h-6 rounded-md bg-blue-100 text-brand-600 inline-flex items-center justify-center text-xs">1</span>
+                            <span>【要約】</span>
+                        </h2>
+                        <span id="summaryLengthBadge" class="text-xs px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full font-mono">0文字 (目安: 300字)</span>
+                    </div>
+                    <p id="summaryOutput" class="text-sm text-slate-700 leading-relaxed font-normal bg-slate-50/70 p-3.5 rounded-xl border border-slate-100"></p>
+                </div>
+
+                <!-- 2. 【決定事項・重要点】 Card -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+                        <h2 class="font-bold text-slate-800 flex items-center space-x-2 text-sm sm:text-base">
+                            <span class="w-6 h-6 rounded-md bg-indigo-100 text-indigo-600 inline-flex items-center justify-center text-xs">2</span>
+                            <span>【決定事項・重要点】</span>
+                        </h2>
+                        <span class="text-xs text-slate-400">最大5点（必要に応じて）</span>
+                    </div>
+                    <ul id="keyPointsOutput" class="space-y-2 text-sm text-slate-700"></ul>
+                </div>
+
+                <!-- 3. 【次回のアクションプラン】 Card -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+                        <h2 class="font-bold text-slate-800 flex items-center space-x-2 text-sm sm:text-base">
+                            <span class="w-6 h-6 rounded-md bg-emerald-100 text-emerald-600 inline-flex items-center justify-center text-xs">3</span>
+                            <span>【次回のアクションプラン】</span>
+                        </h2>
+                        <button onclick="addNewTaskRow()" class="text-xs text-brand-600 hover:text-brand-800 font-medium flex items-center space-x-1">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>タスク追加</span>
+                        </button>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 text-xs font-semibold uppercase border-b border-slate-200">
+                                    <th class="py-2.5 px-3 w-10 text-center">完了</th>
+                                    <th class="py-2.5 px-3 w-28 sm:w-36">担当者</th>
+                                    <th class="py-2.5 px-3">内容 (何を)</th>
+                                    <th class="py-2.5 px-3 w-28 sm:w-32">期限 (いつまでに)</th>
+                                    <th class="py-2.5 px-2 w-8"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="actionPlanTableBody" class="divide-y divide-slate-100">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white text-sm px-4 py-3 rounded-xl shadow-xl flex items-center space-x-2 z-50">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-green-400"></i>
+        <span id="toastMsg">処理が完了しました</span>
+    </div>
+
+    <!-- History Modal -->
+    <div id="historyModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+                <h3 class="font-bold text-slate-800 flex items-center space-x-2">
+                    <i class="fa-solid fa-clock-rotate-left text-brand-600"></i>
+                    <span>分析履歴</span>
+                </h3>
+                <button onclick="toggleHistoryModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="historyList" class="p-4 overflow-y-auto space-y-2 flex-1">
+                <!-- History Items -->
+            </div>
+            <div class="p-3 border-t border-slate-100 bg-slate-50 flex justify-between items-center">
+                <button onclick="clearHistory()" class="text-xs text-red-500 hover:text-red-700 font-medium">履歴をクリア</button>
+                <button onclick="toggleHistoryModal()" class="px-4 py-1.5 bg-slate-200 text-slate-700 text-xs rounded-lg hover:bg-slate-300 font-medium">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample Texts
+        const SAMPLES = {
+            1: `25周年記念の中部ブロック発表に向けた調整会議メモ
+
+日時: 2026年8月28日
+出席者: 斎木、中原、竹俣、馬場、小川
+
+【議論概要】
+・25周年記念の中部ブロック発表内容について構想案を提示。
+・過去の活動、現在に続く活動、および各館1事例程度の現在の活動事例の3軸で構成するのが良さそう。
+・仕切り役（全体進行）については、小川大先輩、竹俣大先輩、馬場先輩にお願いしたい考え。
+・下準備や雑務全般は斎木と中原で分担して進める。
+・まずは小川さんに本構想を伝えてコンタクトをとり、考えの確認とご協力を依頼する必要がある。
+・概要相談ののち役割担当を明確化。
+・最終決定は9月の中部B会議にて行う予定。
+・決定後、原稿作成、映像等の本格準備、ゲネプロを経て本番を迎える。`,
+
+            2: `新製品アプリ開発ブレインストーミング
+
+参加者: AIチーム
+
+アイデア要約:
+・ユーザーの音声メモをリアルタイムで分析してTODOを自動生成するツール。
+・UIは徹底的にシンプルにして、1タップで録音・テキスト化まで行えるようにする。
+
+決定事項:
+・まずはプロトタイプとしてWeb版を作成。
+・デザインシステムはTailwind CSSを採用。
+・LLMバックエンドはGemini 3 Flash Previewを活用。
+
+次回のアクション:
+・佐藤が要件定義書を8/30までに作成する。
+・UIデザインのワイヤーフレームをデザインチームが9/2までに作成。
+・インフラ構成の検討は未定（インフラ担当者のアサインが必要）。`
+        };
+
+        // State Management
+        let currentAnalysisResult = null;
+
+        // On Load Initializations
+        window.onload = function() {
+            updateCharCount();
+            loadHistory();
+        };
+
+        function updateCharCount() {
+            const text = document.getElementById('sourceText').value;
+            document.getElementById('charCount').textContent = `${text.length} 文字`;
+        }
+
+        function loadSample(id) {
+            if (SAMPLES[id]) {
+                document.getElementById('sourceText').value = SAMPLES[id];
+                updateCharCount();
+                showToast("サンプルテキストを読み込みました", "info");
+            }
+        }
+
+        function clearText() {
+            document.getElementById('sourceText').value = "";
+            updateCharCount();
+        }
+
+        function showToast(message, type = "success") {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.textContent = message;
+            if (type === "success") {
+                toastIcon.className = "fa-solid fa-circle-check text-green-400";
+            } else if (type === "error") {
+                toastIcon.className = "fa-solid fa-circle-xmark text-red-400";
+            } else {
+                toastIcon.className = "fa-solid fa-circle-info text-blue-400";
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        async function analyzeText() {
+            const text = document.getElementById('sourceText').value.trim();
+            if (!text) {
+                showToast("テキストを入力してください", "error");
+                return;
+            }
+
+            // Show Loading State
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('resultState').classList.add('hidden');
+            document.getElementById('resultState').classList.remove('flex');
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('loadingState').classList.add('flex');
+
+            const systemInstruction = `あなたは優秀なプロジェクトマネージャー（PM）です。
+ユーザーが入力したテキスト（打ち合わせメモ、アイデア出しのノート等）を分析し、要点と具体的なアクションプランを作成してください。
+
+# 制約事項
+- 事実に基づかない推測は絶対に含まないでください。
+- アクションプランの「担当者」や「期限」がテキストに明記されていない場合は必ず「未定」としてください。
+- 要約は全体の重要項目を網羅しつつ「300文字程度」でまとめてください。
+- 決定事項・重要点は簡潔な箇条書きで「必要に応じて最大5点」で整理してください。`;
+
+            const prompt = `以下のテキストを分析し、指定されたフォーマットで出力してください。
+
+テキスト:
+${text}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            summary: { 
+                                type: "STRING", 
+                                description: "全体の内容を300文字程度でまとめた要約" 
+                            },
+                            keyPoints: { 
+                                type: "ARRAY", 
+                                items: { type: "STRING" },
+                                description: "決定事項・重要点の箇条書き（必要に応じて最大5点まで）" 
+                            },
+                            actionPlans: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        assignee: { type: "STRING", description: "担当者（不明なら『未定』）" },
+                                        task: { type: "STRING", description: "具体的な内容" },
+                                        dueDate: { type: "STRING", description: "期限（不明なら『未定』）" }
+                                    },
+                                    required: ["assignee", "task", "dueDate"]
+                                },
+                                description: "誰が・何を・いつまでにのタスク一覧"
+                            }
+                        },
+                        required: ["summary", "keyPoints", "actionPlans"]
+                    }
+                }
+            };
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            try {
+                let response = await fetchWithRetry(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                let data = await response.json();
+                let jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (!jsonText) {
+                    throw new Error("AIからのレスポンスの取得に失敗しました");
+                }
+
+                let parsedResult = JSON.parse(jsonText);
+                currentAnalysisResult = parsedResult;
+
+                renderResult(parsedResult);
+                saveToHistory(text, parsedResult);
+
+                showToast("分析が完了しました");
+
+            } catch (error) {
+                console.error("API Call Error:", error);
+                showToast("分析中にエラーが発生しました。時間を置いて再試行してください。", "error");
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('loadingState').classList.remove('flex');
+                document.getElementById('emptyState').classList.remove('hidden');
+            }
+        }
+
+        // Retry mechanism with exponential backoff
+        async function fetchWithRetry(url, options, retries = 3, backoff = 1000) {
+            try {
+                const res = await fetch(url, options);
+                if (!res.ok && res.status === 429 && retries > 0) {
+                    await new Promise(r => setTimeout(r, backoff));
+                    return fetchWithRetry(url, options, retries - 1, backoff * 2);
+                }
+                return res;
+            } catch (err) {
+                if (retries > 0) {
+                    await new Promise(r => setTimeout(r, backoff));
+                    return fetchWithRetry(url, options, retries - 1, backoff * 2);
+                }
+                throw err;
+            }
+        }
+
+        function renderResult(result) {
+            // Hide Loader & Empty state
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('loadingState').classList.remove('flex');
+
+            const resultState = document.getElementById('resultState');
+            resultState.classList.remove('hidden');
+            resultState.classList.add('flex');
+
+            // 1. Render Summary
+            const summaryText = result.summary || "";
+            document.getElementById('summaryOutput').textContent = summaryText;
+            const summaryBadge = document.getElementById('summaryLengthBadge');
+            summaryBadge.textContent = `${summaryText.length}文字 (目安: 300字)`;
+            summaryBadge.className = "text-xs px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full font-mono";
+
+            // 2. Render Key Points (Max 5)
+            const keyPointsList = document.getElementById('keyPointsOutput');
+            keyPointsList.innerHTML = "";
+            const points = (result.keyPoints || []).slice(0, 5);
+            if (points.length === 0) {
+                keyPointsList.innerHTML = `<li class="text-slate-400 italic">決定事項・重要点は特に検出されませんでした</li>`;
+            } else {
+                points.forEach(point => {
+                    const li = document.createElement('li');
+                    li.className = "flex items-start space-x-2 bg-indigo-50/50 p-2.5 rounded-xl border border-indigo-100/60";
+                    li.innerHTML = `
+                        <i class="fa-solid fa-circle-check text-indigo-500 mt-0.5 text-xs shrink-0"></i>
+                        <span class="leading-relaxed">${escapeHtml(point)}</span>
+                    `;
+                    keyPointsList.appendChild(li);
+                });
+            }
+
+            // 3. Render Action Plan Table
+            const tbody = document.getElementById('actionPlanTableBody');
+            tbody.innerHTML = "";
+            const plans = result.actionPlans || [];
+
+            if (plans.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400 italic">次回のアクションプランはありません</td></tr>`;
+            } else {
+                plans.forEach((plan, idx) => {
+                    addTaskRowToTable(plan.assignee, plan.task, plan.dueDate, false);
+                });
+            }
+
+            // Set Timestamp
+            const now = new Date();
+            document.getElementById('outputTimestamp').textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} 生成`;
+        }
+
+        // Add a row to the action plan table
+        function addTaskRowToTable(assignee, task, dueDate, isCompleted = false) {
+            const tbody = document.getElementById('actionPlanTableBody');
+            const row = document.createElement('tr');
+            row.className = "hover:bg-slate-50/80 transition-colors group";
+
+            const assigneeClass = (assignee === "未定" || !assignee) 
+                ? "bg-amber-50 text-amber-700 border-amber-200" 
+                : "bg-blue-50 text-brand-700 border-blue-200";
+
+            const dateClass = (dueDate === "未定" || !dueDate) 
+                ? "bg-amber-50 text-amber-700 border-amber-200" 
+                : "bg-emerald-50 text-emerald-700 border-emerald-200";
+
+            row.innerHTML = `
+                <td class="py-2.5 px-3 text-center">
+                    <input type="checkbox" ${isCompleted ? 'checked' : ''} onchange="toggleTaskDone(this)" 
+                        class="w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500 cursor-pointer">
+                </td>
+                <td class="py-2.5 px-3">
+                    <span contenteditable="true" class="inline-block px-2 py-0.5 text-xs font-semibold rounded-md border ${assigneeClass} outline-none focus:ring-1 focus:ring-brand-500">
+                        ${escapeHtml(assignee || "未定")}
+                    </span>
+                </td>
+                <td class="py-2.5 px-3">
+                    <div contenteditable="true" class="task-content text-slate-800 outline-none focus:bg-white focus:ring-1 focus:ring-brand-500 rounded p-1 ${isCompleted ? 'line-through text-slate-400' : ''}">
+                        ${escapeHtml(task || "")}
+                    </div>
+                </td>
+                <td class="py-2.5 px-3">
+                    <span contenteditable="true" class="inline-block px-2 py-0.5 text-xs font-semibold rounded-md border ${dateClass} outline-none focus:ring-1 focus:ring-brand-500">
+                        ${escapeHtml(dueDate || "未定")}
+                    </span>
+                </td>
+                <td class="py-2.5 px-2 text-center">
+                    <button onclick="removeTaskRow(this)" class="text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        }
+
+        function toggleTaskDone(checkbox) {
+            const row = checkbox.closest('tr');
+            const taskContent = row.querySelector('.task-content');
+            if (checkbox.checked) {
+                taskContent.classList.add('line-through', 'text-slate-400');
+            } else {
+                taskContent.classList.remove('line-through', 'text-slate-400');
+            }
+        }
+
+        function addNewTaskRow() {
+            addTaskRowToTable("未定", "新しいタスク項目を入力", "未定", false);
+            showToast("タスク行を追加しました", "info");
+        }
+
+        function removeTaskRow(btn) {
+            const row = btn.closest('tr');
+            row.remove();
+        }
+
+        function copyAsMarkdown() {
+            if (!currentAnalysisResult) return;
+
+            const summary = document.getElementById('summaryOutput').textContent;
+            
+            // Get Keypoints
+            const kpElements = document.querySelectorAll('#keyPointsOutput li span');
+            let kpText = "";
+            kpElements.forEach(el => {
+                kpText += `- ${el.textContent}\n`;
+            });
+
+            // Get Table Tasks
+            const rows = document.querySelectorAll('#actionPlanTableBody tr');
+            let tableText = "| 担当者 | 内容 | 期限 |\n| :--- | :--- | :--- |\n";
+            rows.forEach(r => {
+                const spans = r.querySelectorAll('td span');
+                const taskDiv = r.querySelector('.task-content');
+                if (spans.length >= 2 && taskDiv) {
+                    const assignee = spans[0].textContent.trim();
+                    const task = taskDiv.textContent.trim();
+                    const dueDate = spans[1].textContent.trim();
+                    tableText += `| ${assignee} | ${task} | ${dueDate} |\n`;
+                }
+            });
+
+            const markdown = `# 分析結果要約・アクションプラン
+
+## 1. 【要約】
+${summary}
+
+## 2. 【決定事項・重要点】
+${kpText}
+## 3. 【次回のアクションプラン】
+${tableText}`;
+
+            // ExecCommand Copy fallback
+            const textarea = document.createElement('textarea');
+            textarea.value = markdown;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast("Markdown形式でコピーしました！");
+            } catch (err) {
+                showToast("コピーに失敗しました", "error");
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function exportCSV() {
+            const rows = document.querySelectorAll('#actionPlanTableBody tr');
+            let csvContent = "\uFEFF担当者,内容,期限,ステータス\n";
+
+            rows.forEach(r => {
+                const checkbox = r.querySelector('input[type="checkbox"]');
+                const spans = r.querySelectorAll('td span');
+                const taskDiv = r.querySelector('.task-content');
+                if (spans.length >= 2 && taskDiv) {
+                    const assignee = `"${spans[0].textContent.trim().replace(/"/g, '""')}"`;
+                    const task = `"${taskDiv.textContent.trim().replace(/"/g, '""')}"`;
+                    const dueDate = `"${spans[1].textContent.trim().replace(/"/g, '""')}"`;
+                    const status = checkbox && checkbox.checked ? "完了" : "未完了";
+                    csvContent += `${assignee},${task},${dueDate},${status}\n`;
+                }
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `action_plan_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("CSVファイルを保存しました");
+        }
+
+        // Local Storage History
+        function saveToHistory(inputText, result) {
+            let history = JSON.parse(localStorage.getItem('pm_note_history') || '[]');
+            const newItem = {
+                id: Date.now(),
+                timestamp: new Date().toLocaleString('ja-JP'),
+                inputText: inputText.slice(0, 60) + (inputText.length > 60 ? '...' : ''),
+                fullInput: inputText,
+                result: result
+            };
+            history.unshift(newItem);
+            if (history.length > 10) history = history.slice(0, 10); // Keep max 10 items
+            localStorage.setItem('pm_note_history', JSON.stringify(history));
+            loadHistory();
+        }
+
+        function loadHistory() {
+            const historyList = document.getElementById('historyList');
+            let history = JSON.parse(localStorage.getItem('pm_note_history') || '[]');
+
+            if (history.length === 0) {
+                historyList.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">分析履歴はありません</p>`;
+                return;
+            }
+
+            historyList.innerHTML = "";
+            history.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "p-3 bg-slate-50 hover:bg-blue-50/50 rounded-xl border border-slate-200/80 cursor-pointer transition flex items-start justify-between space-x-2";
+                div.onclick = () => restoreHistoryItem(item);
+                div.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <div class="text-xs text-slate-400 font-mono mb-1">${item.timestamp}</div>
+                        <p class="text-xs text-slate-700 font-medium truncate">${escapeHtml(item.inputText)}</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mt-2"></i>
+                `;
+                historyList.appendChild(div);
+            });
+        }
+
+        function restoreHistoryItem(item) {
+            document.getElementById('sourceText').value = item.fullInput;
+            updateCharCount();
+            currentAnalysisResult = item.result;
+            renderResult(item.result);
+            toggleHistoryModal();
+            showToast("履歴から読み込みました", "info");
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('pm_note_history');
+            loadHistory();
+            showToast("履歴を削除しました", "info");
+        }
+
+        function toggleHistoryModal() {
+            const modal = document.getElementById('historyModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
