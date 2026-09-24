@@ -357,24 +357,62 @@
 ・インフラ構成の検討は未定（インフラ担当者のアサインが必要）。`
         };
 
+        // In-memory storage fallback for private/restricted environments
+        const memoryStorage = {};
+        const safeStorage = {
+            getItem(key) {
+                try {
+                    return window.localStorage ? window.localStorage.getItem(key) : (memoryStorage[key] || null);
+                } catch (e) {
+                    return memoryStorage[key] || null;
+                }
+            },
+            setItem(key, value) {
+                try {
+                    if (window.localStorage) {
+                        window.localStorage.setItem(key, value);
+                        return;
+                    }
+                } catch (e) {
+                    // Fallback to memory
+                }
+                memoryStorage[key] = String(value);
+            },
+            removeItem(key) {
+                try {
+                    if (window.localStorage) {
+                        window.localStorage.removeItem(key);
+                    }
+                } catch (e) {
+                    // Ignore
+                }
+                delete memoryStorage[key];
+            }
+        };
+
         // State Management
         let currentAnalysisResult = null;
 
         // On Load Initializations
         window.onload = function() {
-            updateCharCount();
-            loadHistory();
-            loadSavedApiKey();
+            try {
+                updateCharCount();
+                loadHistory();
+                loadSavedApiKey();
+            } catch (err) {
+                console.warn("Init error suppressed:", err);
+            }
         };
 
         function getStoredApiKey() {
-            return localStorage.getItem('pm_gemini_api_key') || "";
+            return safeStorage.getItem('pm_gemini_api_key') || "";
         }
 
         function loadSavedApiKey() {
             const key = getStoredApiKey();
             if (key) {
-                document.getElementById('apiKeyInput').value = key;
+                const el = document.getElementById('apiKeyInput');
+                if (el) el.value = key;
             }
         }
 
@@ -386,24 +424,24 @@
         function saveApiKey() {
             const key = document.getElementById('apiKeyInput').value.trim();
             if (key) {
-                localStorage.setItem('pm_gemini_api_key', key);
+                safeStorage.setItem('pm_gemini_api_key', key);
                 showToast("APIキーを保存しました。AIモードで実行します。");
             } else {
-                localStorage.removeItem('pm_gemini_api_key');
+                safeStorage.removeItem('pm_gemini_api_key');
                 showToast("APIキーを解除しました。内蔵解析モードで実行します。", "info");
             }
             toggleApiKeyModal();
         }
 
         function clearApiKey() {
-            localStorage.removeItem('pm_gemini_api_key');
+            safeStorage.removeItem('pm_gemini_api_key');
             document.getElementById('apiKeyInput').value = "";
             showToast("APIキーを削除しました", "info");
             toggleApiKeyModal();
         }
 
         function updateCharCount() {
-            const text = document.getElementById('sourceText').value;
+            const text = document.getElementById('sourceText').value || "";
             document.getElementById('charCount').textContent = `${text.length} 文字`;
         }
 
@@ -459,7 +497,7 @@
 
             const apiKey = getStoredApiKey();
 
-            // If no API key is set, use the robust local PM parser instantly
+            // If no API key is provided, use the local parser immediately
             if (!apiKey) {
                 setTimeout(() => {
                     try {
@@ -467,17 +505,17 @@
                         currentAnalysisResult = localResult;
                         renderResult(localResult);
                         saveToHistory(text, localResult);
-                        showToast("内蔵PMアナライザーで分析を完了しました（キー設定でGemini連携も可能）");
+                        showToast("分析を完了しました");
                     } catch (e) {
                         console.error("Local parse error", e);
-                        showToast("分析処理中に問題が発生しました", "error");
+                        showToast("分析処理中に問題が発生しました: " + (e.message || ""), "error");
                         restoreStateAfterError();
                     }
-                }, 600);
+                }, 400);
                 return;
             }
 
-            // If API key is present, call Gemini API
+            // If API key is present, call Gemini 3 Flash Preview API
             const systemInstruction = `あなたは優秀なプロジェクトマネージャー（PM）です。
 ユーザーが入力したテキスト（打ち合わせメモ、アイデア出しのノート等）を分析し、要点と具体的なアクションプランを作成してください。
 
@@ -528,7 +566,7 @@ ${text}`;
                 }
             };
 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
             try {
                 let response = await fetchWithRetry(apiUrl, {
@@ -540,18 +578,14 @@ ${text}`;
                 if (!response.ok) {
                     const errData = await response.json().catch(() => ({}));
                     const errMsg = errData.error?.message || `HTTP ${response.status}`;
-                    if (response.status === 400 || response.status === 403) {
-                        throw new Error(`APIキーが無効、またはアクセス権限がありません (${errMsg})`);
-                    } else {
-                        throw new Error(`Gemini API エラー: ${errMsg}`);
-                    }
+                    throw new Error(errMsg);
                 }
 
                 let data = await response.json();
                 let jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
                 if (!jsonText) {
-                    throw new Error("AIからのレスポンスの取得に失敗しました");
+                    throw new Error("AI応答を取得できませんでした");
                 }
 
                 let parsedResult = JSON.parse(jsonText);
@@ -559,17 +593,20 @@ ${text}`;
 
                 renderResult(parsedResult);
                 saveToHistory(text, parsedResult);
-
                 showToast("Gemini AIによる分析が完了しました");
 
             } catch (error) {
-                console.warn("API Call Failed, falling back to local analyzer:", error);
-                // Fallback gracefully to local analyzer so user never gets stuck
-                const fallbackResult = runLocalPMAnalysis(text);
-                currentAnalysisResult = fallbackResult;
-                renderResult(fallbackResult);
-                saveToHistory(text, fallbackResult);
-                showToast(`API利用不可(${error.message})のため内蔵解析で完了しました`, "info");
+                console.warn("API error, switching to safe local engine:", error);
+                try {
+                    const fallbackResult = runLocalPMAnalysis(text);
+                    currentAnalysisResult = fallbackResult;
+                    renderResult(fallbackResult);
+                    saveToHistory(text, fallbackResult);
+                    showToast("API通信不可のため内蔵解析エンジンで分析を完了しました", "info");
+                } catch (fallbackErr) {
+                    showToast("分析処理中にエラーが発生しました", "error");
+                    restoreStateAfterError();
+                }
             }
         }
 
@@ -579,25 +616,24 @@ ${text}`;
             document.getElementById('emptyState').classList.remove('hidden');
         }
 
-        // Robust Local PM Analysis Engine (fallback & standalone)
+        // Robust Local PM Analysis Engine (safe from regex injection & null values)
         function runLocalPMAnalysis(rawText) {
-            const cleanText = rawText.replace(/\r\n/g, '\n').trim();
+            if (!rawText) throw new Error("テキストが空です");
+            const cleanText = String(rawText).replace(/\r\n/g, '\n').trim();
             const lines = cleanText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
-            // Extract lines that look like tasks, dates, assignees
             const keyPoints = [];
             const actionPlans = [];
 
-            // Patterns
-            const bulletRegex = /^([・\-*●◆\d+\.※]|Q:|A:)\s*/;
+            // Strip bullet headers
+            const bulletRegex = /^([・\-*●◆■▲▶\d+\.※]|Q:|A:)\s*/;
             const contentLines = lines.map(l => l.replace(bulletRegex, '').trim()).filter(l => l.length > 0);
 
-            // 1. Key points (up to 5 substantive items)
+            // 1. Key points (up to 5 items)
             for (const line of contentLines) {
                 if (keyPoints.length >= 5) break;
-                // Avoid date/meta header lines for key points if possible
                 if (/^(日時|場所|参加者|出席者|参加|日時:|出席者:)/.test(line)) continue;
-                if (!keyPoints.includes(line) && line.length >= 6) {
+                if (!keyPoints.includes(line) && line.length >= 5) {
                     keyPoints.push(line);
                 }
             }
@@ -607,10 +643,9 @@ ${text}`;
 
             // 2. Action plans (Extract assignee, action, date)
             const dateRegex = /(\d{1,2}月\d{1,2}日|\d{1,2}\/\d{1,2}|\d{4}年\d{1,2}月|\d{1,2}月末|次回|本日中|明日|来週)/;
-            const assigneeWords = ['さん', '氏', '君', 'チーム', '担当', '斎木', '中原', '小川', '竹俣', '馬場', '佐藤', '田中', '鈴木', '高橋', '渡辺', '伊藤'];
+            const commonAssignees = ['小川', '竹俣', '馬場', '斎木', '中原', '佐藤', '田中', '鈴木', '高橋', '渡辺', '伊藤', 'チーム', '担当者'];
 
             contentLines.forEach(line => {
-                // Check if line indicates an action
                 const hasActionWord = /(する|行う|作成|進める|依頼|確認|決定|相談|準備|実施|報告|検討|提出|送付)/.test(line);
                 if (hasActionWord || dateRegex.test(line)) {
                     let assignee = "未定";
@@ -622,19 +657,21 @@ ${text}`;
                         dueDate = dateMatch[0];
                     }
 
-                    // Detect Assignee
-                    for (const w of assigneeWords) {
-                        if (line.includes(w)) {
-                            // Clean up extraction
-                            const match = line.match(new RegExp(`([^\s、・]+${w})`));
-                            if (match) {
-                                assignee = match[1];
-                                break;
-                            }
+                    // Detect Assignee safely
+                    for (const name of commonAssignees) {
+                        if (line.includes(name)) {
+                            assignee = name;
+                            if (line.includes(name + 'さん')) assignee = name + 'さん';
+                            break;
+                        }
+                    }
+                    if (assignee === "未定") {
+                        const sanMatch = line.match(/([^\s、・,，()（）]+)(?:さん|氏|君)/);
+                        if (sanMatch && sanMatch[0]) {
+                            assignee = sanMatch[0];
                         }
                     }
 
-                    // Clean task description
                     let taskText = line;
                     if (taskText.length > 60) {
                         taskText = taskText.slice(0, 60) + '...';
@@ -648,7 +685,6 @@ ${text}`;
                 }
             });
 
-            // Default fallback task if none found
             if (actionPlans.length === 0) {
                 actionPlans.push({
                     assignee: "未定",
@@ -657,7 +693,7 @@ ${text}`;
                 });
             }
 
-            // 3. Summary (target ~300 chars)
+            // 3. Summary (~300 chars)
             let baseSummary = contentLines.slice(0, 4).join("。");
             if (baseSummary.length > 0 && !baseSummary.endsWith("。")) baseSummary += "。";
             
@@ -666,7 +702,6 @@ ${text}`;
                 summary += `今後の方針として「${actionPlans[0].task}」などを中心に各タスクを推進する計画となっています。担当者および詳細な期限が明記されていない項目については、次回ミーティング等で調整・確定を行う想定です。`;
             }
 
-            // Adjust to around 300 characters
             if (summary.length > 320) {
                 summary = summary.slice(0, 290) + "...。";
             } else if (summary.length < 180 && cleanText.length > 200) {
@@ -681,7 +716,7 @@ ${text}`;
         }
 
         // Retry mechanism with exponential backoff
-        async function fetchWithRetry(url, options, retries = 3, backoff = 1000) {
+        async function fetchWithRetry(url, options, retries = 2, backoff = 1000) {
             try {
                 const res = await fetch(url, options);
                 if (!res.ok && res.status === 429 && retries > 0) {
@@ -699,6 +734,8 @@ ${text}`;
         }
 
         function renderResult(result) {
+            if (!result) return;
+
             // Hide Loader & Empty state
             document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('loadingState').classList.remove('flex');
@@ -712,7 +749,6 @@ ${text}`;
             document.getElementById('summaryOutput').textContent = summaryText;
             const summaryBadge = document.getElementById('summaryLengthBadge');
             summaryBadge.textContent = `${summaryText.length}文字 (目安: 300字)`;
-            summaryBadge.className = "text-xs px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full font-mono";
 
             // 2. Render Key Points (Max 5)
             const keyPointsList = document.getElementById('keyPointsOutput');
@@ -740,7 +776,7 @@ ${text}`;
             if (plans.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400 italic">次回のアクションプランはありません</td></tr>`;
             } else {
-                plans.forEach((plan, idx) => {
+                plans.forEach((plan) => {
                     addTaskRowToTable(plan.assignee, plan.task, plan.dueDate, false);
                 });
             }
@@ -849,7 +885,6 @@ ${kpText}
 ## 3. 【次回のアクションプラン】
 ${tableText}`;
 
-            // ExecCommand Copy fallback
             const textarea = document.createElement('textarea');
             textarea.value = markdown;
             document.body.appendChild(textarea);
@@ -891,45 +926,54 @@ ${tableText}`;
             showToast("CSVファイルを保存しました");
         }
 
-        // Local Storage History
+        // Safe Storage History
         function saveToHistory(inputText, result) {
-            let history = JSON.parse(localStorage.getItem('pm_note_history') || '[]');
-            const newItem = {
-                id: Date.now(),
-                timestamp: new Date().toLocaleString('ja-JP'),
-                inputText: inputText.slice(0, 60) + (inputText.length > 60 ? '...' : ''),
-                fullInput: inputText,
-                result: result
-            };
-            history.unshift(newItem);
-            if (history.length > 10) history = history.slice(0, 10); // Keep max 10 items
-            localStorage.setItem('pm_note_history', JSON.stringify(history));
-            loadHistory();
+            try {
+                let history = JSON.parse(safeStorage.getItem('pm_note_history') || '[]');
+                const newItem = {
+                    id: Date.now(),
+                    timestamp: new Date().toLocaleString('ja-JP'),
+                    inputText: inputText.slice(0, 60) + (inputText.length > 60 ? '...' : ''),
+                    fullInput: inputText,
+                    result: result
+                };
+                history.unshift(newItem);
+                if (history.length > 10) history = history.slice(0, 10);
+                safeStorage.setItem('pm_note_history', JSON.stringify(history));
+                loadHistory();
+            } catch (err) {
+                console.warn("Could not save to history:", err);
+            }
         }
 
         function loadHistory() {
-            const historyList = document.getElementById('historyList');
-            let history = JSON.parse(localStorage.getItem('pm_note_history') || '[]');
+            try {
+                const historyList = document.getElementById('historyList');
+                if (!historyList) return;
+                let history = JSON.parse(safeStorage.getItem('pm_note_history') || '[]');
 
-            if (history.length === 0) {
-                historyList.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">分析履歴はありません</p>`;
-                return;
+                if (history.length === 0) {
+                    historyList.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">分析履歴はありません</p>`;
+                    return;
+                }
+
+                historyList.innerHTML = "";
+                history.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = "p-3 bg-slate-50 hover:bg-blue-50/50 rounded-xl border border-slate-200/80 cursor-pointer transition flex items-start justify-between space-x-2";
+                    div.onclick = () => restoreHistoryItem(item);
+                    div.innerHTML = `
+                        <div class="flex-1 min-w-0">
+                            <div class="text-xs text-slate-400 font-mono mb-1">${item.timestamp}</div>
+                            <p class="text-xs text-slate-700 font-medium truncate">${escapeHtml(item.inputText)}</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs mt-2"></i>
+                    `;
+                    historyList.appendChild(div);
+                });
+            } catch (err) {
+                console.warn("Could not load history:", err);
             }
-
-            historyList.innerHTML = "";
-            history.forEach(item => {
-                const div = document.createElement('div');
-                div.className = "p-3 bg-slate-50 hover:bg-blue-50/50 rounded-xl border border-slate-200/80 cursor-pointer transition flex items-start justify-between space-x-2";
-                div.onclick = () => restoreHistoryItem(item);
-                div.innerHTML = `
-                    <div class="flex-1 min-w-0">
-                        <div class="text-xs text-slate-400 font-mono mb-1">${item.timestamp}</div>
-                        <p class="text-xs text-slate-700 font-medium truncate">${escapeHtml(item.inputText)}</p>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mt-2"></i>
-                `;
-                historyList.appendChild(div);
-            });
         }
 
         function restoreHistoryItem(item) {
@@ -942,7 +986,7 @@ ${tableText}`;
         }
 
         function clearHistory() {
-            localStorage.removeItem('pm_note_history');
+            safeStorage.removeItem('pm_note_history');
             loadHistory();
             showToast("履歴を削除しました", "info");
         }
@@ -954,7 +998,7 @@ ${tableText}`;
 
         function escapeHtml(str) {
             if (!str) return '';
-            return str
+            return String(str)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
